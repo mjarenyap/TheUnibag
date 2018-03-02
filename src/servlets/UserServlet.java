@@ -17,7 +17,7 @@ public class UserServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserServlet() {
+    public UserServlet(){
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,8 +26,22 @@ public class UserServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		String path = request.getServletPath();
+
+		switch(path){
+			case "/profile": profile(request, response);
+			break;
+
+			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
+			break;
+		}
+	}
+
+	protected void profile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check for logged user
+		// get purpose parameter
+		// check if purpose parameter is in the whitelist
+		// dispatch to the profile page
 	}
 
 	/**
