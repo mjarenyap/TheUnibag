@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class UserServlet
+ * Servlet implementation class UserAdminServlet
  */
-@WebServlet(urlPatterns = {"/profile"})
-public class UserServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/adduser", "/allusers", "/viewuser"})
+public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserServlet() {
+    public UserAdminServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,7 +27,7 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
