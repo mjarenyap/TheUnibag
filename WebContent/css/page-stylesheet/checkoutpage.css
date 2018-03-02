@@ -1,0 +1,48 @@
+#checkout .checkout-feed .photo-details .featured-image{
+    width: 20%;
+    height: 80px;
+}
+
+#checkout .checkout-feed .content-wrapper .photo-details{
+    margin-bottom: 10px;
+}
+
+#checkout{ 
+    width: 35%;
+}
+
+.list-out{
+    align-items: flex-start;
+}
+
+#billing-details{
+    width: 60%;
+}
+
+.total{
+    margin: 10px 0px;
+}
+
+button{
+    width: 100%;
+}
+
+.names{
+    width: 100%;
+    margin: 0px 10px;
+    margin-bottom: 10px;
+}
+
+.textfield{
+    width: 88.3%;
+    margin: 0px 10px;
+    margin-bottom: 10px;
+}
+
+#billing-details h3{
+    margin: 10px 10px 5px 10px;
+}
+
+form{
+    padding: 10px;
+}

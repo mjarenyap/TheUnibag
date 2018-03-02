@@ -1,0 +1,42 @@
+/* theme styleheet of the website */
+
+:root{
+	--theme-dark: #6e768f;
+	--theme-par-dark: #444444;
+	--theme-purple: #5C6AC5;
+	--theme-dark-purple: #212F78;
+	--theme-light-grey: #f7f7fa;
+	--theme-grey: #c9d0e1;
+}
+
+body, html{
+	margin: 0;
+	padding: 0;
+	font-family: 'Lato', sans-serif;
+	color: var(--theme-dark);
+}
+
+h1, h2, h3, h4, h5, h6{
+	color: var(--theme-dark);
+	margin: 0;
+	padding: 0;
+	font-family: 'Montserrat', sans-serif;
+}
+
+p{
+	color: var(--theme-par-dark);
+	font-family: 'Lato', sans-serif;
+	word-wrap: break-word;
+	letter-spacing: 0.02em;
+}
+
+section{
+	padding: 80px 10%;
+	background-color: #f4f4f4;
+	box-sizing: border-box; 
+}
+
+a{
+	text-decoration: none;
+	color: inherit;
+}

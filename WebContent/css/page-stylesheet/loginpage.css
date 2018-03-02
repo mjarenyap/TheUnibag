@@ -1,0 +1,62 @@
+html, body{
+    background-color: #ededf3; 
+}
+
+
+#login_recti{
+    max-width: 37%;
+    padding: 30px 30px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 5em;
+}
+
+button{
+    background-color: var(--theme-purple);
+    border: none;
+    width: 120px;
+    height: 40px;
+    border-radius: 3px;
+    color: white;
+    margin-left: 15px;
+}
+
+#signuptext{
+    color: var(--theme-purple);
+}
+
+h2{
+    margin-bottom: 40px;
+}
+
+.textfield{
+    padding: 10px 10px;
+    border-radius: 3px;
+    width: 365px;
+    height: 25px;
+    border: 1px solid var(--theme-grey);
+    margin-bottom: 18px;
+    color: #333;
+}
+
+form{
+    padding: 30px 30px;
+    border-radius: 3px;
+    border: 1px solid var(--theme-grey);
+    background-color: white;
+}
+
+::placeholder{
+    color: var(--theme-grey);
+}
+
+button:hover{
+    background-color: var(--theme-dark-purple);
+    cursor: pointer;
+}
+
+#signuptext:hover{
+    color: var(--theme-dark-purple);
+    cursor: pointer;
+}

@@ -1,0 +1,66 @@
+/* Page stylesheet for the product list page */
+
+#list .product-feed .content-wrapper .photo-details .featured-image{
+    width: 100%;
+    height: 270px;
+    background-color: #ededf3;
+}
+
+#list h2{
+    margin: 30px 8px;
+}
+
+#list .product-feed .content-wrapper{
+    background-color: white;
+    border: 1px solid var(--theme-grey);
+    border-radius: 3px;
+    margin: 20px 8px;
+}
+
+#list.content-wrapper p{
+    font-size: 0.9em;
+}
+
+#list .product-highlight{
+    margin: 30px;
+}
+
+#list .other-details{
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+    font-size: 0.8em;
+}
+
+#list button{
+    font-size: 0.6em;
+    padding: 0.7em;
+}
+
+select{
+    margin-right: 8px;
+    padding: 5px 10px;
+    border: 1px solid var(--theme-grey);
+    border-radius: 3px;
+}
+
+#filters{
+    width: 35%;
+    padding: 30px;
+}
+
+.filter-products{
+    align-items: flex-start;
+}
+
+.control{
+    margin: 20px 0px;
+}
+
+.price{
+    color:var(--theme-purple);
+}
+
+.title-price-button{
+    align-items: flex-start;
+}

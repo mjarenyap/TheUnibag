@@ -1,0 +1,61 @@
+body{
+    margin-left: 250px;
+}
+
+#side-nav{
+    position:fixed;
+    left: 0;
+    height:100%;
+    width: 250px;
+    background-color: var(--theme-purple);
+    padding:0;
+}
+
+.side-tabs{
+    color:white;
+    font-size: 18px;
+    padding: 10px 40px;
+}
+
+#logo{
+    width: 170px;
+    height:70px;
+    padding:40px;
+}
+
+hr{
+    margin:0px 20px;
+}
+
+.header-button{
+    padding: 0px 22px
+}
+
+#table-section{
+    padding: 40px;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px;
+}
+
+td, th{
+    text-align: left;
+    padding: 10px;
+}
+
+.row-content:hover{
+    cursor: pointer;
+    background-color: var(--theme-grey);
+}
+
+.side-tabs:hover{
+    cursor: pointer;
+    color: var(--theme-grey);
+}
+
+.active{
+    background-color: var(--theme-dark-purple);
+}
