@@ -55,15 +55,32 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	protected void shoppingCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// check for logged user
+		// check cart session for items
+		// put each item in an arraylist
+		// compute for subtotal
+		// set computed total as request attribute "subtotal"
+		// set arraylist to request attribute
+		// dispatch to the shopping cart page
 	}
 
 	protected void checkout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// check for logged user
+		// check purpose if it contains "cart"
+		// autofill the fields for logged users
+		// compute for subtotal
+		// put each item in an arraylist
+		// set computed total as request attribute "subtotal"
+		// set arraylist to request attribute
+		// dispatch to the checkout page
 	}
 
 	protected void success(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
-		
+		// check if there items in the cart
+		// check purpose if it contains "checkout"
+		// create orders for items in the shopping cart
+		// invalidate the shopping cart session
+		// dispatch to the success page
 	}
 
 	/**
