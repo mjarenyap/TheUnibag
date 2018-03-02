@@ -20,7 +20,7 @@ import services.SizeService;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(urlPatterns = {"/allproducts", "/product", "/collection", "/brand"})
+@WebServlet(urlPatterns = {"/products", "/collection", "/brand"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,6 +38,41 @@ public class ProductServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String path = request.getServletPath();
+
+		switch(path){
+			case "/products": products(request, response);
+			break;
+
+			case "/collection": collection(request, response);
+			break;
+
+			case "/brand": brand(request, response);
+			break;
+
+			default: product(request, response);
+			break;
+		}
+	}
+
+	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check for logged users
+		// get pagination number parameter
+		// get all products
+		// preview 10 products according to pagination number
+		// set pagination numbers based on the total number of products
+			// products.size() / 10 [+1 if products.size() % 10 > 0]
+	}
+
+	protected void product(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check for logged users
+	}
+
+	protected void collection(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+
+	protected void brand(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 	}
 
 	/**
