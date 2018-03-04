@@ -15,6 +15,7 @@ import beans.User;
 import beans.Bag;
 import services.UserService;
 import services.BagService;
+import security.FieldChecker;
 
 /**
  * Servlet implementation class LogServlet
@@ -54,27 +55,69 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// get the prupose parameter
+		// declare needed variables
+		boolean pruposeFlag = false;
+		boolean loggedFlag = false;
 
-		// check if they are trying to logout
+		String purpose = null;
+ 
+		// get the prupose parameter // check if they are trying to logout
+		if(request.getParameter("purpose") != null && request.getParameter("purpose").equals("logout")){
+			purpose = request.getParameter("purpose");
+			pruposeFlag = true;
+		}
+
 		// check for logged user
+		if(request.getSession().getAttribute("Account") != null)
+			loggedFlag = true;
+
 		// invalidate the session
-		// remove the Accout cookies
-		// dispatch to the homepage
+		if(loggedFlag){
+			request.getSession().invalidate();
+
+			// remove the Account cookies
+			Cookie[] cookies = request.getCookies();
+			if(cookies != null){
+				for(int i = 0; i < cookies.length; i++)
+				{	
+					Cookie currentCookie = cookies[i];
+					if(currentCookie.getName().equals("Account"))
+					{
+						currentCookie.setMaxAge(0);
+						response.addCookie(currentCookie);
+					}
+				}
+			}
+		}
+
+		// REQUEST ATTRIBUTES HERE
 
 		// dispatch to the homepage
+		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		// get the email, password and redirect parameters
-		// check for invalid or empty fields
-		// check if the redirect parameter is part of the whitelisted pages (array of URLs)
-		// find a matched account credentials from the database
-		// create a User object then set the necessary attributes
-		// set a session attribute "Account"
-		// create a cookie for the logged user
-		// dispatch to the specified redirect page
+		if(request.getSession().getAttribute("Account") == null && request.getCookies() == null){
+			// get the email, password and redirect parameters
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			String redirect = request.getParameter("redirect");
+
+			// declare flag variables
+			boolean invalidFlag = true;
+
+			// check for invalid or empty fields
+			invalidFlag = FieldChecker.checkLogin(email, password);
+			// check if the redirect parameter is part of the whitelisted pages (array of URLs)
+			// find a matched account credentials from the database
+			// create a User object then set the necessary attributes
+			// set a session attribute "Account"
+			// create a cookie for the logged user
+			// dispatch to the specified redirect page
+		}
+
+		else home(request, response);
 	}
 
 	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

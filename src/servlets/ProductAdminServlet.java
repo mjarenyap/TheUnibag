@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ProductAdminServlet
  */
-@WebServlet(urlPatterns = {"/addproducts", "/allproducts", "/viewproduct"})
+@WebServlet(urlPatterns = {"/admin/addproducts", "/admin/allproducts", "/admin/viewproduct"})
 public class ProductAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -27,7 +27,30 @@ public class ProductAdminServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String path = request.getServletPath();
+
+		switch(path){
+			case "/admin/addproducts": addProducts(request, response);
+			break;
+
+			case "/admin/allproducts": allProducts(request, response);
+			break;
+
+			case "/admin/viewproduct": viewProduct(request, response);
+			break;
+		}
+	}
+
+	protected void addProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+	protected void allProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+	protected void viewProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 	}
 
 	/**

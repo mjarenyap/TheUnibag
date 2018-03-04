@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class UserAdminServlet
  */
-@WebServlet(urlPatterns = {"/adduser", "/allusers", "/viewuser"})
+@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin"})
 public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -26,8 +26,36 @@ public class UserAdminServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String path = request.getServletPath();
+
+		switch(path){
+			case "/admin/adduser": addUser(request, response);
+			break;
+
+			case "/admin/allusers": allUsers(request, response);
+			break;
+
+			case "/admin/viewuser": viewUser(request, response);
+			break;
+
+			case "/admin": adminHome(request, response);
+		}
+	}
+
+	protected void addUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+	protected void allUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+
+	protected void viewUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+
+	protected void adminHome(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 	}
 
 	/**
