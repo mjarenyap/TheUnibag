@@ -20,7 +20,7 @@ import services.SizeService;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(urlPatterns = {"/products", "/product", "/deleteProduct", "/addProduct"})
+@WebServlet(urlPatterns = {"/products", "/products/collections", "/products/types", "/product"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -40,61 +40,58 @@ public class ProductServlet extends HttpServlet {
 		String path = request.getServletPath();
 
 		switch(path){
-			case "/products": selectAllProducts(request, response);
+			case "/products": products(request, response);
 			break;
 
-			case "/product": selectOneProduct(request, response);
+			case "/products/collections": collections(request, response);
+			break;
+
+			case "/products/brands": brands(request, response);
+			break;
+
+			case "/product": product(request, response);
+			break;
+
+			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
 			break;
 		}
 	}
 
-	protected void selectAllProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//get all products and store to list
-		List<Bag> baglist = BagService.getAllBags();
+	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check for logged users
+		// get pagination number parameter
+		// get all products
+		// preview 10 products according to pagination number
+		// set pagination numbers based on the total number of products
+			// products.size() / 10 [+1 if products.size() % 10 > 0]
+	}
 
-		//filtration status from JSP
+	protected void product(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check for logged user
+		// check filter status
+		// get contextualized url parametr of the product
+		// split the id and the actual name of the product
+		// convert the id String to Integer
+		// search the product by id in the database
+		// validate the match result by product name
+		// create a Bag object and set the necessary attributes
+		// fetch the the size associated with the product
+		// fetch the colors associated with the product
+	}
+
+	protected void collections(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check for logged user
+		// check filter status
+		// get contextualized url parameter of the product
+		// 
+	}
+
+	protected void brands(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-
-		//set to an attribute
-		request.setAttribute("productlist", baglist);
-		request.getRequestDispatcher("products.jsp").forward(request, response);
 	}
 
-	protected void selectOneProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//get all products and store to list
-		List<Bag> baglist = BagService.getAllBags();
-		List<Color> colorlist = ColorService.getAllColors();
-		List<Size> sizelist = SizeService.getAllSizes();
-
-		//find matched product
-		long bagID = Long.parseLong(request.getParameter("chosen"));
-		Bag selectedBag = null;
-		ArrayList<Color> selectedColors = new ArrayList<>();
-		ArrayList<Size> selectedSizes = new ArrayList<>();
-
-		for(int i = 0; i < baglist.size(); i++)
-			if(bagID == baglist.get(i).getBagID()){
-				selectedBag = baglist.get(i);
-			}
-
-		//check if seletedBag exists
-		if(selectedBag != null){
-			//find appropriate colors
-			for(int i = 0; i < colorlist.size(); i++)
-				if(selectedBag.getBagID() == colorlist.get(i).getBagID())
-					selectedColors.add(colorlist.get(i));
-
-			for(int i = 0; i < sizelist.size(); i++)
-				if(selectedBag.getBagID() == sizelist.get(i).getBagID())
-					selectedSizes.add(sizelist.get(i));
-
-			request.setAttribute("selectedColors", selectedColors);
-			request.setAttribute("selectedSizes", selectedSizes);
-		}
-
-		//set to an attribute
-		request.setAttribute("selectedBag", selectedBag);
-		request.getRequestDispatcher("single.jsp").forward(request, response);
+	protected void types(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 	}
 
 	/**

@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class UserServlet
+ * Servlet implementation class OrderAdminServlet
  */
-@WebServlet(urlPatterns = {"/profile"})
-public class UserServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/admin/addorder", "/admin/viewallorders", "/admin/vieworder"})
+public class OrderAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserServlet(){
+    public OrderAdminServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,22 +26,31 @@ public class UserServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		String path = request.getServletPath();
 
 		switch(path){
-			case "/profile": profile(request, response);
+			case "/admin/addorder": addOrder(request, response);
 			break;
 
-			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
+			case "/admin/allorders": allOrders(request, response);
+			break;
+
+			case "/admin/vieworder": viewOrder(request, response);
 			break;
 		}
 	}
 
-	protected void profile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// check for logged user
-		// get purpose parameter
-		// check if purpose parameter is in the whitelist
-		// dispatch to the profile page
+	protected void addOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+	protected void allOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+	protected void viewOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 	}
 
 	/**
