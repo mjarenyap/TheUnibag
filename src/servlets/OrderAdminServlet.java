@@ -42,15 +42,18 @@ public class OrderAdminServlet extends HttpServlet {
 	}
 
 	protected void addOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		/* LEAVE THIS BLANK */
 	}
 
 	protected void allOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// Retrieve all of the orders through OrderService
+		// Store all the orders in an ArrayList
+		// Set the ArrayList as request attribute named "orderlist"
+		// Dispatch to admin-orders.jsp
 	}
 
 	protected void viewOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// Get request parameter of the 
 	}
 
 	/**

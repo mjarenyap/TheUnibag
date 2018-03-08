@@ -42,11 +42,29 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void addProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
+		Get request parameter values of the ff.
+		[ex. request.getParameter("name")]:
+		- name
+		- brand
+		- description
+		- color
+		- type
+		- collection
+		- rating
+		- price
+		*/
 
+		// create a newProduct object
+		// set the necessary attributes
+		// store it in the database
+		// dispatch to admin-products.jsp
 	}
 
 	protected void allProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// retrieve all products via BagService
+		// put all bags in an arraylist
+		// set the arraylist as a request attribute named "baglist"
 	}
 
 	protected void viewProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

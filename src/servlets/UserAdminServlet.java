@@ -43,11 +43,27 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void addUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
+		Get request parameter values of the ff.
+		[ex. request.getParameter("name")]:
+		- firstname
+		- lastname
+		- email
+		- password
+		- phone
+		- usertype
+		*/
 
+		// create a User object and set the necessary attributes
+		// store the new user in the database
+		// dispatch to admin-users.jsp
 	}
 
 	protected void allUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// retrieve all Users via UserService
+		// put all users in an arraylist
+		// set the arraylist as request parameter named "userlist"
+		// dispatch to admin-users.jsp
 	}
 
 	protected void viewUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
