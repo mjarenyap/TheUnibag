@@ -39,9 +39,22 @@ public class UserServlet extends HttpServlet {
 
 	protected void profile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check for logged user
+		boolean loggedFlag = false;
+		
+		// check for logged user
+				if(request.getSession().getAttribute("Account") != null)
+					loggedFlag = true;
+
+				// invalidate the session
+				if(!loggedFlag){
+					request.getSession().invalidate();
+		
 		// get purpose parameter
+		String purpose = request.getParameter("purpose");
 		// check if purpose parameter is in the whitelist
+		
 		// dispatch to the profile page
+		request.getRequestDispatcher("profile.jsp");
 	}
 
 	/**

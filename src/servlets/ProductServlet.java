@@ -59,6 +59,17 @@ public class ProductServlet extends HttpServlet {
 
 	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check for logged users
+		boolean loggedFlag = false;
+		
+		// check for logged user
+				if(request.getSession().getAttribute("Account") != null)
+					loggedFlag = true;
+
+				// invalidate the session
+				if(!loggedFlag){
+					request.getSession().invalidate();
+		
+		
 		// get pagination number parameter
 		// get all products
 		// preview 10 products according to pagination number
@@ -67,8 +78,18 @@ public class ProductServlet extends HttpServlet {
 	}
 
 	protected void product(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		boolean loggedFlag = false;
+		
 		// check for logged user
+				if(request.getSession().getAttribute("Account") != null)
+					loggedFlag = true;
+
+				// invalidate the session
+				if(!loggedFlag){
+					request.getSession().invalidate();
+		
 		// check filter status
+				if(request.getSession(),getAttribute("Filter") != null)
 		// get contextualized url parametr of the product
 		// split the id and the actual name of the product
 		// convert the id String to Integer
@@ -80,7 +101,15 @@ public class ProductServlet extends HttpServlet {
 	}
 
 	protected void collections(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		boolean loggedFlag = false;
+		
 		// check for logged user
+				if(request.getSession().getAttribute("Account") != null)
+					loggedFlag = true;
+
+				// invalidate the session
+				if(!loggedFlag){
+					request.getSession().invalidate();
 		// check filter status
 		// get contextualized url parameter of the product
 		// 

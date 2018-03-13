@@ -1,11 +1,15 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import beans.User;
+import services.UserService;
 
 /**
  * Servlet implementation class UserAdminServlet
@@ -53,17 +57,40 @@ public class UserAdminServlet extends HttpServlet {
 		- phone
 		- usertype
 		*/
+		
+		String firstname = request.getParameter("firstname");
+		String lastname = request.getParameter("lastname");
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+		String phone = request.getParameter("phone");
+		String userType = request.getParameter("userType");
 
 		// create a User object and set the necessary attributes
+		
+		User newUser = new User();
 		// store the new user in the database
+		
+		newUser.setFirstName(firstname);
+		newUser.setLastName(lastname);
+		newUser.setEmail(email);
+		newUser.setPassword(password);
+		newUser.setPhone(phone);
+		newUser.setUserType(userType);
+		
 		// dispatch to admin-users.jsp
+		request.getRequestDispatcher("admin-users.jsp").forward(request, response);
 	}
 
 	protected void allUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// retrieve all Users via UserService
-		// put all users in an arraylist
+		UserService us = new UserService();
+
+		//to do put all users in an arraylist
+		List<User> users = us.getAllUsers();
 		// set the arraylist as request parameter named "userlist"
+		request.setAttribute("userlist", users);
 		// dispatch to admin-users.jsp
+		request.getRequestDispatcher("admin-user.jsp");
 	}
 
 	protected void viewUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
