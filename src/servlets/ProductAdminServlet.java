@@ -1,11 +1,15 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import beans.Bag;
+import services.BagService;
 
 /**
  * Servlet implementation class ProductAdminServlet
@@ -42,15 +46,60 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void addProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
+		Get request parameter values of the ff.
+		[ex. request.getParameter("name")]:
+		- name
+		- brand
+		- description
+		- color
+		- type
+		- collection
+		- rating
+		- price
+		*/
+		
+		String name = request.getParameter("name");
+		String brand= request.getParameter("brand");
+		String description = request.getParameter("description");
+		String color = request.getParameter("color");
+		String type = request.getParameter("type");
+		String collection = request.getParameter("collection");
+		String rating = request.getParameter("rating");
+		String price = request.getParameter("price");
 
+		// create a newProduct object
+		Bag newBag = new Bag();
+		// set the necessary attributes
+		// store it in the database
+		newBag.setName(name);
+		newBag.setBrand(brand);
+		newBag.setDescription(description);
+		newBag.setColor(color);
+		newBag.setType(type);
+		newBag.setCollection(collection);
+		newBag.setRating(Integer.parseInt(rating));
+		newBag.setPrice(price);
+		
+		// dispatch to admin-products.jsp
+		request.getRequestDispatcher("admin-products.jsp");
 	}
 
 	protected void allProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// retrieve all products via BagService
+		BagService bs = new BagService(); 
+		// put all bags in an arraylist
+		List<Bag> bags = bs.getAllBags();
+		
+		// set the arraylist as a request attribute named "baglist"
+		request.setAttribute("baglist", bags);
+		
+		//TODO do I set the request Dispatcher din here?
+		request.getRequestDispatcher("admin-products");
 	}
 
 	protected void viewProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
 	}
 
 	/**

@@ -1,11 +1,16 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import beans.Order;
+import services.OrderService;
 
 /**
  * Servlet implementation class OrderAdminServlet
@@ -42,15 +47,24 @@ public class OrderAdminServlet extends HttpServlet {
 	}
 
 	protected void addOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		/* LEAVE THIS BLANK */
 	}
 
 	protected void allOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// Retrieve all of the orders through OrderService
+		OrderService os = new OrderService();
+		// Store all the orders in an ArrayList
+		List<Order> orderList = os.getAllOrders();
+		
+		// Set the ArrayList as request attribute named "orderlist"
+		request.setAttribute("orderlist", orderList);
+		// Dispatch to admin-orders.jsp
+		request.getRequestDispatcher("admin-orders");
 	}
 
 	protected void viewOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// Get request parameter of the 
+		OrderService.getAllOrders();
 	}
 
 	/**
