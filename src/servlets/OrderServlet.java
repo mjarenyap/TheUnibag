@@ -56,7 +56,19 @@ public class OrderServlet extends HttpServlet {
 
 	protected void shoppingCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check for logged user
+		boolean loggedFlag = false;
+		
+		// check for logged user
+				if(request.getSession().getAttribute("Account") != null)
+					loggedFlag = true;
+
+				// invalidate the session
+				if(!loggedFlag){
+					request.getSession().invalidate();
+
+		
 		// check cart session for items
+		
 		// put each item in an arraylist
 		// compute for subtotal
 		// set computed total as request attribute "subtotal"
@@ -66,13 +78,25 @@ public class OrderServlet extends HttpServlet {
 
 	protected void checkout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check for logged user
+		boolean loggedFlag = false;
+		
+		// check for logged user
+				if(request.getSession().getAttribute("Account") != null)
+					loggedFlag = true;
+
+				// invalidate the session
+				if(!loggedFlag){
+					request.getSession().invalidate();
+		
 		// check purpose if it contains "cart"
+		
 		// autofill the fields for logged users
 		// compute for subtotal
 		// put each item in an arraylist
 		// set computed total as request attribute "subtotal"
 		// set arraylist to request attribute
 		// dispatch to the checkout page
+		request.getRequestDispatcher("checkout.jsp");
 	}
 
 	protected void success(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
