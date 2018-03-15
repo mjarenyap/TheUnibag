@@ -55,7 +55,6 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	protected void shoppingCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// check for logged user
 		// check cart session for items
 		// put each item in an arraylist
 		// compute for subtotal

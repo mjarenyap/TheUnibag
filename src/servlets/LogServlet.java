@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import beans.User;
 import beans.Bag;
@@ -58,6 +59,12 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check if there is no existing cart session
+		if(request.getSession().getAttribute("ShoppingCart") == null){
+			ArrayList<Bag> shoppingcart = new ArrayList<>();
+			request.getSession().setAttribute("ShoppingCart", shoppingcart);
+		}
+
 		// declare needed variables
 		boolean purposeFlag = false;
 		boolean loggedFlag = false;
@@ -76,7 +83,7 @@ public class LogServlet extends HttpServlet {
 
 		// invalidate the session
 		if(loggedFlag && purpose.equals("logout") && purposeFlag){
-			request.getSession().invalidate();
+			request.getSession().setAttribute("Account", null);
 
 			// remove the Account cookies
 			Cookie[] cookies = request.getCookies();
