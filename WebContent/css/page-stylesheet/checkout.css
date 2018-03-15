@@ -1,0 +1,91 @@
+/* checkout page stylesheet */
+
+section#checkout-section > div.flex-start{
+	align-items: flex-start;
+}
+
+#checkout-title{
+	font-size: 2.3em;
+	margin-bottom: 1em;
+}
+
+#billing-form{
+	max-width: 50%;
+	width: 100%;
+	margin-right: 3em;
+}
+
+#billing-form input.full-width{
+	width: 90%;
+}
+
+.forname input.full-width{
+	width: 80% !important;
+}
+
+#billing-form label{
+	display: block;
+	margin: 0.7em 0;
+}
+
+.reminder{
+	display: block;
+	margin-bottom: 1em;
+	font-style: italic;
+}
+
+#confirm-pane{
+	max-width: 45%;
+	width: 100%;
+}
+
+#confirm-title{
+	margin-bottom: 1em;
+}
+
+#product-feed .content-wrapper{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em 0;
+	border-bottom: thin solid #ccc;
+}
+
+#product-feed .content-wrapper .featured-image{
+	width: 3em;
+	height: 3em;
+	border-radius: 100%;
+	background-color: white;
+}
+
+#product-feed .content-wrapper .product-name{
+	max-width: 60%;
+	font-weight: normal;
+	width: 100%;
+	margin: 0 0.5em;
+	text-align: left;
+}
+
+#product-feed .content-wrapper .product-price{
+	color: var(--theme-color);
+}
+
+#confirm-button{
+	margin: 1em 0;
+	width: 100%;
+	font-size: 0.8em;
+}
+
+#go-back{
+	text-transform: uppercase;
+	font-size: 0.7em;
+	color: var(--theme-color);
+	display: block;
+	text-align: center;
+	cursor: pointer;
+}
+
+#go-back:hover{
+	text-decoration: underline;
+}
+

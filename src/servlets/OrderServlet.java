@@ -65,8 +65,7 @@ public class OrderServlet extends HttpServlet {
 				// invalidate the session
 				if(!loggedFlag){
 					request.getSession().invalidate();
-
-		
+          
 		// check cart session for items
 		
 		// put each item in an arraylist

@@ -36,7 +36,7 @@ public class UserService {
 		em.close();
 	}
 	
-	public static User getUser(int id)
+	public static User getUser(long id)
 	{
 		User users = null;
 		
@@ -54,7 +54,7 @@ public class UserService {
 		
 	}
 	
-	public static void deleteUser(int id)
+	public static void deleteUser(long id)
 	{	
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -73,7 +73,7 @@ public class UserService {
 		}
 	}
 	
-	public static boolean updateUser(int id, User newinfo)
+	public static boolean updateUser(long id, User newinfo)
 	{
 		boolean success = false;
 		

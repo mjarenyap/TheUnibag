@@ -1,6 +1,7 @@
 package security;
-
 import beans.User;
+import beans.Address;
+import security.Encryption;
 
 public class FieldChecker {
 	public boolean checkLogin(String email, String password){
@@ -65,6 +66,40 @@ public class FieldChecker {
 		if(!capitalLetter || !symbolFlag || !numberFlag)
 			return false;
 		
+		return true;
+	}
+
+	public boolean checkProfileGeneral(User user){
+		if(user.getFirstName() == null || user.getFirstName().length() == 0)
+			return false;
+
+		if(user.getLastName() == null || user.getLastName().length() == 0)
+			return false;
+
+		if(user.getEmail() == null || user.getEmail().length() == 0 || !user.getEmail().contains("@"))
+			return false;
+
+		String phone = user.getPhone();
+		for(int i = 0; i < phone.length(); i++)
+			if(phone.charAt(i) < '0' || phone.charAt(i) > '9')
+				return false;
+
+		return true;
+	}
+
+	public boolean checkProfileAddress(Address address){
+		return true;
+	}
+
+	public boolean checkProfilePassword(String oldpass, String newpass, String confirmpass, User user){
+		Encryption e = new Encryption();
+		String decryptedUserPass = e.decryptPassword(user.getPassword());
+		if(!decryptedUserPass.equals(oldpass))
+			return false;
+
+		if(!newpass.equals(confirmpass))
+			return false;
+
 		return true;
 	}
 }

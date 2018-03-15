@@ -16,6 +16,9 @@ import beans.Bag;
 import services.UserService;
 import services.BagService;
 import security.FieldChecker;
+import security.PurposeChecker;
+import security.DuplicateChecker;
+import security.Encryption;
 
 /**
  * Servlet implementation class LogServlet
@@ -43,20 +46,27 @@ public class LogServlet extends HttpServlet {
 			case "/home": home(request, response);
 			break;
 
-			case "/login": login(request, response);
+			case "/login": loginPage(request, response);
 			break;
 
-			case "/signup": signup(request, response);
+			case "/signup": signupPage(request, response);
 			break;
-
+			/*
 			default: home(request, response);
 			break;
+			*/
 		}
 	}
 
 	protected void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check if there is no existing cart session
+		if(request.getSession().getAttribute("ShoppingCart") == null){
+			ArrayList<Bag> shoppingcart = new ArrayList<>();
+			request.getSession().setAttribute("ShoppingCart", shoppingcart);
+		}
+
 		// declare needed variables
-		boolean pruposeFlag = false;
+		boolean purposeFlag = false;
 		boolean loggedFlag = false;
 
 		String purpose = null;
@@ -64,7 +74,7 @@ public class LogServlet extends HttpServlet {
 		// get the prupose parameter // check if they are trying to logout
 		if(request.getParameter("purpose") != null && request.getParameter("purpose").equals("logout")){
 			purpose = request.getParameter("purpose");
-			pruposeFlag = true;
+			purposeFlag = true;
 		}
 
 		// check for logged user
@@ -72,8 +82,8 @@ public class LogServlet extends HttpServlet {
 			loggedFlag = true;
 
 		// invalidate the session
-		if(loggedFlag){
-			request.getSession().invalidate();
+		if(loggedFlag && purpose.equals("logout") && purposeFlag){
+			request.getSession().setAttribute("Account", null);
 
 			// remove the Account cookies
 			Cookie[] cookies = request.getCookies();
@@ -90,96 +100,194 @@ public class LogServlet extends HttpServlet {
 			}
 		}
 
-		// REQUEST ATTRIBUTES HERE
+		// IMPORTANT: GET ALL PROMOTIONS
+		// IMPORTANT: SET THEM TO REQUEST ATTRIBUTES
 
 		// dispatch to the homepage
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
+	protected void loginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+			home(request, response);
+
+		else request.getRequestDispatcher("login.jsp").forward(request, response);
+	}
+
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Access user service
-		UserService us = new UserService();
-		List<User> users = us.getAllUsers();
-		
 		// check if there is a logged user
 		if(request.getSession().getAttribute("Account") == null && request.getCookies() == null){
+			//security calsses
+			FieldChecker fc = new FieldChecker();
+			Encryption e = new Encryption();
+			
 			// get the email, password and redirect parameters
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
 			String redirect = request.getParameter("redirect");
 
 			// declare flag variables
-			boolean invalidFlag = true;
+			boolean validCredentialFlag = false;
+			boolean validRedirectFlag = false;
+			boolean errorFlag = false;
 
-			// check for invalid or empty fields --
-			/*Todo might have made checkLogin Static -- pls check*/
-			invalidFlag = FieldChecker.checkLogin(email, password);
-			// check if the redirect parameter is part of the whitelisted pages (array of URLs)
-			// find a matched account credentials from the database
-			// create a User object then set the necessary attributes
-			User newUser = new User();
-			newUser.setEmail(email);
-			newUser.setPassword(password);
-			
-			// set a session attribute "Account"
-			request.getSession().setAttribute("Account", newUser);
-			// TODO create a cookie for the logged user
-			
-			// dispatch to the specified redirect page
-			// TODO which JSP page
-			request.getRequestDispatcher("redirect.jsp");
-			
-			
-			
-	}
-
-	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//TODO Please check this
-		
-		// check if there is a logged user
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
-			
-			String fname = request.getParameter("firstname");
-			String lname = request.getParameter("lastname");
-			String email = request.getParameter("email");
-			String phone = request.getParameter("phone");
-			
-			// declare flag variables
-			boolean invalidFlag = false;
-			
 			// check for invalid or empty fields
-				User u = new User();
-				u.setFirstName(fname);
-				u.setLastName(lname);
-				u.setEmail(email);
-				u.setPhone(phone);
-				
-				invalidFlag = FieldChecker.checkSignup(u);
-			
+			validCredentialFlag = fc.checkLogin(email, password);
 
-			// get the redirect parameter
-				String redirect = request.getParameter("redirect");
-			// check for duplicate account
-			UserService us = new UserService();
-			for(int i = 0; i < us.getAllUsers().size(); i++) {
-				if(us.getAllUsers().get(i).getEmail() == u.getEmail()) {
-					/* TODO WHATEVER YOU DO HERE*/
+			// check if the redirect parameter is part of the whitelisted pages (array of URLs)
+			PurposeChecker checker = new PurposeChecker();
+			if(checker.checkRedirect(redirect))
+				validRedirectFlag = true;
+
+
+			if(validCredentialFlag && validRedirectFlag){
+				// find a matched account credentials from the database
+				List<User> userlist = UserService.getAllUsers();
+				User correctUser = null;
+
+				if(userlist != null){
+					for(int i = 0; i < userlist.size(); i++){
+						String decryptedPassword = e.decryptPassword(userlist.get(i).getPassword());
+						if(email.equals(userlist.get(i).getEmail()) && password.equals(decryptedPassword)){
+							correctUser = userlist.get(i);
+							break;
+						}
+					}
+				}
+
+				// set a session attribute "Account"
+				if(correctUser != null){
+					request.getSession().setAttribute("Account", correctUser);
+					
+					// create a cookie for the logged user
+					Cookie userCookie = new Cookie("Username", correctUser.getEmail());
+					response.addCookie(userCookie);
+
+					if(!redirect.equals("index"))
+						request.getRequestDispatcher(redirect + ".jsp").forward(request, response);
+
+					else home(request, response);
+				}
+
+				else{
+					errorFlag = true;
+					request.setAttribute("error", errorFlag);
+					request.getRequestDispatcher("login.jsp").forward(request, response);
 				}
 			}
-			
-			// create a User object then set the necessary attributes
-			
-			// add the User to the database
-			us.addUser(u);
-			
-			// set a session attribute "Account"
-			request.getSession().setAttribute("Account", u);
-			
-			
+
+			else if(validCredentialFlag && !validRedirectFlag)
+				home(request, response);
+
+			else if(!validCredentialFlag && validRedirectFlag){
+				errorFlag = true;
+				request.setAttribute("error", errorFlag);
+				request.getRequestDispatcher("login.jsp").forward(request, response);
+			}
+
+			else home(request, response);
 		}
 
 		else home(request, response);
-		
+	}
+
+	protected void signupPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+			home(request, response);
+
+		else request.getRequestDispatcher("signup.jsp").forward(request, response);
+	}
+
+	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check if there is a logged user
+		if(request.getSession().getAttribute("Account") == null && request.getCookies() == null){
+			//security variables
+			FieldChecker fc = new FieldChecker();
+			DuplicateChecker dc = new DuplicateChecker();
+			Encryption e = new Encryption();
+			
+			// get the firstname, lastname, email, and phone parameters
+			String firstname = request.getParameter("firstname");
+			String lastname = request.getParameter("lastname");
+			String email = request.getParameter("email");
+			String phone = request.getParameter("phone");
+
+			String password = request.getParameter("password");
+			String confirmPass = request.getParameter("confirmpass");
+			// get the redirect parameter
+			String redirect = request.getParameter("redirect");
+
+			// declare flags
+			boolean validCredentialFlag = false;
+			boolean validRedirectFlag = false;
+			boolean duplicateFlag = true;
+			boolean errorFlag = false;
+
+			if(password.equals(confirmPass)){
+				// create a User object then set the necessary attributes
+				User newUser = new User();
+				newUser.setFirstName(firstname);
+				newUser.setLastName(lastname);
+				newUser.setEmail(email);
+				newUser.setPhone(phone);
+				newUser.setUserType("normal");
+				newUser.setPassword(password);
+
+				// check for invalid or empty fields
+				validCredentialFlag = fc.checkSignup(newUser);
+
+				// check if the redirect parameter is part of the whitelisted pages (array of URLs)
+				PurposeChecker checker = new PurposeChecker();
+				if(checker.checkRedirect(redirect))
+					validRedirectFlag = true;
+
+				// check for duplicate account
+				List<User> userlist = UserService.getAllUsers();
+				duplicateFlag = dc.checkUser(newUser, userlist);
+
+				if(validCredentialFlag && validRedirectFlag && !duplicateFlag){
+					// add the User to the database
+					long newUserID = (long)userlist.size();
+					newUser.setUserID(newUserID);
+
+					String encryptedPass = e.encryptPassword(password);
+					newUser.setPassword(encryptedPass);
+
+					UserService.addUser(newUser);
+
+					// set a session attribute "Account"
+					request.getSession().setAttribute("Account", newUser);
+						
+					// create a cookie for the logged user
+					Cookie userCookie = new Cookie("Username", newUser.getEmail());
+					response.addCookie(userCookie);
+
+					if(redirect.equals("cart") || redirect.equals("checkout"))
+						request.getRequestDispatcher(redirect + ".jsp").forward(request, response);
+
+					else home(request, response);
+				}
+
+				else if((!validCredentialFlag && validRedirectFlag) || (duplicateFlag && validRedirectFlag)){
+					errorFlag = true;
+					request.setAttribute("error", errorFlag);
+					request.setAttribute("duplicate", duplicateFlag);
+					request.getRequestDispatcher("signup.jsp").forward(request, response);
+				}
+
+				else home(request, response);
+			}
+
+			else{
+				errorFlag = true;
+				duplicateFlag = false;
+				request.setAttribute("error", errorFlag);
+				request.setAttribute("duplicate", duplicateFlag);
+				request.getRequestDispatcher("signup.jsp").forward(request, response);
+			}
+		}
+
+		else home(request, response);
 	}
 
 	/**

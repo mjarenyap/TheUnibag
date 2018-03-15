@@ -34,7 +34,7 @@ public class ColorService {
 		em.close();
 	}
 	
-	public static Color getColor(int id)
+	public static Color getColor(long id)
 	{
 		Color colors = null;
 		
@@ -52,7 +52,7 @@ public class ColorService {
 		
 	}
 	
-	public static void deleteColor(int id)
+	public static void deleteColor(long id)
 	{	
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -71,7 +71,7 @@ public class ColorService {
 		}
 	}
 	
-	public static boolean updateColor(int id, Color newinfo)
+	public static boolean updateColor(long id, Color newinfo)
 	{
 		boolean success = false;
 		
