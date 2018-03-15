@@ -11,6 +11,7 @@ public class PurposeChecker {
 		whitelistPages = new ArrayList<>();
 		whitelistPages.add("index");
 		whitelistPages.add("cart");
+		whitelistPages.add("checkout");
 		whitelistPages.add("products");
 		whitelistPages.add("single");
 	}

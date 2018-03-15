@@ -20,7 +20,7 @@ import services.SizeService;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(urlPatterns = {"/products", "/products/collections", "/products/types", "/product"})
+@WebServlet(urlPatterns = {"/products", "/products/*"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -43,16 +43,7 @@ public class ProductServlet extends HttpServlet {
 			case "/products": products(request, response);
 			break;
 
-			case "/products/collections": collections(request, response);
-			break;
-
-			case "/products/brands": brands(request, response);
-			break;
-
-			case "/product": product(request, response);
-			break;
-
-			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
+			default: product(request, response);
 			break;
 		}
 	}
@@ -77,21 +68,6 @@ public class ProductServlet extends HttpServlet {
 		// create a Bag object and set the necessary attributes
 		// fetch the the size associated with the product
 		// fetch the colors associated with the product
-	}
-
-	protected void collections(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// check for logged user
-		// check filter status
-		// get contextualized url parameter of the product
-		// 
-	}
-
-	protected void brands(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	}
-
-	protected void types(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 	}
 
 	/**

@@ -1,42 +1,72 @@
-/* theme styleheet of the website */
+/* Theme setup for the website */
 
 :root{
-	--theme-dark: #6e768f;
-	--theme-par-dark: #444444;
-	--theme-purple: #5C6AC5;
-	--theme-dark-purple: #212F78;
-	--theme-light-grey: #f7f7fa;
-	--theme-grey: #c9d0e1;
+	--theme-color: #7f0641;
+	--theme-dark-accent: #400221;
+	--theme-light-neutral: #e8e8e4;
+	--theme-dark-neutral: #333333;
 }
 
 body, html{
 	margin: 0;
 	padding: 0;
-	font-family: 'Lato', sans-serif;
-	color: var(--theme-dark);
+	background-color: var(--theme-light-neutral);
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+body.nav-sticky{
+	margin-top: 127px;
 }
 
 h1, h2, h3, h4, h5, h6{
-	color: var(--theme-dark);
 	margin: 0;
 	padding: 0;
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'Source Serif Pro', sans-serif;
+	color: var(--theme-dark-neutral);
 }
 
 p{
-	color: var(--theme-par-dark);
-	font-family: 'Lato', sans-serif;
+	margin: 0;
+	padding: 0;
+	font-size: 1em;
+	font-family: 'Source Sans Pro', sans-serif;
 	word-wrap: break-word;
-	letter-spacing: 0.02em;
-}
-
-section{
-	padding: 80px 10%;
-	background-color: #f4f4f4;
-	box-sizing: border-box; 
+	color: var(--theme-dark-neutral);
 }
 
 a{
-	text-decoration: none;
 	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+p a, span a, h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{
+	color: var(--theme-color);
+}
+
+p a:hover, span a:hover, h1 a:hover, h2 a:hover,
+h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover{
+	text-decoration: underline;
+}
+
+section{
+	padding: 8em 15%;
+}
+
+section.white{
+	background-color: white;
+}
+
+form{
+	margin: 0;
+	padding: 0;
+}
+
+hr{
+	border: none;
+	border-top: thin solid #ccc;
+}
+
+b.important{
+	color: var(--theme-color);
 }

@@ -18,9 +18,8 @@
  */
 
 :root{
-    --theme-button-color: #5C6AC5;
-    --theme-button-accent: #212F78;
-
+    --theme-button-color: #7f0641;
+    --theme-button-accent: #400221;
     --theme-button-dark-color: #637484;
     --theme-button-dark-accent: #4C5A68;
     --theme-button-light-color: white;
@@ -39,18 +38,18 @@ button.radius-full, input[type="button"].radius-full, input[type="submit"].radiu
 
 /* default look of a button */
 button, input[type="button"], input[type="submit"]{
-    padding: 1em 2em;
+    padding: 10px 30px;
     font-kerning: 3.6em;
     background-color: var(--theme-button-color);
     border: thin solid var(--theme-button-color);
     color: var(--theme-button-color-value);
-    font-family: 'lato', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     cursor: pointer;
     border-radius: 3px;
-    font-size: 0.8em;
+    font-size: 0.9em;
     margin: 0;
     outline: none;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
 
     transition: ease 0.3s all;

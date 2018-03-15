@@ -7,10 +7,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.User;
+import beans.Address;
+import services.UserService;
+import services.AddressService;
+import security.Encryption;
+import security.FieldChecker;
+
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(urlPatterns = {"/profile"})
+@WebServlet(urlPatterns = {"/profile/general", "/profile/address", "/password/password", "/profile", "/profile/*"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -29,7 +36,16 @@ public class UserServlet extends HttpServlet {
 		String path = request.getServletPath();
 
 		switch(path){
-			case "/profile": profile(request, response);
+			case "/profile": profileGeneral(request, response);
+			break;
+
+			case "/profile/general": profileGeneral(request, response);
+			break;
+
+			case "/profile/address": profileAddress(request, response);
+			break;
+
+			case "/profile/password": profilePassword(request, response);
 			break;
 
 			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
@@ -37,11 +53,242 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	protected void profile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// check for logged user
-		// get purpose parameter
-		// check if purpose parameter is in the whitelist
-		// dispatch to the profile page
+	protected void editGeneral(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//check for logged users
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+			// security variables
+			Encryption e = new Encryption();
+			FieldChecker fc= new FieldChecker();
+			
+			// get parameter values of firstname, lastname, email, phone
+			String firstname = request.getParameter("firstname");
+			String lastname = request.getParameter("lastname");
+			String email = request.getParameter("email");
+			String phone = request.getParameter("phone");
+			// password as security answer
+			String securityPassword = request.getParameter("securityPassword");
+
+			// declare flags
+			boolean validPasswordFlag = false;
+			boolean validCredentialsFlag = false;
+			boolean errorFlag = false;
+			boolean successFlag = false;
+
+			User currentUser = (User)request.getSession().getAttribute("Account");
+			long decryptedID = e.decryptID(currentUser.getUserID());
+			if(UserService.getUser(decryptedID) != null){
+
+				// decrypt the current user's password
+				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
+
+				// compare it with the security password
+				if(decryptedPassword.equals(securityPassword))
+					validPasswordFlag = true;
+
+				else errorFlag = true;
+
+				User temp = new User();
+				temp.setFirstName(firstname);
+				temp.setLastName(lastname);
+				temp.setEmail(email);
+				temp.setPhone(phone);
+				validCredentialsFlag = fc.checkProfileGeneral(temp);
+
+				// modify the currentUser's credentials
+				if(validCredentialsFlag && validPasswordFlag && !errorFlag){
+					currentUser.setFirstName(firstname);
+					currentUser.setLastName(lastname);
+					currentUser.setEmail(email);
+					currentUser.setPhone(phone);
+
+					UserService.updateUser(currentUser.getUserID(), currentUser);
+
+					successFlag = true;
+					errorFlag = false;
+					request.setAttribute("success", successFlag);
+					request.setAttribute("error", errorFlag);
+				}
+
+				else if(!validPasswordFlag || errorFlag){
+					successFlag = false;
+					errorFlag = true;
+					request.setAttribute("success", successFlag);
+					request.setAttribute("error", errorFlag);
+				}
+
+				request.getRequestDispatcher("profile-general.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+	}
+
+	protected void profileGeneral(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+			request.getRequestDispatcher("profile-general.jsp").forward(request, response);
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+	}
+
+	protected void editAddress(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//check for logged users
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+			// security variables
+			Encryption e = new Encryption();
+			FieldChecker fc= new FieldChecker();
+			
+			// get parameter values of firstname, lastname, email, phone
+			String location = request.getParameter("location");
+			String city = request.getParameter("city");
+			int postcode = Integer.parseInt(request.getParameter("postcode"));
+			String province = request.getParameter("province");
+			// password as security answer
+			String securityPassword = request.getParameter("securityPassword");
+
+			// declare flags
+			boolean validPasswordFlag = false;
+			boolean validCredentialsFlag = false;
+			boolean errorFlag = false;
+			boolean successFlag = false;
+
+			User currentUser = (User)request.getSession().getAttribute("Account");
+			long decryptedID = e.decryptID(currentUser.getUserID());
+			if(UserService.getUser(decryptedID) != null){
+
+				// decrypt the current user's password
+				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
+
+				// compare it with the security password
+				if(decryptedPassword.equals(securityPassword))
+					validPasswordFlag = true;
+
+				else errorFlag = true;
+
+				Address temp = new Address();
+				temp.setLocation(location);
+				temp.setCity(city);
+				temp.setPostcode(postcode);
+				temp.setProvince(province);
+				validCredentialsFlag = fc.checkProfileAddress(temp);
+
+				// modify the currentAddress credentials
+				if(validCredentialsFlag && validPasswordFlag && !errorFlag){
+					Address currentAddress = AddressService.getAddress(currentUser.getUserID());
+					if(currentAddress == null){
+						currentAddress = new Address();
+						currentAddress.setUserID(currentUser.getUserID());
+						currentAddress.setLocation(location);
+						currentAddress.setCity(city);
+						currentAddress.setPostcode(postcode);
+						currentAddress.setProvince(province);
+						AddressService.addAddress(currentAddress);
+					}
+
+					else{
+						currentAddress.setUserID(currentUser.getUserID());
+						currentAddress.setLocation(location);
+						currentAddress.setCity(city);
+						currentAddress.setPostcode(postcode);
+						currentAddress.setProvince(province);
+						AddressService.updateAddress(currentAddress.getUserID(), currentAddress);
+					}
+
+					successFlag = true;
+					errorFlag = false;
+					request.setAttribute("success", successFlag);
+					request.setAttribute("error", errorFlag);
+				}
+
+				else if(!validPasswordFlag || errorFlag){
+					successFlag = false;
+					errorFlag = true;
+					request.setAttribute("success", successFlag);
+					request.setAttribute("error", errorFlag);
+				}
+
+				request.getRequestDispatcher("profile-address.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+	}
+
+	protected void profileAddress(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+			request.getRequestDispatcher("profile-address.jsp").forward(request, response);
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+	}
+
+	protected void editPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//check for logged users
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+			// security variables
+			Encryption e = new Encryption();
+			FieldChecker fc= new FieldChecker();
+			
+			// get parameter values of firstname, lastname, email, phone
+			String oldPassword = request.getParameter("oldPassword");
+			String newPassword = request.getParameter("newPassword");
+			String confirmNewPass = request.getParameter("confirmPass");
+
+			// declare flags
+			boolean validPasswordFlag = false;
+			boolean validCredentialsFlag = false;
+			boolean errorFlag = false;
+			boolean successFlag = false;
+
+			User currentUser = (User)request.getSession().getAttribute("Account");
+			long decryptedID = e.decryptID(currentUser.getUserID());
+			if(UserService.getUser(decryptedID) != null){
+
+				// decrypt the current user's password
+				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
+
+				// compare it with the security password
+				if(decryptedPassword.equals(oldPassword))
+					validPasswordFlag = true;
+
+				else errorFlag = true;
+
+				validCredentialsFlag = fc.checkProfilePassword(oldPassword, newPassword, confirmNewPass, currentUser);
+
+				// modify the currentUser's credentials
+				if(validCredentialsFlag && validPasswordFlag && !errorFlag){
+					currentUser.setPassword(newPassword);
+					UserService.updateUser(currentUser.getUserID(), currentUser);
+
+					successFlag = true;
+					errorFlag = false;
+					request.setAttribute("success", successFlag);
+					request.setAttribute("error", errorFlag);
+				}
+
+				else if(!validPasswordFlag || errorFlag){
+					successFlag = false;
+					errorFlag = true;
+					request.setAttribute("success", successFlag);
+					request.setAttribute("error", errorFlag);
+				}
+
+				request.getRequestDispatcher("profile-password.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+	}
+
+	protected void profilePassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+			request.getRequestDispatcher("profile-password.jsp").forward(request, response);
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	/**

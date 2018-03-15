@@ -1,109 +1,67 @@
-/* Page stylesheet for the Homepage */
+/* homepage stylesheet */
 
-header div#hero-content{
-	width: 40%;
+body{
+	margin-top: 127px;
 }
 
 header{
-    background-color: #ededf3; 
+	background: url('../../assets/images/hero-image.jpeg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	padding: 12em 15%;
+	color: white;
 }
 
-#services .featured-image{
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background-color: #ededf3; 
-    margin-bottom: 20px;
+header #welcome{
+	color: white;
+	text-align: center;
+	font-size: 3.5em;
+	text-shadow: 0px 0px 21px #000;
 }
 
-#top-selling{
-    background-color: #ededf3;
+header #tagline{
+	color: white;
+	font-weight: normal;
+	text-align: center;
+	font-size: 1.5em;
+	text-shadow: 0px 0px 21px #000;
 }
 
-#services .content-wrapper{
-    margin: 0px 10px;
-    align-items: flex-start;
+header #cta{
+	text-align: center;
+	display: block;
+	margin: auto;
 }
 
-#services .content-wrapper .title, #services .content-wrapper .description{
-    text-align: center;
+img.ornaments{
+	width: 5em;
+	display: block;
+	margin: auto;
 }
 
-#top-selling .product-feed .content-wrapper .featured-image{
-    width: 100%;
-    height: 250px;
-    background-color: #ededf3;
+section#services{
+	align-items: flex-start !important;
+	padding: 5em 15%;
 }
 
-#top-selling h2{
-    margin-bottom: 30px;
+section#services div.content-wrapper{
+	width: 25%;
 }
 
-#top-selling .product-feed{
-    align-items: flex-start;
+section#services div.content-wrapper p{
+	text-align: center;
+	line-height: 1.5em;
 }
 
-#top-selling .product-feed .content-wrapper{
-    background-color: white;
-    border: 1px solid var(--theme-grey);
-    border-radius: 3px;
-    margin: 10px 8px;
-    max-width: 30%;
+section#services img{
+	width: 5em;
+	display: block;
+	margin: auto;
+	margin-bottom: 2em;
 }
 
-#top-selling .content-wrapper p{
-    font-size: 0.9em;
-}
-
-#top-selling .product-highlight{
-    margin: 30px;
-}
-
-#top-selling .other-details{
-    list-style: none;
-    margin-left: 0px;
-    padding-left: 0px;
-    font-size: 0.8em;
-}
-
-#top-selling button{
-    font-size: 0.6em;
-    padding: 0.7em;
-}
-
-#brands .brand-feed .content-wrapper .featured-image{
-    width: 100%;
-    height: 250px;
-    background-color: #ededf3;
-}
-
-#brands h2{
-    margin: 30px 8px;
-}
-
-#brands .brand-feed .content-wrapper{
-    background-color: white;
-    border: 1px solid var(--theme-grey);
-    border-radius: 3px;
-    margin: 10px 8px;
-}
-
-#brands .content-wrapper p{
-    font-size: 0.9em;
-}
-
-#brands .product-highlight{
-    margin: 30px;
-}
-
-#brands .other-details{
-    list-style: none;
-    margin-left: 0px;
-    padding-left: 0px;
-    font-size: 0.8em;
-}
-
-#brands button{
-    font-size: 0.6em;
-    padding: 0.7em;
+section#brands h1{
+	text-align: center;
+	font-size: 2.3em;
 }

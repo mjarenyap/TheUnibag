@@ -35,7 +35,7 @@ public class OrderService {
 		em.close();
 	}
 	
-	public static Order getOrder(int id)
+	public static Order getOrder(long id)
 	{
 		Order orders = null;
 		
@@ -53,7 +53,7 @@ public class OrderService {
 		
 	}
 	
-	public static void deleteOrder(int id)
+	public static void deleteOrder(long id)
 	{	
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
