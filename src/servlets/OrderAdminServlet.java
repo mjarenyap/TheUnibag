@@ -15,7 +15,7 @@ import services.OrderService;
 /**
  * Servlet implementation class OrderAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/addorder", "/admin/viewallorders", "/admin/vieworder"})
+@WebServlet(urlPatterns = {"/admin/viewallorders", "/admin/vieworder"})
 public class OrderAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -35,9 +35,6 @@ public class OrderAdminServlet extends HttpServlet {
 		String path = request.getServletPath();
 
 		switch(path){
-			case "/admin/addorder": addOrder(request, response);
-			break;
-
 			case "/admin/allorders": allOrders(request, response);
 			break;
 
@@ -59,7 +56,7 @@ public class OrderAdminServlet extends HttpServlet {
 		// Set the ArrayList as request attribute named "orderlist"
 		request.setAttribute("orderlist", orderList);
 		// Dispatch to admin-orders.jsp
-		request.getRequestDispatcher("admin-orders");
+		request.getRequestDispatcher("admin-orders.jsp").forward(request, response);
 	}
 
 	protected void viewOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

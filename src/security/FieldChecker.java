@@ -102,4 +102,29 @@ public class FieldChecker {
 
 		return true;
 	}
+
+	public boolean checkOrderFields(User user, Address address){
+		if(user.getFirstName() == null || user.getFirstName().length() == 0)
+			return false;
+
+		if(user.getLastName() == null || user.getLastName().length() == 0)
+			return false;
+
+		if(user.getEmail() == null || user.getEmail().length() == 0 || !user.getEmail().contains("@"))
+			return false;
+
+		if(address.getLocation() == null || address.getLocation().length() == 0)
+			return false;
+
+		if(address.getProvince() == null || address.getProvince().length() == 0)
+			return false;
+
+		if(address.getCity() == null || address.getCity().length() == 0)
+			return false;
+
+		if(String.valueOf(address.getPostcode()) == null || address.getPostcode() == 0)
+			return false;
+
+		return true;
+	}
 }

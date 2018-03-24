@@ -66,7 +66,7 @@ public class ProductAdminServlet extends HttpServlet {
 		String type = request.getParameter("type");
 		String collection = request.getParameter("collection");
 		String rating = request.getParameter("rating");
-		String price = request.getParameter("price");
+		float price = Integer.parseInt(request.getParameter("price"));
 
 		// create a newProduct object
 		Bag newBag = new Bag();
@@ -82,20 +82,18 @@ public class ProductAdminServlet extends HttpServlet {
 		newBag.setPrice(price);
 		
 		// dispatch to admin-products.jsp
-		request.getRequestDispatcher("admin-products.jsp");
+		request.getRequestDispatcher("admin-products.jsp").forward(request, response);
 	}
 
 	protected void allProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// retrieve all products via BagService
-		BagService bs = new BagService(); 
 		// put all bags in an arraylist
-		List<Bag> bags = bs.getAllBags();
+		List<Bag> bags = BagService.getAllBags();
 		
 		// set the arraylist as a request attribute named "baglist"
 		request.setAttribute("baglist", bags);
 		
 		//TODO do I set the request Dispatcher din here?
-		request.getRequestDispatcher("admin-products");
+		request.getRequestDispatcher("admin-products.jsp").forward(request, response);
 	}
 
 	protected void viewProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

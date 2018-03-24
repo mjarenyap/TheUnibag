@@ -23,7 +23,7 @@ import security.Encryption;
 /**
  * Servlet implementation class LogServlet
  */
-@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/logout"})
+@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/logout", "/home/*"})
 public class LogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -101,7 +101,15 @@ public class LogServlet extends HttpServlet {
 		}
 
 		// IMPORTANT: GET ALL PROMOTIONS
+		List<Bag> bags = BagService.getAllBags();
+		ArrayList baglist = new ArrayList<>();
+
 		// IMPORTANT: SET THEM TO REQUEST ATTRIBUTES
+		if(bags.size() > 0)
+			for(int i = 0; i < 3; i++)
+				baglist.add(bags.get(i));
+
+		request.setAttribute("baglist", baglist);
 
 		// dispatch to the homepage
 		request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -148,8 +156,10 @@ public class LogServlet extends HttpServlet {
 				if(userlist != null){
 					for(int i = 0; i < userlist.size(); i++){
 						String decryptedPassword = e.decryptPassword(userlist.get(i).getPassword());
-						if(email.equals(userlist.get(i).getEmail()) && password.equals(decryptedPassword)){
+						if(email.equals(userlist.get(i).getEmail()) && password.equals(decryptedPassword) &&
+							userlist.get(i).getUserType().equals("normal")){
 							correctUser = userlist.get(i);
+							correctUser.setPassword("");
 							break;
 						}
 					}
@@ -247,7 +257,7 @@ public class LogServlet extends HttpServlet {
 
 				if(validCredentialFlag && validRedirectFlag && !duplicateFlag){
 					// add the User to the database
-					long newUserID = (long)userlist.size();
+					long newUserID = (long)userlist.size() + 1;
 					newUser.setUserID(newUserID);
 
 					String encryptedPass = e.encryptPassword(password);
