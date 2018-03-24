@@ -23,6 +23,7 @@
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/homepage.css" />
 	</head>
 	<body>
+		<!-- Sticky navigation -->
 		<nav class="sticky">
 			<ul class="mainnav flex-between">
 				<li class="flex-start" id="search">
@@ -49,6 +50,8 @@
 				<li data-id="weekenderbag">Weekender bag</li>
 			</ul>
 		</nav>
+
+		<!-- Hero section -->
 		<header>
 			<h1 id="welcome">Welcome to The Unibag</h1>
 			<h3 id="tagline">The shopping experience at it's best.</h3>
@@ -56,6 +59,7 @@
 			<button class="hallow-white" id="cta">Get started</button>
 		</header>
 
+		<!-- Services section -->
 		<section id="services" class="flex-between">
 			<div class="content-wrapper">
 				<img src="assets/icons/worldwide.svg" />
@@ -81,6 +85,34 @@
 			<h1>Popular Bag Brands</h1>
 			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
 			<!-- CONTENT HERE -->
+		</section>
+
+		<!-- Featured bags section -->
+		<section class="white" id="collections">
+			<h1 class="title-heading">Featured Bags</h1>
+			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
+			<!-- CONTENT HERE -->
+			<div class="product-feed flex-between">
+				<div class="content-wrapper">
+					<div class="featured-image"></div>
+					<h3 class="product-name">Voyager Indigo Stripe Print</h3>
+					<h3 class="product-price">$110.00</h3>
+					<button class="hallow view-product">View product details</button>
+				</div>
+				<div class="content-wrapper">
+					<div class="featured-image"></div>
+					<h3 class="product-name">Functional Backpack Gravel C</h3>
+					<h3 class="product-price">$140.00</h3>
+					<button class="hallow view-product">View product details</button>
+				</div>
+				<div class="content-wrapper">
+					<div class="featured-image"></div>
+					<h3 class="product-name">CR Small Weekender True Black C</h3>
+					<h3 class="product-price">$125.00</h3>
+					<button class="hallow view-product">View product details</button>
+				</div>
+			</div>
+			<button class="hallow see-more">See more</button>
 		</section>
 
 		<footer>
