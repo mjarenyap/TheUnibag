@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -37,7 +38,10 @@
 						<span>Login</span>
 						<img src="assets/icons/avatar.svg" class="icon" />
 					</div>
-					<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
+					<div class="flex-between">
+						<span>(0)</span>
+						<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
+					</div>
 				</li>
 			</ul>
 			<ul class="subnav flex-center">
@@ -56,11 +60,11 @@
 				<h1 id="main-heading">Browse All Products</h1>
 				<div class="flex-start">
 					<select>
-						<option>Names A-Z</option>
-						<option>Names Z-A</option>
-						<option>Price</option>
-						<option>Type of bag</option>
-						<option>Brand</option>
+						<option value="0">Names A-Z</option>
+						<option value="1">Names Z-A</option>
+						<option value="2">Price</option>
+						<option value="3">Type of bag</option>
+						<option value="4">Brand</option>
 					</select>
 					<div id="pagination">
 						<ul>
@@ -124,53 +128,20 @@
 					</label>
 				</div>
 				<div id="product-feed">
-					<div class="content-wrapper">
-						<div class="featured-image"></div>
-						<div class="product-info">
-							<h1 class="product-name">Voyager Indigo Stripe Print</h1>
-							<h3 class="product-price">$110.00</h3>
-							<h4 class="product-brand">Brand: <span>LeSportSac</span></h4>
-							<h4 class="product-type">Type of bag: <span>Tote bag</span></h4>
-							<h4 class="product-rating">Product rating: <span>5 out of 5</span></h4>
-							<button class="hallow view-product">View product details</button>
+					<c:forEach items="${baglist}" var="bag">
+						<div class="content-wrapper">
+							<div class="featured-image"></div>
+							<div class="product-info">
+								<h1 class="product-name"><c:out value="${bag.name}"/></h1>
+								<h3 class="product-price">$<c:out value="${bag.price}"/></h3>
+								<h4 class="product-brand">Brand: <span><c:out value="${bag.brand}"/></span></h4>
+								<h4 class="product-type">Type of bag: <span><c:out value="${bag.type}"/></span></h4>
+								<h4 class="product-rating">Product rating: <span><c:out value="${bag.rating}"/> out of 5</span></h4>
+								<button class="hallow view-product">View product details</button>
+							</div>
 						</div>
-					</div>
-					<hr/>
-					<div class="content-wrapper">
-						<div class="featured-image"></div>
-						<div class="product-info">
-							<h1 class="product-name">Functional Backpack Gravel C</h1>
-							<h3 class="product-price">$140.00</h3>
-							<h4 class="product-brand">Brand: <span>LeSportSac</span></h4>
-							<h4 class="product-type">Type of bag: <span>Tote bag</span></h4>
-							<h4 class="product-rating">Product rating: <span>5 out of 5</span></h4>
-							<button class="hallow view-product">View product details</button>
-						</div>
-					</div>
-					<hr/>
-					<div class="content-wrapper">
-						<div class="featured-image"></div>
-						<div class="product-info">
-							<h1 class="product-name">CR Small Weekender True Black C</h1>
-							<h3 class="product-price">$125.00</h3>
-							<h4 class="product-brand">Brand: <span>LeSportSac</span></h4>
-							<h4 class="product-type">Type of bag: <span>Tote bag</span></h4>
-							<h4 class="product-rating">Product rating: <span>5 out of 5</span></h4>
-							<button class="hallow view-product">View product details</button>
-						</div>
-					</div>
-					<hr/>
-					<div class="content-wrapper">
-						<div class="featured-image"></div>
-						<div class="product-info">
-							<h1 class="product-name">NoHo Backpack Black</h1>
-							<h3 class="product-price">$140.00</h3>
-							<h4 class="product-brand">Brand: <span>LeSportSac</span></h4>
-							<h4 class="product-type">Type of bag: <span>Tote bag</span></h4>
-							<h4 class="product-rating">Product rating: <span>5 out of 5</span></h4>
-							<button class="hallow view-product">View product details</button>
-						</div>
-					</div>
+						<hr/>
+					</c:forEach>
 				</div>
 			</div>
 		</section>

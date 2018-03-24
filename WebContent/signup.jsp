@@ -35,7 +35,10 @@
 						<span>Login</span>
 						<img src="assets/icons/avatar.svg" class="icon" />
 					</div>
-					<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
+					<div class="flex-between">
+						<span>(0)</span>
+						<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
+					</div>
 				</li>
 			</ul>
 			<ul class="subnav flex-center">

@@ -35,7 +35,10 @@
 						<span>Login</span>
 						<img src="assets/icons/avatar.svg" class="icon" />
 					</div>
-					<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
+					<div class="flex-between">
+						<span>(0)</span>
+						<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
+					</div>
 				</li>
 			</ul>
 			<ul class="subnav flex-center">
@@ -53,15 +56,15 @@
 		<section id="product-info" class="flex-start">
 			<div id="featured-image"></div>
 			<div class="content-wrapper">
-				<h1 id="product-name">Voyager Indigo Stripe Print</h1>
-				<h3 id="product-price">$110.00</h3>
-				<h4 id="product-brand">Brand: <span>LeSportSac</span></h4>
-				<h4 id="product-type">Type of bag: <span>Tote bag</span></h4>
-				<h4 id="product-size">Size (W x H x L): <span>47.63 cm x 31.45 cm x 22.86 cm</span></h4>
-				<h4 id="product-color">Color: <span>Indigo Stripe Print</span></h4>
-				<h4 id="product-rating">Product rating: <span>5 out of 5</span></h4>
+				<h1 id="product-name"><c:out value="${featuredBag.name}" /></h1>
+				<h3 id="product-price">$<c:out value="${featuredBag.price}" /></h3>
+				<h4 id="product-brand">Brand: <span><c:out value="${featuredBag.brand}" /></span></h4>
+				<h4 id="product-type">Type of bag: <span><c:out value="${featuredBag.type}" /></span></h4>
+				<h4 id="product-size">Size (W x H x L): <span><c:out value="${featuredSize.width}" /> x <c:out value="${featuredSize.height}" /> x <c:out value="${featuredSize.length}" /></span></h4>
+				<h4 id="product-color">Color: <span><c:out value="${featuredBag.color}" /></span></h4>
+				<h4 id="product-rating">Product rating: <span><c:out value="${featuredBag.rating}" /> out of 5</span></h4>
 				<p id="product-description">
-					Drawstring main closure, Top flap with quick release clip lock closure, Exterior front pocket with zipped closure, Two exterior side pockets with clip lock closures, Adjustable shoulder straps, Three interior mesh pockets, Interior signature zip/open pocket.
+					<c:out value="${featuredBag.description}" />
 				</p>
 				<button id="add-to-cart">Add to cart</button>
 			</div>

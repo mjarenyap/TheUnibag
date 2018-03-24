@@ -92,6 +92,15 @@ public class ProductServlet extends HttpServlet {
 
 			// proceed to the single product page if found
 			if(foundFlag){
+				Size selectedSize = null;
+				List<Size> sizelist = SizeService.getAllSizes();
+				for(int i = 0; i < sizelist.size(); i++)
+					if(selectedBag.getBagID() == sizelist.get(i).getBagID()){
+						selectedSize = sizelist.get(i);
+						break;
+					}
+
+				request.setAttribute("featuredSize", selectedSize);
 				request.setAttribute("featuredBag", selectedBag);
 				request.getRequestDispatcher("single.jsp").forward(request, response);
 			}

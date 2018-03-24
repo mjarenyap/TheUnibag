@@ -23,6 +23,8 @@
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/homepage.css" />
 	</head>
 	<body>
+		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
+		<c:set var="loggedUser" value="${sessionScope.Account}" />
 		<!-- Sticky navigation -->
 		<nav class="sticky">
 			<ul class="mainnav flex-between">
@@ -32,11 +34,22 @@
 				</li>
 				<li><img src="assets/images/Pottermore.png" id="main-logo" /></li>
 				<li class="flex-start">
-					<div class="flex-start" id="login">
-						<span>Login</span>
-						<img src="assets/icons/avatar.svg" class="icon" />
+					<c:if test="${loggedUser} == null">
+						<div class="flex-start" id="login">
+							<span>Login</span>
+							<img src="assets/icons/avatar.svg" class="icon" />
+						</div>
+					</c:if>
+					<c:if test="${loggedUser} != null">
+						<div class="flex-start" id="logged-account">
+							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
+							<img src="assets/icons/avatar.svg" class="icon" />
+						</div>
+					</c:if>
+					<div class="flex-between">
+						<span>(<c:out value="${fn:length(shoppingcart)}"/>)</span>
+						<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
 					</div>
-					<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
 				</li>
 			</ul>
 			<ul class="subnav flex-center">
@@ -91,26 +104,16 @@
 		<section class="white" id="collections">
 			<h1 class="title-heading">Featured Bags</h1>
 			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
-			<!-- CONTENT HERE -->
+			<!-- Product feed -->
 			<div class="product-feed flex-between">
-				<div class="content-wrapper">
-					<div class="featured-image"></div>
-					<h3 class="product-name">Voyager Indigo Stripe Print</h3>
-					<h3 class="product-price">$110.00</h3>
-					<button class="hallow view-product">View product details</button>
-				</div>
-				<div class="content-wrapper">
-					<div class="featured-image"></div>
-					<h3 class="product-name">Functional Backpack Gravel C</h3>
-					<h3 class="product-price">$140.00</h3>
-					<button class="hallow view-product">View product details</button>
-				</div>
-				<div class="content-wrapper">
-					<div class="featured-image"></div>
-					<h3 class="product-name">CR Small Weekender True Black C</h3>
-					<h3 class="product-price">$125.00</h3>
-					<button class="hallow view-product">View product details</button>
-				</div>
+				<c:forEach items="${baglist}" var="bag">
+					<div class="content-wrapper">
+						<div class="featured-image"></div>
+						<h3 class="product-name"><c:out value="${bag.name}" /></h3>
+						<h3 class="product-price">$<c:out value="${bag.price}" /></h3>
+						<button class="hallow view-product">View product details</button>
+					</div>
+				</c:forEach>
 			</div>
 			<button class="hallow see-more">See more</button>
 		</section>
