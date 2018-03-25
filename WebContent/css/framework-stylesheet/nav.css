@@ -52,6 +52,10 @@ nav ul.mainnav li{
 	cursor: pointer;
 }
 
+nav ul li.active{
+	border-bottom-color: white;
+}
+
 nav ul.subnav{
 	background-color: var(--theme-dark-accent);
 }

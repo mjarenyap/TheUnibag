@@ -137,7 +137,7 @@ public class UserServlet extends HttpServlet {
 		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
 			// security variables
 			Encryption e = new Encryption();
-			FieldChecker fc= new FieldChecker();
+			FieldChecker fc = new FieldChecker();
 			
 			// get parameter values of firstname, lastname, email, phone
 			String location = request.getParameter("location");
@@ -218,8 +218,19 @@ public class UserServlet extends HttpServlet {
 	}
 
 	protected void profileAddress(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+			List<Address> addresslist = AddressService.getAllAddresses();
+			User currentUser = (User) request.getSession().getAttribute("Account");
+			Address currentAddress = null;
+			for(int i = 0; i < addresslist.size(); i++)
+				if(currentUser.getUserID() == addresslist.get(i).getUserID()){
+					currentAddress = addresslist.get(i);
+					break;
+				}
+
+			request.setAttribute("address", currentAddress);
 			request.getRequestDispatcher("profile-address.jsp").forward(request, response);
+		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}

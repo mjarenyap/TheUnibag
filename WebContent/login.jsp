@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Welcome to Unibag</title>
+		<title>Login to Unibag</title>
 		<!-- FONT EXTERNAL LINKS -->
 		<link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -21,7 +21,7 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
 
 		<!-- PAGE STYLESHEET -->
-		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/homepage.css" />
+		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/login.css" />
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -35,13 +35,13 @@
 				</li>
 				<li><img src="assets/images/unibag-logo.png" id="main-logo" /></li>
 				<li class="flex-start">
-					<c:if test="${loggedUser} == null">
+					<c:if test="${loggedUser == null}">
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
 						</div>
 					</c:if>
-					<c:if test="${loggedUser} != null">
+					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
 							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
@@ -65,58 +65,22 @@
 			</ul>
 		</nav>
 
-		<!-- Hero section -->
-		<header>
-			<h1 id="welcome">Welcome to The Unibag</h1>
-			<h3 id="tagline">The shopping experience at it's best.</h3>
-			<img src="assets/icons/spirals-of-vines.svg" class="ornaments">
-			<button class="hallow-white" id="cta">Get started</button>
-		</header>
-
-		<!-- Services section -->
-		<section id="services" class="flex-between">
-			<div class="content-wrapper">
-				<img src="assets/icons/worldwide.svg" />
-				<p>
-					Get a real-time connection to your browser. Make changes to CSS and HTML and you'll instantly see those changes on screen.
-				</p>
-			</div>
-			<div class="content-wrapper">
-				<img src="assets/icons/route.svg" />
-				<p>
-					Work with preprocessors in a whole new way. We know how important preprocessors are to your workflow. 
-				</p>
-			</div>
-			<div class="content-wrapper">
-				<img src="assets/icons/help.svg" />
-				<p>
-					Instead of jumping between file tabs, Brackets lets you open a window into the code you care about most.
-				</p>
-			</div>
-		</section>
-
-		<section class="white" id="brands">
-			<h1>Popular Bag Brands</h1>
-			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
-			<!-- CONTENT HERE -->
-		</section>
-
-		<!-- Featured bags section -->
-		<section class="white" id="collections">
-			<h1 class="title-heading">Featured Bags</h1>
-			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
-			<!-- Product feed -->
-			<div class="product-feed flex-between">
-				<c:forEach items="${baglist}" var="bag">
-					<div class="content-wrapper">
-						<div class="featured-image"></div>
-						<h3 class="product-name"><c:out value="${bag.name}" /></h3>
-						<h3 class="product-price">$<c:out value="${bag.price}" /></h3>
-						<button class="hallow view-product">View product details</button>
-					</div>
-				</c:forEach>
-			</div>
-			<button class="hallow see-more">See more</button>
+		<section>
+			<form action="login" method="get" id="login-form">
+				<h1 class="heading">Login to Unibag</h1>
+				<label>
+					<span>Email address</span>
+					<input type="email" name="email" placeholder="user@example.com" class="full-width" />
+				</label>
+				<label>
+					<span>Password</span>
+					<input type="password" name="password" placeholder="Type here your password" class="full-width" />
+				</label>
+				<div class="flex-end">
+					<span class="help">Don't have an account? <a href="#">Get started</a> here.</span>
+					<input type="submit" value="Login" />
+				</div>
+			</form>
 		</section>
 
 		<footer>

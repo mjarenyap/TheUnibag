@@ -36,7 +36,7 @@ public class Bag {
 	@Column
 	private int rating;
 	@Column
-	private String price; 
+	private float price; 
 	
 	
 	/*Setters and Getters*/
@@ -105,11 +105,11 @@ public class Bag {
 		this.rating = rating; 
 	}
 	
-	public String getPrice() {
+	public float getPrice() {
 		return price; 
 	}
 	
-	public void setPrice(String price) {
+	public void setPrice(float price) {
 		this.price = price; 
 	}
 	
