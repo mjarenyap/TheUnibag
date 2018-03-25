@@ -16,7 +16,7 @@ import beans.User;
 public class UserService {
 	/*CRUD Operations*/
 	
-	public static void addUser(User users)
+	public static void addUser(User user)
 	{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -24,7 +24,7 @@ public class UserService {
 		
 		try{
 			trans.begin();
-			em.persist(users);
+			em.persist(user);
 			trans.commit();
 		}catch(Exception e){
 			if(trans!=null)

@@ -49,25 +49,66 @@ public class ProductServlet extends HttpServlet {
 	}
 
 	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// check for logged users
-		// get pagination number parameter
+		// declare filter variables // retrieve from filter controls
 		// get all products
+		List<Bag> baglist = new BagService.getAllBags();
+		request.setAttribute("baglist", baglist);
+		request.getRequestDispatcher("products.jsp").forward(request, response);
 		// preview 10 products according to pagination number
 		// set pagination numbers based on the total number of products
 			// products.size() / 10 [+1 if products.size() % 10 > 0]
 	}
 
 	protected void product(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// check for logged user
-		// check filter status
+		// declare flag variables
+		boolean validProductPath = false;
 		// get contextualized url parametr of the product
-		// split the id and the actual name of the product
-		// convert the id String to Integer
-		// search the product by id in the database
-		// validate the match result by product name
-		// create a Bag object and set the necessary attributes
-		// fetch the the size associated with the product
-		// fetch the colors associated with the product
+		String[] splitParts = productPath.split("#");
+		long encryptedID = -1;
+
+		try{
+			encryptedID = Long.parseLong(splitParts[0]);
+		} catch(Exception er){
+			validProductPath = false;
+		}
+
+		if(splitParts.length != 2)
+			validProductPath = false;
+
+		request.setAttribute("error", validProductPath);
+
+		if(validProductPath){
+			// declare second layer flag variables
+			boolean foundFlag = false;
+
+			// decrype the id and name of the product
+			long decryptedID = e.decryptID(encryptedID);
+			String productName = splitParts[1].replace('+', ' ');
+
+			// search for a matched result
+			Bag selectedBag = BagService.getBag(decryptedID);
+			if(selectedBag != null && productName.equalsIgnoreCase(selectedBag.getName()))
+				foundFlag = true;
+
+			// proceed to the single product page if found
+			if(foundFlag){
+				Size selectedSize = null;
+				List<Size> sizelist = SizeService.getAllSizes();
+				for(int i = 0; i < sizelist.size(); i++)
+					if(selectedBag.getBagID() == sizelist.get(i).getBagID()){
+						selectedSize = sizelist.get(i);
+						break;
+					}
+
+				request.setAttribute("featuredSize", selectedSize);
+				request.setAttribute("featuredBag", selectedBag);
+				request.getRequestDispatcher("single.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-404.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-404.jsp").forward(request, response);
 	}
 
 	/**

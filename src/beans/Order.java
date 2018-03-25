@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 /**
  * @author gisellenodalo
@@ -26,13 +26,15 @@ public class Order {
 	@Column
 	private long sizeID;
 	@Column
-	private Calendar orderDate;
+	private LocalDateTime orderDate;
 	@Column
 	private String city; 
 	@Column
 	private int postcode;
 	@Column
 	private String province;
+	@Column
+	private String location;
 	
 	public String getCity() {
 		return city;
@@ -65,8 +67,6 @@ public class Order {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
-	private String location;
 	
 	/*Setters and Getters*/
 	
@@ -102,12 +102,12 @@ public class Order {
 		this.sizeID = sizeID;
 	}
 	
-	public Calendar getOrderDate() {
+	public LocalDateTime getOrderDate() {
 		return orderDate;
 	}
 	
-	public void setOrderDate(Calendar date) {
-		this.orderDate = date; 
+	public void setOrderDate(LocalDateTime date) {
+		this.orderDate = date;
 	}
 	
 	@Override

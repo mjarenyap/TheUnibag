@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Welcome to Unibag</title>
+		<title>Browse Products - Unibag</title>
 		<!-- FONT EXTERNAL LINKS -->
 		<link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -19,9 +19,11 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/select.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/checkbox.css" />
 
 		<!-- PAGE STYLESHEET -->
-		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/homepage.css" />
+		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/product-list.css" />
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -35,13 +37,13 @@
 				</li>
 				<li><img src="assets/images/unibag-logo.png" id="main-logo" /></li>
 				<li class="flex-start">
-					<c:if test="${loggedUser} == null">
+					<c:if test="${loggedUser == null}">
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
 						</div>
 					</c:if>
-					<c:if test="${loggedUser} != null">
+					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
 							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
@@ -64,59 +66,95 @@
 				<li data-id="weekenderbag">Weekender bag</li>
 			</ul>
 		</nav>
-
-		<!-- Hero section -->
-		<header>
-			<h1 id="welcome">Welcome to The Unibag</h1>
-			<h3 id="tagline">The shopping experience at it's best.</h3>
-			<img src="assets/icons/spirals-of-vines.svg" class="ornaments">
-			<button class="hallow-white" id="cta">Get started</button>
-		</header>
-
-		<!-- Services section -->
-		<section id="services" class="flex-between">
-			<div class="content-wrapper">
-				<img src="assets/icons/worldwide.svg" />
-				<p>
-					Get a real-time connection to your browser. Make changes to CSS and HTML and you'll instantly see those changes on screen.
-				</p>
-			</div>
-			<div class="content-wrapper">
-				<img src="assets/icons/route.svg" />
-				<p>
-					Work with preprocessors in a whole new way. We know how important preprocessors are to your workflow. 
-				</p>
-			</div>
-			<div class="content-wrapper">
-				<img src="assets/icons/help.svg" />
-				<p>
-					Instead of jumping between file tabs, Brackets lets you open a window into the code you care about most.
-				</p>
-			</div>
-		</section>
-
-		<section class="white" id="brands">
-			<h1>Popular Bag Brands</h1>
-			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
-			<!-- CONTENT HERE -->
-		</section>
-
-		<!-- Featured bags section -->
-		<section class="white" id="collections">
-			<h1 class="title-heading">Featured Bags</h1>
-			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
-			<!-- Product feed -->
-			<div class="product-feed flex-between">
-				<c:forEach items="${baglist}" var="bag">
-					<div class="content-wrapper">
-						<div class="featured-image"></div>
-						<h3 class="product-name"><c:out value="${bag.name}" /></h3>
-						<h3 class="product-price">$<c:out value="${bag.price}" /></h3>
-						<button class="hallow view-product">View product details</button>
+		<section>
+			<div id="main-controls">
+				<h1 id="main-heading">Browse All Products</h1>
+				<div class="flex-start">
+					<select>
+						<option value="0">Names A-Z</option>
+						<option value="1">Names Z-A</option>
+						<option value="2">Price</option>
+						<option value="3">Type of bag</option>
+						<option value="4">Brand</option>
+					</select>
+					<div id="pagination">
+						<ul>
+							<li class="active">1</li>
+							<li>2</li>
+							<li>3</li>
+							<li>4</li>
+							<li>5</li>
+						</ul>
 					</div>
-				</c:forEach>
+				</div>
 			</div>
-			<button class="hallow see-more">See more</button>
+			<div class="flex-between" id="product-list">
+				<div id="filters">
+					<h3 id="filter-heading">Filter products by:</h3>
+					<hr/>
+
+					<h4 class="criteria">Price ranges</h4>
+					<label>
+						<input type="checkbox" checked="checked" />
+						<span></span>
+						less than $40.00
+					</label>
+					<label>
+						<input type="checkbox" checked="checked" />
+						<span></span>
+						$40.00 - $99.00
+					</label>
+					<label>
+						<input type="checkbox" checked="checked" />
+						<span></span>
+						$100.00 - $149.00
+					</label>
+					<label>
+						<input type="checkbox" checked="checked" />
+						<span></span>
+						$150.00 - $200.00
+					</label>
+					<label>
+						<input type="checkbox" checked="checked" />
+						<span></span>
+						more than $200.00
+					</label>
+
+
+					<h4 class="criteria">Collections</h4>
+					<label>
+						<input type="checkbox" checked="checked" />
+						<span></span>
+						Classic Collection
+					</label>
+					<label>
+						<input type="checkbox" checked="checked" />
+						<span></span>
+						Essential Collection
+					</label>
+					<label>
+						<input type="checkbox" checked="checked" />
+						<span></span>
+						Travel System Collection
+					</label>
+				</div>
+				<div id="product-feed">
+					<c:forEach items="${baglist}" var="bag">
+						<div class="content-wrapper">
+							<div class="featured-image"></div>
+							<div class="product-info">
+								<h1 class="product-name"><c:out value="${bag.name}"/></h1>
+								<h3 class="product-price">$<c:out value="${bag.price}"/></h3>
+								<h4 class="product-brand">Brand: <span><c:out value="${bag.brand}"/></span></h4>
+								<h4 class="product-type">Type of bag: <span><c:out value="${bag.type}"/></span></h4>
+								<h4 class="product-rating">Product rating: <span><c:out value="${bag.rating}"/> out of 5</span></h4>
+								<button class="hallow view-product">View product details</button>
+							</div>
+						</div>
+						<hr/>
+					</c:forEach>
+				</div>
+			</div>
 		</section>
 
 		<footer>
