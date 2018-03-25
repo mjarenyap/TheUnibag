@@ -221,7 +221,8 @@ public class OrderServlet extends HttpServlet {
 			}
 
 			//invalidate shopping cart session
-			request.getSession().setAttribute("ShoppingCart", null);
+			ArrayList<Bag> emptyList = new ArrayList<>();
+			request.getSession().setAttribute("ShoppingCart", emptyList);
 
 			// dispatch to success page
 			request.setAttribute("error", validFieldFlag);

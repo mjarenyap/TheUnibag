@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -22,7 +23,7 @@
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/homepage.css" />
 	</head>
-	<body>
+	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
 		<c:set var="loggedUser" value="${sessionScope.Account}" />
 		<!-- Sticky navigation -->
@@ -32,7 +33,7 @@
 					<img src="assets/icons/magnifying-glass.svg" class="icon" />
 					<span>Discover</span>
 				</li>
-				<li><img src="assets/images/Pottermore.png" id="main-logo" /></li>
+				<li><img src="assets/images/unibag-logo.png" id="main-logo" /></li>
 				<li class="flex-start">
 					<c:if test="${loggedUser} == null">
 						<div class="flex-start" id="login">

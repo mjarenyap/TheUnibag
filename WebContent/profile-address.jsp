@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -22,34 +23,45 @@
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/profile.css" />
 	</head>
-	<body>
-		<nav>
+	<body class="nav-sticky">
+		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
+		<c:set var="loggedUser" value="${sessionScope.Account}" />
+		<!-- Sticky navigation -->
+		<nav class="sticky">
 			<ul class="mainnav flex-between">
 				<li class="flex-start" id="search">
 					<img src="assets/icons/magnifying-glass.svg" class="icon" />
 					<span>Discover</span>
 				</li>
-				<li><img src="assets/images/Pottermore.png" id="main-logo" /></li>
+				<li><img src="assets/images/unibag-logo.png" id="main-logo" /></li>
 				<li class="flex-start">
-					<div class="flex-start" id="login">
-						<span>Login</span>
-						<img src="assets/icons/avatar.svg" class="icon" />
-					</div>
+					<c:if test="${loggedUser == null}">
+						<div class="flex-start" id="login">
+							<span>Login</span>
+							<img src="assets/icons/avatar.svg" class="icon" />
+						</div>
+					</c:if>
+					<c:if test="${loggedUser != null}">
+						<div class="flex-start" id="logged-account">
+							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
+							<img src="assets/icons/avatar.svg" class="icon" />
+						</div>
+					</c:if>
 					<div class="flex-between">
-						<span>(0)</span>
+						<span>(<c:out value="${fn:length(shoppingcart)}"/>)</span>
 						<img src="assets/icons/shopping-cart.svg" class="icon" id="cart" />
 					</div>
 				</li>
 			</ul>
 			<ul class="subnav flex-center">
-				<li>All</li>
-				<li>Backpack</li>
-				<li>Handbag</li>
-				<li>Tote bag</li>
-				<li>Messenger bag</li>
-				<li>Travel bag</li>
-				<li>Sling bag</li>
-				<li>Weekender bag</li>
+				<li data-id="all">All</li>
+				<li data-id="backpack">Backpack</li>
+				<li data-id="handbag">Handbag</li>
+				<li data-id="totebag">Tote bag</li>
+				<li data-id="messengerbag">Messenger bag</li>
+				<li data-id="travelbag">Travel bag</li>
+				<li data-id="slingbag">Sling bag</li>
+				<li data-id="weekenderbag">Weekender bag</li>
 			</ul>
 		</nav>
 
@@ -68,19 +80,47 @@
 					<h1 id="context-title">Address Information</h1>
 					<label>
 						<span>Location</span>
-						<input type="text" name="location" value="Unit 2 cor Paseo de Sta Rosa" class="full-width" />
+						<c:choose>
+							<c:when test="${address != null}">
+								<input type="text" name="location" value="${address.location}" placeholder="Edit your location" class="full-width" />
+							</c:when>
+							<c:otherwise>
+								<input type="text" name="location" value="" placeholder="Edit your location" class="full-width" />
+							</c:otherwise>
+						</c:choose>
 					</label>
 					<label>
 						<span>City</span>
-						<input type="text" name="city" value="Sta Rosa" class="full-width" />
+						<c:choose>
+							<c:when test="${address != null}">
+								<input type="text" name="city" value="${address.city}" placeholder="Edit your city" class="full-width" />
+							</c:when>
+							<c:otherwise>
+								<input type="text" name="city" value="" placeholder="Edit your city" class="full-width" />
+							</c:otherwise>
+						</c:choose>
 					</label>
 					<label>
 						<span>Postcode</span>
-						<input type="number" name="postcode" value="4026" class="full-width" />
+						<c:choose>
+							<c:when test="${address != null}">
+								<input type="number" name="postcode" value="${address.postcode}" placeholder="Edit your postcode" class="full-width" />
+							</c:when>
+							<c:otherwise>
+								<input type="number" name="postcode" value="" placeholder="Edit your postcode" class="full-width" />
+							</c:otherwise>
+						</c:choose>
 					</label>
 					<label>
 						<span>Province</span>
-						<input type="text" name="province" value="Laguna" class="full-width" />
+						<c:choose>
+							<c:when test="${address != null}">
+								<input type="text" name="province" value="${address.province}" placeholder="Edit your province" class="full-width" />
+							</c:when>
+							<c:otherwise>
+								<input type="text" name="province" value="" placeholder="Edit your province" class="full-width" />
+							</c:otherwise>
+						</c:choose>
 					</label>
 					<div id="confirm-buttons" class="flex-end">
 						<button class="hallow">Cancel</button>
