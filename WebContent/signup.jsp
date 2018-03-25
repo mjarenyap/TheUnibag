@@ -22,6 +22,10 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/signup.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -66,7 +70,7 @@
 		</nav>
 
 		<section>
-			<form action="signup" method="get" id="signup-form">
+			<form action="account" method="get" id="signup-form">
 				<div class="heading">
 					<h1 class="title">Get started with Unibag</h1>
 					<span class="reminder">All fields with (*) are required</span>
@@ -98,9 +102,10 @@
 					<input type="number" name="phone" placeholder="(Optional) Type here you phone number" class="full-width" />
 				</label>
 				<div class="flex-end">
-					<span class="help">Already have an account? <a href="#">Login</a> here.</span>
+					<span class="help">Already have an account? <a href="#" id="go-login">Login</a> here.</span>
 					<input type="submit" value="Sign Up" />
 				</div>
+				<input type="hidden" name="purpose" value="signup" />
 			</form>
 		</section>
 

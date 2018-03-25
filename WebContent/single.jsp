@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title><c:out value="${featuredBag.name}"> - Unibag</title>
+		<title><c:out value="${featuredBag.name}" /> - Unibag</title>
 		<!-- FONT EXTERNAL LINKS -->
 		<link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -22,6 +22,10 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/product-details.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />

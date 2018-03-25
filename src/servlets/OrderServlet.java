@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import beans.Bag;
@@ -26,7 +25,7 @@ import security.Encryption;
 /**
  * Servlet implementation class OrderServlet
  */
-@WebServlet(urlPatterns = {"/shoppingcart", "/checkout", "/success"})
+@WebServlet(urlPatterns = {"/shoppingcart", "/checkout", "/success", "/addtocart"})
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

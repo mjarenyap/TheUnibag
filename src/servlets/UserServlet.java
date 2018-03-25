@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.List;
+
 import beans.User;
 import beans.Address;
 import services.UserService;
@@ -17,7 +19,7 @@ import security.FieldChecker;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(urlPatterns = {"/profile/general", "/profile/address", "/password/password", "/profile", "/profile/*"})
+@WebServlet(urlPatterns = {"/profile/general", "/profile/address", "/password/password", "/profile"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -36,7 +38,7 @@ public class UserServlet extends HttpServlet {
 		String path = request.getServletPath();
 
 		switch(path){
-			case "/profile": profileGeneral(request, response);
+			case "/profile": profileRequest(request, response);
 			break;
 
 			case "/profile/general": profileGeneral(request, response);
@@ -51,6 +53,25 @@ public class UserServlet extends HttpServlet {
 			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
 			break;
 		}
+	}
+
+	protected void profileRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+			String purpose = request.getParameter("purpose");
+
+			if(purpose.equals("edit-pa"))
+				editAddress(request, response);
+
+			else if(purpose.equals("edit-pg"))
+				editGeneral(request, response);
+
+			else if (purpose.equals("edit-pp"))
+				editPassword(request, response);
+
+			else profileGeneral(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	protected void editGeneral(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -219,7 +240,7 @@ public class UserServlet extends HttpServlet {
 
 	protected void profileAddress(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
-			List<Address> addresslist = AddressService.getAllAddresses();
+			List<Address> addresslist = AddressService.getAllAddress();
 			User currentUser = (User) request.getSession().getAttribute("Account");
 			Address currentAddress = null;
 			for(int i = 0; i < addresslist.size(); i++)

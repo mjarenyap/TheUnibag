@@ -24,6 +24,10 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/product-list.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -139,8 +143,8 @@
 					</label>
 				</div>
 				<div id="product-feed">
-					<c:forEach items="${baglist}" var="bag">
-						<div class="content-wrapper">
+					<c:forEach items="${baglist}" var="bag" varStatus="status">
+						<div class="content-wrapper" data-id="${bag.bagID}#${productnames[status]}">
 							<div class="featured-image"></div>
 							<div class="product-info">
 								<h1 class="product-name"><c:out value="${bag.name}"/></h1>

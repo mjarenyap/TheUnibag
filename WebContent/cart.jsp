@@ -22,6 +22,10 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/cart.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -35,13 +39,13 @@
 				</li>
 				<li><img src="assets/images/unibag-logo.png" id="main-logo" /></li>
 				<li class="flex-start">
-					<c:if test="${loggedUser} == null">
+					<c:if test="${loggedUser == null}">
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
 						</div>
 					</c:if>
-					<c:if test="${loggedUser} != null">
+					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
 							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
@@ -95,7 +99,7 @@
 					<button id="checkout">Proceed to checkout</button>
 				</div>
 			</div>
-			<button class="hallow">Continue Shopping</button>
+			<button class="hallow" id="continue-shopping">Continue Shopping</button>
 			<button class="hallow">Clear my cart</button>
 		</section>
 

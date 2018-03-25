@@ -22,6 +22,10 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/profile.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -91,9 +95,10 @@
 						<input type="password" name="confirmpass" placeholder="Re-type here your new password" class="full-width" />
 					</label>
 					<div id="confirm-buttons" class="flex-end">
-						<button class="hallow">Cancel</button>
+						<button class="hallow" data-id="pa" id="profile-discard-changes">Cancel</button>
 						<input type="submit" value="Save Changes" id="save-changes" />
 					</div>
+					<input type="hidden" name="purpose" value="edit-pp" />
 				</form>
 			</div>
 		</section>
