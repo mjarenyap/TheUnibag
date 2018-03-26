@@ -22,6 +22,10 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/success.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -73,8 +77,8 @@
 			</h3>
 			<h4 id="meantime">For the meantime, you can:</h4>
 			<div id="links" class="flex-center">
-				<button>Go back home</button>
-				<button class="hallow">Browse more bags</button>
+				<button id="back-home">Go back home</button>
+				<button class="hallow" id="browse-products">Browse more bags</button>
 			</div>
 		</section>
 

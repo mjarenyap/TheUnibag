@@ -23,7 +23,7 @@ import security.Encryption;
 /**
  * Servlet implementation class LogServlet
  */
-@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/logout", "/home/*"})
+@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account"})
 public class LogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -51,6 +51,9 @@ public class LogServlet extends HttpServlet {
 
 			case "/signup": signupPage(request, response);
 			break;
+
+			case "/account": processAccount(request, response);
+
 			/*
 			default: home(request, response);
 			break;
@@ -102,17 +105,42 @@ public class LogServlet extends HttpServlet {
 
 		// IMPORTANT: GET ALL PROMOTIONS
 		List<Bag> bags = BagService.getAllBags();
-		ArrayList baglist = new ArrayList<>();
+		ArrayList<Bag> baglist = new ArrayList<>();
+		ArrayList<String> productNames = new ArrayList<>();
+		Encryption e = new Encryption();
 
 		// IMPORTANT: SET THEM TO REQUEST ATTRIBUTES
 		if(bags.size() > 0)
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < 3; i++){
+				long encryptedID = e.encryptID(bags.get(i).getBagID());
+				bags.get(i).setBagID(encryptedID);
+
+				String pname = bags.get(i).getName().replace(' ', '+');
+				productNames.add(pname);
 				baglist.add(bags.get(i));
+			}
 
 		request.setAttribute("baglist", baglist);
+		request.setAttribute("productnames", productNames);
 
 		// dispatch to the homepage
 		request.getRequestDispatcher("index.jsp").forward(request, response);
+	}
+
+	protected void processAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+			home(request, response);
+
+		else {
+			String purpose = request.getParameter("purpose");
+			if(purpose.equals("login"))
+				login(request, response);
+
+			else if(purpose.equals("signup"))
+				signup(request, response);
+
+			else home(request, response);
+		}
 	}
 
 	protected void loginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

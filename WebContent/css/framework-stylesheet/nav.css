@@ -30,6 +30,7 @@ nav ul li{
 
 nav #main-logo{
 	width: 10em;
+	cursor: pointer;
 }
 
 nav ul.mainnav li img.icon{
