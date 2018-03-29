@@ -129,6 +129,9 @@ public class OrderServlet extends HttpServlet {
 			// set the subtotal as attribute
 			request.setAttribute("subtotal", subtotal);
 
+			// set error message as FALSE by default
+			request.setAttribute("error", false);
+
 			// dispatch to the checkout page
 			request.getRequestDispatcher("checkout.jsp").forward(request, response);
 		}

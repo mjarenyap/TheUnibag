@@ -75,6 +75,12 @@
 			<h1 id="checkout-title">Checkout</h1>
 			<div class="flex-start">
 				<form action="success" method="post" id="billing-form">
+					<c:if test="${error == true}">
+						<div class="error-banner flex-between">
+							<p>Woah there! You have to fill out the necessary fields.</p>
+							<i class="fa fa-close"></i>
+						</div>
+					</c:if>	
 					<h1 id="billing-title"><b class="important">Step 1:</b> Billing Information</h1>
 					<span class="reminder">All fields with (*) are required</span>
 					<div class="flex-between forname">

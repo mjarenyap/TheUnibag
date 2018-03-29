@@ -72,6 +72,24 @@
 
 		<section>
 			<form action="account" method="get" id="signup-form">
+				<c:if test="${error == true}">
+					<div class="error-banner flex-between">
+						<div>
+							<p>Woah there! Did you fill out the important parts?</p>
+							<br/>
+							<p>
+								<b>Did you follow the password policy?</b><br/>
+								at least 8 characters long. <br/>
+								at least one capital letter. <br/>
+								at least one number. <br/>
+								at least one symbol. <br/>
+							</p>
+							<br/>
+							<p>Figured it out? Please try again.</p>
+						</div>
+						<i class="fa fa-close"></i>
+					</div>	
+				</c:if>
 				<div class="heading">
 					<h1 class="title">Get started with Unibag</h1>
 					<span class="reminder">All fields with (*) are required</span>

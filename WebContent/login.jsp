@@ -72,6 +72,12 @@
 
 		<section>
 			<form action="account" method="get" id="login-form">
+				<c:if test="${error == true}">
+					<div class="error-banner flex-between">
+						<p>Oops! It looks like your email address and password did not match.</p>
+						<i class="fa fa-close"></i>
+					</div>	
+				</c:if>
 				<h1 class="heading">Login to Unibag</h1>
 				<label>
 					<span>Email address</span>
