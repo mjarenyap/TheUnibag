@@ -25,6 +25,7 @@
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/checkout.css" />
 
 		<!-- JAVASCRIPT -->
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
 		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
 	</head>

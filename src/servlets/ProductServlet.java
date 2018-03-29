@@ -19,7 +19,7 @@ import security.Encryption;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(urlPatterns = {"/products", "products/*", "/featured/*"})
+@WebServlet(urlPatterns = {"/products", "/products/*", "/featured/*"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

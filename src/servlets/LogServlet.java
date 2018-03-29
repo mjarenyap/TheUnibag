@@ -116,6 +116,7 @@ public class LogServlet extends HttpServlet {
 				bags.get(i).setBagID(encryptedID);
 
 				String pname = bags.get(i).getName().replace(' ', '+');
+				pname = encryptedID + "#" + pname;
 				productNames.add(pname);
 				baglist.add(bags.get(i));
 			}

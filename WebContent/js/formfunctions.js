@@ -65,7 +65,7 @@ function directCart(){
 	$('form#directCart').submit();
 }
 
-function directChekcout(){
+function directCheckout(){
 	$('body').append('<form action="checkout" method="post" id="directCheckout"></form>');
 	$('form#directCheckout').submit();
 }
@@ -89,9 +89,10 @@ function redirectProfile(profilePage){
 	if(profilePage === 'pa')
 		$('body').append('<form action="profile/address" method="post" id="dicardChanges"></form>');
 
-	else if(profilePage === 'pg')
+	else if(profilePage === 'pg'){
 		$('body').append('<form action="profile/general" method="post" id="dicardChanges"></form>');
 		$('form#discardChanges').submit();
+	}
 
 	else if(profilePage === 'pp')
 		$('body').append('<form action="profile/password" method="post" id="dicardChanges"></form>');
@@ -102,7 +103,7 @@ function redirectProfile(profilePage){
 }
 
 function showSearch(){
-
+	// show the search modal
 }
 
 function productCategorySelect(targetCategory){
