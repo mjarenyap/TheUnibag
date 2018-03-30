@@ -71,7 +71,7 @@
 		</nav>
 
 		<section>
-			<form action="account" method="get" id="signup-form">
+			<form action="account" method="post" id="signup-form">
 				<c:if test="${error == true}">
 					<div class="error-banner flex-between">
 						<div>
@@ -124,7 +124,7 @@
 					<span class="help">Already have an account? <a href="#" id="go-login">Login</a> here.</span>
 					<input type="submit" value="Sign Up" />
 				</div>
-				<input type="hidden" name="purpose" value="signup" />
+				<input type="hidden" id="pRedirect" name="purpose" value="${purpose}" />
 			</form>
 		</section>
 

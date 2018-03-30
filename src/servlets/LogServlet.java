@@ -148,7 +148,17 @@ public class LogServlet extends HttpServlet {
 		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
 			home(request, response);
 
-		else request.getRequestDispatcher("login.jsp").forward(request, response);
+		else {
+			String pRedirect = request.getParameter("purpose");
+			PurposeChecker pc = new PurposeChecker();
+
+			if(pc.checkRedirect(pRedirect)){
+				request.setAttribute("purpose", pRedirect);
+				request.getRequestDispatcher("login.jsp").forward(request, response);
+			}
+
+			else home(request, response);
+		}
 	}
 
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -234,7 +244,17 @@ public class LogServlet extends HttpServlet {
 		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
 			home(request, response);
 
-		else request.getRequestDispatcher("signup.jsp").forward(request, response);
+		else {
+			String pRedirect = request.getParameter("purpose");
+			PurposeChecker pc = new PurposeChecker();
+
+			if(pc.checkRedirect(pRedirect)){
+				request.setAttribute("purpose", pRedirect);
+				request.getRequestDispatcher("signup.jsp").forward(request, response);
+			}
+
+			else home(request, response);
+		}
 	}
 
 	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

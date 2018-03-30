@@ -44,6 +44,7 @@
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
+							<input type="hidden" id="pRedirect" value="single" />
 						</div>
 					</c:if>
 					<c:if test="${loggedUser != null}">

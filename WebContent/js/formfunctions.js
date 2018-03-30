@@ -51,12 +51,20 @@ function directProfile(){
 }
 
 function directLogin(){
-	$('body').append('<form action="login" method="post" id="directLogin"></form>');
+	$('body').append('<form action="login" method="post" id="directLogin">'+
+		'<input type="hidden" name="purpose" value="'+
+		$('#pRedirect').val()+ 
+		'" />'+
+		'</form>');
 	$('form#directLogin').submit();
 }
 
 function directSignup(){
-	$('body').append('<form action="signup" method="post" id="directSignup"></form>');
+	$('body').append('<form action="signup" method="post" id="directSignup">'+
+		'<input type="hidden" name="purpose" value="'+
+		$('#pRedirect').val()+ 
+		'" />'+
+		'</form>');
 	$('form#directSignup').submit();
 }
 
@@ -107,10 +115,10 @@ function showSearch(){
 }
 
 function productCategorySelect(targetCategory){
-	var list = $('nav ul.subnav li');
+	var list = ["all", "backpack", "handbag", "totebag", "messengerbag", "travelbag", "slingbag", "weekenderbag"];
 	var found = false;
 	for(var x = 0; x < list.length; x++){
-		if(targetCategory === list[x].attr('data-id')){
+		if(targetCategory === list[x]){
 			found = true;
 			break;
 		}

@@ -8,8 +8,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import beans.Bag;
 import services.BagService;
+import security.Encryption;
 
 /**
  * Servlet implementation class ProductAdminServlet
@@ -66,7 +68,7 @@ public class ProductAdminServlet extends HttpServlet {
 		String type = request.getParameter("type");
 		String collection = request.getParameter("collection");
 		String rating = request.getParameter("rating");
-		float price = Integer.parseInt(request.getParameter("price"));
+		float price = Float.parseFloat(request.getParameter("price"));
 
 		// create a newProduct object
 		Bag newBag = new Bag();
@@ -97,7 +99,20 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void viewProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		/*
+		Get the product ID as the request parameter.
+		Make sure to parse it as a float.
+		*/
+
+		// decrypt the ID using the Encryption class provided.
+		// fetch the product via the decrypted ID using the BagService. store it in a Bag object
+
+		/*
+		Set the Bag object as an attribute of the request. Name it as "featuredBag"
+		EX. request.setAttribute(Obejct, "name");
+		*/
+
+		// dispatch to admin-product.jsp
 	}
 
 	/**

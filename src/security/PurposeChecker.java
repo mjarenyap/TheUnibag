@@ -9,7 +9,7 @@ public class PurposeChecker {
 
 	public PurposeChecker(){
 		whitelistPages = new ArrayList<>();
-		whitelistPages.add("index");
+		whitelistPages.add("home");
 		whitelistPages.add("cart");
 		whitelistPages.add("checkout");
 		whitelistPages.add("products");
@@ -17,9 +17,10 @@ public class PurposeChecker {
 	}
 
 	public boolean checkRedirect(String redirect){
-		for(int i = 0; i < whitelistPages.size(); i++)
-			if(redirect.equals(whitelistPages.get(i)))
-				return true;
+		if(redirect != null)
+			for(int i = 0; i < whitelistPages.size(); i++)
+				if(redirect.equalsIgnoreCase(whitelistPages.get(i)))
+					return true;
 
 		return false;
 	}

@@ -71,7 +71,7 @@
 		</nav>
 
 		<section>
-			<form action="account" method="get" id="login-form">
+			<form action="account" method="post" id="login-form">
 				<c:if test="${error == true}">
 					<div class="error-banner flex-between">
 						<p>Oops! It looks like your email address and password did not match.</p>
@@ -91,7 +91,7 @@
 					<span class="help">Don't have an account? <a href="#" id="go-signup">Get started</a> here.</span>
 					<input type="submit" value="Login" />
 				</div>
-				<input type="hidden" name="purpose" value="login" />
+				<input type="hidden" id="pRedirect" name="purpose" value="${purpose}" />
 			</form>
 		</section>
 

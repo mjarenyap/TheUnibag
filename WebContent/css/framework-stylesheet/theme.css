@@ -14,9 +14,11 @@ body, html{
 	font-family: 'Source Sans Pro', sans-serif;
 }
 
+/*
 body.nav-sticky{
 	margin-top: 114.55px;
 }
+*/
 
 h1, h2, h3, h4, h5, h6{
 	margin: 0;

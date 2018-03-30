@@ -14,7 +14,7 @@ import services.UserService;
 /**
  * Servlet implementation class UserAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin"})
+@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser"})
 public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -41,8 +41,6 @@ public class UserAdminServlet extends HttpServlet {
 
 			case "/admin/viewuser": viewUser(request, response);
 			break;
-
-			case "/admin": adminHome(request, response);
 		}
 	}
 
@@ -94,11 +92,20 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void viewUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	}
+		/*
+		Get the product ID as the request parameter.
+		Make sure to parse it as a float.
+		*/
 
-	protected void adminHome(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// decrypt the ID using the Encryption class provided.
+		// fetch the product via the decrypted ID using the UserService. store it in a User object
+
+		/*
+		Set the User object as an attribute of the request. Name it as "featuredUser"
+		EX. request.setAttribute(Obejct, "name");
+		*/
+
+		// dispatch to admin-user.jsp
 	}
 
 	/**
