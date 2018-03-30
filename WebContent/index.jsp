@@ -22,6 +22,11 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/homepage.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -35,13 +40,14 @@
 				</li>
 				<li><img src="assets/images/unibag-logo.png" id="main-logo" /></li>
 				<li class="flex-start">
-					<c:if test="${loggedUser} == null">
+					<c:if test="${loggedUser == null}">
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
+							<input type="hidden" id="pRedirect" value="home" />
 						</div>
 					</c:if>
-					<c:if test="${loggedUser} != null">
+					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
 							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
@@ -70,7 +76,14 @@
 			<h1 id="welcome">Welcome to The Unibag</h1>
 			<h3 id="tagline">The shopping experience at it's best.</h3>
 			<img src="assets/icons/spirals-of-vines.svg" class="ornaments">
-			<button class="hallow-white" id="cta">Get started</button>
+			<c:choose>
+				<c:when test="${loggedUser != null}">
+					<button class="hallow-white" id="view-profile">View Your Profile</button>
+				</c:when>
+				<c:otherwise>
+					<button class="hallow-white" id="cta">Get Started</button>
+				</c:otherwise>
+			</c:choose>
 		</header>
 
 		<!-- Services section -->
@@ -95,20 +108,14 @@
 			</div>
 		</section>
 
-		<section class="white" id="brands">
-			<h1>Popular Bag Brands</h1>
-			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
-			<!-- CONTENT HERE -->
-		</section>
-
 		<!-- Featured bags section -->
 		<section class="white" id="collections">
 			<h1 class="title-heading">Featured Bags</h1>
 			<img src="assets/icons/spirals-of-vines-dark.svg" class="ornaments">
 			<!-- Product feed -->
 			<div class="product-feed flex-between">
-				<c:forEach items="${baglist}" var="bag">
-					<div class="content-wrapper">
+				<c:forEach items="${baglist}" var="bag" varStatus="status">
+					<div class="content-wrapper" data-id="${productnames[status.index]}">
 						<div class="featured-image"></div>
 						<h3 class="product-name"><c:out value="${bag.name}" /></h3>
 						<h3 class="product-price">$<c:out value="${bag.price}" /></h3>
@@ -116,7 +123,7 @@
 					</div>
 				</c:forEach>
 			</div>
-			<button class="hallow see-more">See more</button>
+			<button class="hallow see-more" id="see-more">See more</button>
 		</section>
 
 		<footer>

@@ -11,16 +11,15 @@ import java.util.List;
 import java.util.ArrayList;
 
 import beans.Bag;
-import beans.Color;
 import beans.Size;
 import services.BagService;
-import services.ColorService;
 import services.SizeService;
+import security.Encryption;
 
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(urlPatterns = {"/products", "/products/*"})
+@WebServlet(urlPatterns = {"/products", "/featured"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -43,15 +42,14 @@ public class ProductServlet extends HttpServlet {
 			case "/products": products(request, response);
 			break;
 
-			default: product(request, response);
-			break;
+			case "/featured": product(request, response);
 		}
 	}
 
 	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// declare filter variables // retrieve from filter controls
 		// get all products
-		List<Bag> baglist = new BagService.getAllBags();
+		List<Bag> baglist = BagService.getAllBags();
 		request.setAttribute("baglist", baglist);
 		request.getRequestDispatcher("products.jsp").forward(request, response);
 		// preview 10 products according to pagination number
@@ -62,7 +60,10 @@ public class ProductServlet extends HttpServlet {
 	protected void product(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// declare flag variables
 		boolean validProductPath = false;
+		
+		Encryption e = new Encryption();
 		// get contextualized url parametr of the product
+		String productPath = request.getParameter("path");
 		String[] splitParts = productPath.split("#");
 		long encryptedID = -1;
 

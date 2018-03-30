@@ -3,16 +3,16 @@ package security;
 public class Encryption{
 	public Encryption(){}
 
-	public long encryptID(long userID){
-		long encrypted = userID;
+	public long encryptID(long id){
+		long encrypted = id;
 
 		encrypted *= 404;
 		encrypted += 403;
 		return encrypted;
 	}
 
-	public long decryptID(long userID){
-		long decrypt = userID;
+	public long decryptID(long id){
+		long decrypt = id;
 
 		decrypt -= 403;
 		decrypt /= 404;

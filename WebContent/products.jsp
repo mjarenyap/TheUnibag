@@ -24,6 +24,11 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/product-list.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -41,6 +46,7 @@
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
+							<input type="hidden" id="pRedirect" value="products" />
 						</div>
 					</c:if>
 					<c:if test="${loggedUser != null}">
@@ -139,8 +145,8 @@
 					</label>
 				</div>
 				<div id="product-feed">
-					<c:forEach items="${baglist}" var="bag">
-						<div class="content-wrapper">
+					<c:forEach items="${baglist}" var="bag" varStatus="status">
+						<div class="content-wrapper" data-id="${bag.bagID}#${productnames[status]}">
 							<div class="featured-image"></div>
 							<div class="product-info">
 								<h1 class="product-name"><c:out value="${bag.name}"/></h1>

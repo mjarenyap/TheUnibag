@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import beans.Order;
 import services.OrderService;
+import security.Encryption;
 
 /**
  * Servlet implementation class OrderAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/viewallorders", "/admin/vieworder"})
+@WebServlet(urlPatterns = {"/admin/allorders", "/admin/vieworder", "/admin"})
 public class OrderAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -40,6 +41,8 @@ public class OrderAdminServlet extends HttpServlet {
 
 			case "/admin/vieworder": viewOrder(request, response);
 			break;
+
+			case "/admin": adminHome(request, response);
 		}
 	}
 
@@ -50,8 +53,14 @@ public class OrderAdminServlet extends HttpServlet {
 	protected void allOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Retrieve all of the orders through OrderService
 		OrderService os = new OrderService();
+		Encryption e = new Encryption();
+
 		// Store all the orders in an ArrayList
 		List<Order> orderList = os.getAllOrders();
+		for(int i = 0; i < orderList.size(); i++){
+			long theID = orderList.get(i).getOrderID();
+			orderList.get(i).setOrderID(e.encryptID(theID));
+		}
 		
 		// Set the ArrayList as request attribute named "orderlist"
 		request.setAttribute("orderlist", orderList);
@@ -60,8 +69,38 @@ public class OrderAdminServlet extends HttpServlet {
 	}
 
 	protected void viewOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Get request parameter of the 
-		OrderService.getAllOrders();
+		/*
+		Get the product ID as the request parameter.
+		Make sure to parse it as a float.
+		*/
+
+		// decrypt the ID using the Encryption class provided.
+		// fetch the product via the decrypted ID using the OrderService. store it in a Order object
+
+		/*
+		Set the Order object as an attribute of the request. Name it as "featuredOrder"
+		EX. request.setAttribute(Obejct, "name");
+		*/
+
+		// dispatch to admin-user.jsp
+	}
+
+	protected void adminHome(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		// Retrieve all of the orders through OrderService
+		OrderService os = new OrderService();
+		Encryption e = new Encryption();
+
+		// Store all the orders in an ArrayList
+		List<Order> orderList = os.getAllOrders();
+		for(int i = 0; i < orderList.size(); i++){
+			long theID = orderList.get(i).getOrderID();
+			orderList.get(i).setOrderID(e.encryptID(theID));
+		}
+		
+		// Set the ArrayList as request attribute named "orderlist"
+		request.setAttribute("orderlist", orderList);
+		// Dispatch to admin-orders.jsp
+		request.getRequestDispatcher("admin-orders.jsp").forward(request, response);
 	}
 
 	/**

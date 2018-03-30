@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import beans.Bag;
@@ -26,7 +25,7 @@ import security.Encryption;
 /**
  * Servlet implementation class OrderServlet
  */
-@WebServlet(urlPatterns = {"/shoppingcart", "/checkout", "/success"})
+@WebServlet(urlPatterns = {"/shoppingcart", "/checkout", "/success", "/addtocart"})
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -129,6 +128,9 @@ public class OrderServlet extends HttpServlet {
 
 			// set the subtotal as attribute
 			request.setAttribute("subtotal", subtotal);
+
+			// set error message as FALSE by default
+			request.setAttribute("error", false);
 
 			// dispatch to the checkout page
 			request.getRequestDispatcher("checkout.jsp").forward(request, response);

@@ -15,9 +15,6 @@ import javax.persistence.Id;
  * version 1.0.02.25.18
  */
 
-
-
-
 @Entity(name = "user")
 public class User {
 	@Id

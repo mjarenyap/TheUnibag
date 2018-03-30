@@ -22,6 +22,11 @@
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/login.css" />
+
+		<!-- JAVASCRIPT -->
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -66,7 +71,13 @@
 		</nav>
 
 		<section>
-			<form action="login" method="get" id="login-form">
+			<form action="account" method="post" id="login-form">
+				<c:if test="${error == true}">
+					<div class="error-banner flex-between">
+						<p>Oops! It looks like your email address and password did not match.</p>
+						<i class="fa fa-close"></i>
+					</div>	
+				</c:if>
 				<h1 class="heading">Login to Unibag</h1>
 				<label>
 					<span>Email address</span>
@@ -77,9 +88,10 @@
 					<input type="password" name="password" placeholder="Type here your password" class="full-width" />
 				</label>
 				<div class="flex-end">
-					<span class="help">Don't have an account? <a href="#">Get started</a> here.</span>
+					<span class="help">Don't have an account? <a href="#" id="go-signup">Get started</a> here.</span>
 					<input type="submit" value="Login" />
 				</div>
+				<input type="hidden" id="pRedirect" name="purpose" value="${purpose}" />
 			</form>
 		</section>
 
