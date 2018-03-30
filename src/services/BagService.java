@@ -50,7 +50,6 @@ public class BagService {
 		em.close();
 		
 		return bags;
-		
 	}
 	
 	public static void deleteBag(long id)
@@ -133,4 +132,32 @@ public class BagService {
 		
 	}
 
+
+	public static List<Bag> getAllBags(int sortMode){
+		List<Bag> bags = null;
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+
+		String[] modes = {"bag.name ASC", "bag.name DESC", "bag.price ASC", "bag.type ASC", "bag.brand ASC"};
+		
+		try{
+			trans.begin();
+			
+			TypedQuery<Bag> query = em.createQuery("select bag from bag bag order by " + modes[sortMode], Bag.class);
+			bags = query.getResultList();
+			
+			trans.commit();
+		
+		}catch(Exception e){
+			if(trans != null)
+				trans.rollback();
+			
+			e.printStackTrace();
+		}finally{
+			em.close();
+		}
+		
+		return bags;
+	}
 }

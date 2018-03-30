@@ -24,6 +24,7 @@
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/cart.css" />
 
 		<!-- JAVASCRIPT -->
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
 		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
@@ -43,6 +44,7 @@
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
+							<input type="hidden" id="pRedirect" value="cart" />
 						</div>
 					</c:if>
 					<c:if test="${loggedUser != null}">
@@ -71,36 +73,45 @@
 
 		<section id="cart-section">
 			<h1 id="cart-heading">Your Shopping Cart</h1>
-			<div class="flex-start">
-				<table id="table-of-cart">
-					<thead>
-						<th>Item</th>
-						<th>Product Name</th>
-						<th>Price</th>
-						<th></th>
-					</thead>
-					<tbody>
-						<c:forEach items="${shoppingcart}" var="bag" varStatus="status">
-							<tr>
-								<td><div class="featured-image"></div></td>
-								<td><c:out value="${bag.name}" /></td>
-								<td><c:out value="${bag.price}" /></td>
-								<td><img src="assets/icons/garbage.svg" class="remove" data-id="${status}" /></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-				<div id="summary-pane">
-					<h3 id="summary-title">Your Order Summary</h3>
-					<div id="summary-content">
-						<p id="count-summary"><b>No. of products</b>: <c:out value="${fn:length(shoppingcart)}" /></p>
-						<p id="total-summary"><b>Grand total</b>: $<c:out value="${subtotal}" /></p>
+			<c:choose>
+				<c:when test="${fn:length(shoppingcart) == 0}">
+					<div class="error-banner">
+						<p class="large">It's empty! Try putting items into your cart.</p>
 					</div>
-					<button id="checkout">Proceed to checkout</button>
-				</div>
-			</div>
-			<button class="hallow" id="continue-shopping">Continue Shopping</button>
-			<button class="hallow">Clear my cart</button>
+				</c:when>
+				<c:otherwise>
+					<div class="flex-start">
+						<table id="table-of-cart">
+							<thead>
+								<th>Item</th>
+								<th>Product Name</th>
+								<th>Price</th>
+								<th></th>
+							</thead>
+							<tbody>
+								<c:forEach items="${shoppingcart}" var="bag" varStatus="status">
+									<tr>
+										<td><div class="featured-image"></div></td>
+										<td><c:out value="${bag.name}" /></td>
+										<td><c:out value="${bag.price}" /></td>
+										<td><img src="assets/icons/garbage.svg" class="remove" data-id="${status}" /></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+						<div id="summary-pane">
+							<h3 id="summary-title">Your Order Summary</h3>
+							<div id="summary-content">
+								<p id="count-summary"><b>No. of products</b>: <c:out value="${fn:length(shoppingcart)}" /></p>
+								<p id="total-summary"><b>Grand total</b>: $<c:out value="${subtotal}" /></p>
+							</div>
+							<button id="checkout">Proceed to checkout</button>
+						</div>
+					</div>
+					<button class="hallow" id="continue-shopping">Continue Shopping</button>
+					<button class="hallow">Clear my cart</button>
+				</c:otherwise>
+			</c:choose>
 		</section>
 
 		<footer>

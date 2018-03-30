@@ -25,6 +25,7 @@
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/checkout.css" />
 
 		<!-- JAVASCRIPT -->
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
 		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
@@ -44,6 +45,7 @@
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
+							<input type="hidden" id="pRedirect" value="checkout" />
 						</div>
 					</c:if>
 					<c:if test="${loggedUser != null}">
@@ -74,6 +76,12 @@
 			<h1 id="checkout-title">Checkout</h1>
 			<div class="flex-start">
 				<form action="success" method="post" id="billing-form">
+					<c:if test="${error == true}">
+						<div class="error-banner flex-between">
+							<p>Woah there! You have to fill out the necessary fields.</p>
+							<i class="fa fa-close"></i>
+						</div>
+					</c:if>	
 					<h1 id="billing-title"><b class="important">Step 1:</b> Billing Information</h1>
 					<span class="reminder">All fields with (*) are required</span>
 					<div class="flex-between forname">

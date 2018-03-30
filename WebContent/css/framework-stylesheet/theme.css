@@ -14,9 +14,11 @@ body, html{
 	font-family: 'Source Sans Pro', sans-serif;
 }
 
+/*
 body.nav-sticky{
 	margin-top: 114.55px;
 }
+*/
 
 h1, h2, h3, h4, h5, h6{
 	margin: 0;
@@ -69,4 +71,30 @@ hr{
 
 b.important{
 	color: var(--theme-color);
+}
+
+div.error-banner{
+	border: thin solid var(--theme-color);
+	box-sizing: border-box;
+	padding: 1em;
+	border-radius: 0.2em;
+	margin-bottom: 1.5em;
+	align-items: flex-start;
+}
+
+div.error-banner p{
+	color: var(--theme-color);
+	font-size: 0.85em;
+}
+
+div.error-banner p.large{
+	font-size: 1.5em;
+	text-align: center;
+}
+
+div.error-banner .fa{
+	color: var(--theme-color);
+	cursor: pointer;
+	margin-left: 1em;
+	font-size: 1.1em;
 }

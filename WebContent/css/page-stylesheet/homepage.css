@@ -1,9 +1,5 @@
 /* homepage stylesheet */
 
-body{
-	margin-top: 127px;
-}
-
 header{
 	background: url('../../assets/images/hero-image.jpeg');
 	background-size: cover;

@@ -19,7 +19,7 @@ import security.Encryption;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(urlPatterns = {"/products", "products/*", "/featured/*"})
+@WebServlet(urlPatterns = {"/products", "/featured"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,14 +38,12 @@ public class ProductServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String path = request.getServletPath();
 
-		if(path.equals("/products"))
-			products(request, response);
+		switch(path){
+			case "/products": products(request, response);
+			break;
 
-		else if(path.startsWith("/products/"))
-			products(request, response);
-
-		else if(path.startsWith("/featured/"))
-			product(request, response);
+			case "/featured": product(request, response);
+		}
 	}
 
 	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -51,12 +51,20 @@ function directProfile(){
 }
 
 function directLogin(){
-	$('body').append('<form action="login" method="post" id="directLogin"></form>');
+	$('body').append('<form action="login" method="post" id="directLogin">'+
+		'<input type="hidden" name="purpose" value="'+
+		$('#pRedirect').val()+ 
+		'" />'+
+		'</form>');
 	$('form#directLogin').submit();
 }
 
 function directSignup(){
-	$('body').append('<form action="signup" method="post" id="directSignup"></form>');
+	$('body').append('<form action="signup" method="post" id="directSignup">'+
+		'<input type="hidden" name="purpose" value="'+
+		$('#pRedirect').val()+ 
+		'" />'+
+		'</form>');
 	$('form#directSignup').submit();
 }
 
@@ -65,7 +73,7 @@ function directCart(){
 	$('form#directCart').submit();
 }
 
-function directChekcout(){
+function directCheckout(){
 	$('body').append('<form action="checkout" method="post" id="directCheckout"></form>');
 	$('form#directCheckout').submit();
 }
@@ -89,9 +97,10 @@ function redirectProfile(profilePage){
 	if(profilePage === 'pa')
 		$('body').append('<form action="profile/address" method="post" id="dicardChanges"></form>');
 
-	else if(profilePage === 'pg')
+	else if(profilePage === 'pg'){
 		$('body').append('<form action="profile/general" method="post" id="dicardChanges"></form>');
 		$('form#discardChanges').submit();
+	}
 
 	else if(profilePage === 'pp')
 		$('body').append('<form action="profile/password" method="post" id="dicardChanges"></form>');
@@ -102,14 +111,14 @@ function redirectProfile(profilePage){
 }
 
 function showSearch(){
-
+	// show the search modal
 }
 
 function productCategorySelect(targetCategory){
-	var list = $('nav ul.subnav li');
+	var list = ["all", "backpack", "handbag", "totebag", "messengerbag", "travelbag", "slingbag", "weekenderbag"];
 	var found = false;
 	for(var x = 0; x < list.length; x++){
-		if(targetCategory === list[x].attr('data-id')){
+		if(targetCategory === list[x]){
 			found = true;
 			break;
 		}

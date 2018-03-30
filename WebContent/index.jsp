@@ -24,6 +24,7 @@
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/homepage.css" />
 
 		<!-- JAVASCRIPT -->
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
 		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
@@ -43,6 +44,7 @@
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
+							<input type="hidden" id="pRedirect" value="home" />
 						</div>
 					</c:if>
 					<c:if test="${loggedUser != null}">
@@ -113,7 +115,7 @@
 			<!-- Product feed -->
 			<div class="product-feed flex-between">
 				<c:forEach items="${baglist}" var="bag" varStatus="status">
-					<div class="content-wrapper" data-id="${bag.bagID}#${productnames[status]}">
+					<div class="content-wrapper" data-id="${productnames[status.index]}">
 						<div class="featured-image"></div>
 						<h3 class="product-name"><c:out value="${bag.name}" /></h3>
 						<h3 class="product-price">$<c:out value="${bag.price}" /></h3>
