@@ -72,17 +72,36 @@ public class OrderAdminServlet extends HttpServlet {
 		/*
 		Get the product ID as the request parameter.
 		Make sure to parse it as a float.
+		Get the order ID as the request parameter.
+		Make sure to parse it as a long.
 		*/
 
+		
+		String orderID = request.getParameter("orderID");
+		long orID = Long.parseLong(orderID);
+		/*long orIDecrypt;*/
+		
 		// decrypt the ID using the Encryption class provided.
+		Encryption decryptor = new Encryption();
+		
+		orID = decryptor.decryptID(orID);
+		/*orIDecrypt = decryptor.decryptID(orID);*/
+		
 		// fetch the product via the decrypted ID using the OrderService. store it in a Order object
+		Order obj = OrderService.getOrder(orID);
+		
+		/*Order obj = OrderService.getOrder(orIDecrypt);*/
 
 		/*
 		Set the Order object as an attribute of the request. Name it as "featuredOrder"
 		EX. request.setAttribute(Obejct, "name");
+		EX. request.setAttribute("name", Obejct);
 		*/
+		request.setAttribute("featuredOrder", obj);
 
 		// dispatch to admin-user.jsp
+		
+		request.getRequestDispatcher("admin-user.jsp").forward(request, response);
 	}
 
 	protected void adminHome(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -108,6 +127,7 @@ public class OrderAdminServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//Auto-generated method stub
 		doGet(request, response);
 	}
 

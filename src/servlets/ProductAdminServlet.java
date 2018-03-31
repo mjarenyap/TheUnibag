@@ -95,6 +95,7 @@ public class ProductAdminServlet extends HttpServlet {
 		request.setAttribute("baglist", bags);
 		
 		//TODO do I set the request Dispatcher din here?
+		// do I set the request Dispatcher din here?
 		request.getRequestDispatcher("admin-products.jsp").forward(request, response);
 	}
 
@@ -102,17 +103,31 @@ public class ProductAdminServlet extends HttpServlet {
 		/*
 		Get the product ID as the request parameter.
 		Make sure to parse it as a float.
+		Make sure to parse it as a long.
 		*/
+		String id = request.getParameter("bagID");
+		long productID = Long.parseLong(id);
+		/*long prodIDecrypt;*/
 
 		// decrypt the ID using the Encryption class provided.
+		Encryption e = new Encryption();
+		productID = e.decryptID(productID);
+		/*prodIDecrypt = e.decryptID(productID);*/
+		
+		
 		// fetch the product via the decrypted ID using the BagService. store it in a Bag object
 
+		Bag bag = BagService.getBag(productID);
+		/*Bag bag = BagService.getBag(prodIDecrypt);*/
+		
 		/*
 		Set the Bag object as an attribute of the request. Name it as "featuredBag"
 		EX. request.setAttribute(Obejct, "name");
 		*/
+		request.setAttribute("featuredBag", bag);
 
 		// dispatch to admin-product.jsp
+		request.getRequestDispatcher("admin-product.jsp").forward(request, response);
 	}
 
 	/**
@@ -120,6 +135,7 @@ public class ProductAdminServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		doGet(request, response);
 	}
 
