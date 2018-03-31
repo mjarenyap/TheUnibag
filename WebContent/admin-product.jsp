@@ -28,7 +28,6 @@
         <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <script src="js/adminformfunctions.js" type="text/javascript"></script>     
     </head>
-    
     <body>
         <div class="sidenav">
             <div class="accent"><img id="logo" src="assets/images/Unibag-logo.png" draggable="false"></div>
@@ -68,19 +67,23 @@
                 <table>
                     <tr>
                         <th></th>
-                        <th>Bag ID</th>
                         <th>Name</th>
                         <th>Brand</th>
                         <th>Type</th>
+                        <th>Collection</th>
+                        <th>Rating</th>
+                        <th>Price</th>
                         <th></th>
                     </tr>
                     <c:forEach items="${baglist}" var="bag">
                         <tr>
-                            <td><input type="checkbox" class="delete-status"></td>
-                            <td><c:out value="${bag.bagID}" /></td>
+                            <td><input type="checkbox" class="delete-status" /></td>
                             <td><c:out value="${bag.name}" /></td>
                             <td><c:out value="${bag.brand}" /></td>
                             <td><c:out value="${bag.type}" /></td>
+                            <td><c:out value="${bag.collection}" /></td>
+                            <td><c:out value="${bag.rating}" /> out of 5</td>
+                            <td>$<c:out value="${bag.price}" /></td>
                             <td><a href="view-product.html"><button class="hallow">Edit</button></a></td>
                         </tr>
                     </c:forEach>

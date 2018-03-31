@@ -28,7 +28,6 @@
         <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <script src="js/adminformfunctions.js" type="text/javascript"></script> 
     </head>
-    
     <body>
         <div class="sidenav">
             <div class="accent"><img id="logo" src="assets/images/Unibag-logo.png" draggable="false"></div>
@@ -68,20 +67,20 @@
                 <table>  
                     <tr>
                         <th></th>
-                        <th>User ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
+                        <th>Phone number</th>
                         <th>User Type</th>
                         <th></th>
                     </tr>
                     <c:forEach items="${userlist}" var="user">
                         <tr>
-                            <td><input type="checkbox"></td>
-                            <td><c:out value="${user.userID}" /></td>
+                            <td><input type="checkbox" class="delete-status" /></td>
                             <td><c:out value="${user.fname}" /></td>
                             <td><c:out value="${user.lname}" /></td>
                             <td><c:out value="${user.email}" /></td>
+                            <td><c:out value="${user.phone}" /></td>
                             <td><c:out value="${user.userType}" /></td>
                             <td><a href="view-user.html"><button class="hallow">Edit</button></a></td>
                         </tr>

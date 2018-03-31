@@ -63,7 +63,7 @@
                     <a href="admin-bag.html"><span>View all products</span></a>
                 </p>
             </div>
-            <div class="info">
+            <form method="post" action="addedproduct" class="info">
                 <div class="header">Add New Product</div>
                 <div class="details flex-between" >
                     <!--First One -->
@@ -71,39 +71,39 @@
                         <div class="type">
                             <div>
                                 <div>Name<span>*</span></div>
-                                <input type="text" placeholder="Type the product name">
+                                <input type="text" name="name" placeholder="Type the product name" />
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Brand<span>*</span></div>
-                                <input type="text" placeholder="Type the brand name">
+                                <input type="text" name="brand" placeholder="Type the brand name" />
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Type of bag<span>*</span></div>
-                                <select>
-                                    <option value="Backpack">Backpack</option>
-                                    <option value="Handbag">Handbag</option>
-                                    <option value="Tote">Tote Bag</option>
-                                    <option value="Messenger">Messenger bag</option>
-                                    <option value="Travel">Travel bag</option>
-                                    <option value="Sling">Sling bag</option>
-                                    <option value="Weekender">Weekender bag</option>
+                                <select name="type">
+                                    <option value="backpack">Backpack</option>
+                                    <option value="dufflebag">Duffle Bag</option>
+                                    <option value="handbag">Handbag</option>
+                                    <option value="messengerbag">Messenger Bag</option>
+                                    <option value="shoulderbag">Shoulder Bag</option>
+                                    <option value="tote">Tote</option>
+                                    <option value="totebag">Tote Bag</option>
                                 </select>
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Price</div>
-                                <input type="text" placeholder="Type the price">
+                                <input type="number" name="price" placeholder="Type the price" />
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Color</div>
-                                <input type="text" placeholder="Type the color">
+                                <input type="text" name="color" placeholder="Type the color" />
                             </div>
                         </div>
                     </div>
@@ -112,34 +112,34 @@
                         <div class="type">
                             <div>
                                 <div>Rating<span>*</span></div>
-                                <select>
-                                    <option>1 out of 5</option>
-                                    <option>2 out of 5</option>
-                                    <option>3 out of 5</option>
-                                    <option>4 out of 5</option>
-                                    <option>5 out of 5</option>
+                                <select name="rating">
+                                    <option value="1">1 out of 5</option>
+                                    <option value="2">2 out of 5</option>
+                                    <option value="3">3 out of 5</option>
+                                    <option value="4">4 out of 5</option>
+                                    <option value="5">5 out of 5</option>
                                 </select>
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Width<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Width">
+                                <input class="dimension" type="text" name="width" placeholder="Width" />
                             </div>
                             
                             <div>
                                 <div>Height<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Height">
+                                <input class="dimension" type="text" name="height" placeholder="Height" />
                             </div>
                             
                             <div>
                                 <div>Length<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Length">
+                                <input class="dimension" type="text" name="length" placeholder="Length" />
                             </div>
                         </div>
                         <div class="type">
                             <div>Description<span>*</span></div>
-                            <textarea class="description" placeholder="Give a short description of the product"></textarea>
+                            <textarea class="description" name="description" placeholder="Give a short description of the product"></textarea>
                         </div>
                         
                         <!-- Save Changes -->
@@ -149,7 +149,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </body>
 </html>

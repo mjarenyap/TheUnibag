@@ -16,7 +16,7 @@ import security.Encryption;
 /**
  * Servlet implementation class OrderAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/allorders", "/admin/vieworder", "/admin"})
+@WebServlet(urlPatterns = {"/admin/allorders", "/admin", "/admin/archiveorders"})
 public class OrderAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -39,10 +39,11 @@ public class OrderAdminServlet extends HttpServlet {
 			case "/admin/allorders": allOrders(request, response);
 			break;
 
-			case "/admin/vieworder": viewOrder(request, response);
+			case "/admin/archiveorders": archiveOrders(request, response);
 			break;
 
-			case "/admin": adminHome(request, response);
+			case "/admin": adminLogin(request, response);
+			break;
 		}
 	}
 
@@ -65,7 +66,7 @@ public class OrderAdminServlet extends HttpServlet {
 		// Set the ArrayList as request attribute named "orderlist"
 		request.setAttribute("orderlist", orderList);
 		// Dispatch to admin-orders.jsp
-		request.getRequestDispatcher("admin-orders.jsp").forward(request, response);
+		request.getRequestDispatcher("admin-index.jsp").forward(request, response);
 	}
 
 	protected void viewOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -101,25 +102,18 @@ public class OrderAdminServlet extends HttpServlet {
 
 		// dispatch to admin-user.jsp
 		
-		request.getRequestDispatcher("admin-user.jsp").forward(request, response);
+		request.getRequestDispatcher("view-order.jsp").forward(request, response);
 	}
 
-	protected void adminHome(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		// Retrieve all of the orders through OrderService
-		OrderService os = new OrderService();
-		Encryption e = new Encryption();
+	protected void archiveOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		/* DO SOME BUSINESS LOGIC HERE */
+	}
 
-		// Store all the orders in an ArrayList
-		List<Order> orderList = os.getAllOrders();
-		for(int i = 0; i < orderList.size(); i++){
-			long theID = orderList.get(i).getOrderID();
-			orderList.get(i).setOrderID(e.encryptID(theID));
-		}
-		
-		// Set the ArrayList as request attribute named "orderlist"
-		request.setAttribute("orderlist", orderList);
-		// Dispatch to admin-orders.jsp
-		request.getRequestDispatcher("admin-orders.jsp").forward(request, response);
+	protected void adminLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		if(request.getSession().getAttribute("adminAccount") != null && request.getCookies() != null)
+			allOrders(request, response);
+
+		else request.getRequestDispatcher("admin-login.jsp").forward(request, response);
 	}
 
 	/**

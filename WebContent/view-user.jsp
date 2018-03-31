@@ -71,42 +71,77 @@
                         <div class="type flex-between">
                             <div>
                                 <div>First name<span>*</span></div>
-                                <input type="text" placeholder="Type the first name">
+                                <input type="text" placeholder="Type the first name" name="firstname" value="${featuredUser.fname}" />
                             </div>
                             <div>
                                 <div>Location<span>*</span></div>
-                                <input type="text" placeholder="Type the location">
+                                <c:choose>
+                                    <c:when test="${featuredAddress.location != null}">
+                                        <input type="text" placeholder="Type the location" name="location" value="${featuredAddress.location}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" placeholder="Type the location" name="location" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Last name<span>*</span></div>
-                                <input type="text" placeholder="Type the last name">
+                                <input type="text" placeholder="Type the last name" name="lastname" value="${featuredUser.lname}" />
                             </div>
                             <div>
                                 <div>City<span>*</span></div>
-                                <input type="text" placeholder="Type the city">
+                                <c:choose>
+                                    <c:when test="${featuredAddress.city != null}">
+                                        <input type="text" placeholder="Type the city" name="city" value="${featuredAddress.city}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" placeholder="Type the city" name="city" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Email address<span>*</span></div>
-                                <input type="text" placeholder="Type the first name">
+                                <input type="email" placeholder="Type the email address" name="email" value="${featuredUser.email}" />
                             </div>
                             <div>
                                 <div>Postcode<span>*</span></div>
-                                <input type="text" placeholder="Type the postcode">
+                                <c:choose>
+                                    <c:when text="${featuredAddress.postcode != null}">
+                                        <input type="number" placeholder="Type the postcode" name="postcode" value="${featuredAddress.postcode}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="number" placeholder="Type the postcode" name="postcode" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Phone number</div>
-                                <input type="text" placeholder="Type the phone number">
+                                <c:choose>
+                                    <c:when test="${featuredUser.phone != null}">
+                                        <input type="number" placeholder="Type the phone number" name="phone" value="${featuredUser.phone}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="number" placeholder="Type the phone number" name="phone" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             
                             <div>
                                 <div>Province<span>*</span></div>
-                                <input type="text" placeholder="Type the province">
+                                <c:choose>
+                                    <c:when test="${featuredAddress.province != null}">
+                                        <input type="text" placeholder="Type the province" name="province" value="${featuredAddress.province}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" placeholder="Type the province" name="province" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>
@@ -114,21 +149,12 @@
                     <div class="part">
                         <div class="type flex-between">
                             <div>
-                                <div>Password<span>*</span></div>
-                                <input type="text" placeholder="Type the phone number">
-                            </div>
-                            <div>
                                 <div>Type of user<span>*</span></div>
-                                <select>
-                                    <option>Normal</option>
-                                    <option>Admin</option>
+                                <select name="userType">
+                                    <option value="${featuredUser.userType}"><c:out value="${featuredUser.userType}" /></option>
+                                    <option value="normal">Normal</option>
+                                    <option value="admin">Admin</option>
                                 </select>
-                            </div>
-                        </div>    
-                        <div class="type">
-                            <div>
-                                <div>Confirm password<span>*</span></div>
-                                <input type="text" placeholder="Type the phone number">
                             </div>
                         </div>    
                     </div>
@@ -136,7 +162,7 @@
                     <!-- Save Changes -->
                     <div class="buttons">
                         <button class="hallow butt">DISCARD</button>
-                        <button class="hallow butt save">SAVE CHANGES</button>
+                        <button class="hallow butt save" type="submit">SAVE CHANGES</button>
                     </div>
                 </div>
             </div>

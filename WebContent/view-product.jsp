@@ -71,35 +71,41 @@
                         <div class="type">
                             <div>
                                 <div>Name<span>*</span></div>
-                                <input type="text" placeholder="Type the product name">
+                                <input type="text" placeholder="Type the product name" name="name" value="${featuredBag.name}" />
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Brand<span>*</span></div>
-                                <input type="text" placeholder="Type the brand name">
+                                <input type="text" placeholder="Type the brand name" name="brand" value="${featuredBag.brand}" />
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Type of bag<span>*</span></div>
-                                <select>
-                                    <option>Backpack</option>
-                                    <option></option>
+                                <select name="type">
+                                    <option value="${optionValue}"><c:out value="${featuredBag.type}" /></option>
+                                    <option value="backpack">Backpack</option>
+                                    <option value="dufflebag">Duffle Bag</option>
+                                    <option value="handbag">Handbag</option>
+                                    <option value="messengerbag">Messenger Bag</option>
+                                    <option value="shoulderbag">Shoulder Bag</option>
+                                    <option value="tote">Tote</option>
+                                    <option value="totebag">Tote Bag</option>
                                 </select>
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Price</div>
-                                <input type="text" placeholder="Type the price">
+                                <input type="number" placeholder="Type the price" name="price" value="${featuredBag.price}" />
                             </div>
                             
                         </div>
                         <div class="type">
                             <div>
                                 <div>Color</div>
-                                <input type="text" placeholder="Type the color">
+                                <input type="text" placeholder="Type the color" name="color" value="${featuredBag.color}" />
                             </div>
                         </div>
                     </div>
@@ -108,12 +114,13 @@
                         <div class="type">
                             <div>
                                 <div>Rating<span>*</span></div>
-                                <select>
-                                    <option>1 out of 5</option>
-                                    <option>2 out of 5</option>
-                                    <option>3 out of 5</option>
-                                    <option>4 out of 5</option>
-                                    <option>5 out of 5</option>
+                                <select name="rating">
+                                    <option value="${featuredBag.rating}"><c:out value="${featuredBag.rating}" /> out of 5</option>
+                                    <option value="1">1 out of 5</option>
+                                    <option value="2">2 out of 5</option>
+                                    <option value="3">3 out of 5</option>
+                                    <option value="4">4 out of 5</option>
+                                    <option value="5">5 out of 5</option>
                                 </select>
                             </div>
                             
@@ -121,25 +128,25 @@
                         <div class="type flex-between">
                             <div>
                                 <div>Width<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Width">
+                                <input class="dimension" type="text" placeholder="Width" name="width" value="${featuredBag.width}" />
                             </div>
                             <div>
                                 <div>Height<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Height">
+                                <input class="dimension" type="text" placeholder="Height" name="height" value="${featuredBag.height}" />
                             </div>
                             <div>
                                 <div>Length<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Length">
+                                <input class="dimension" type="text" placeholder="Length" name="length" value="${featuredBag.length}" />
                             </div>
                         </div>
                         <div class="type">
                             <div>Description<span>*</span></div>
-                            <textarea class="description" placeholder="Give a short description of the product"></textarea>
+                            <textarea class="description" placeholder="Give a short description of the product" name="description" value="${featuredBag.description}"></textarea>
                         </div>
                         <!-- Save Changes -->
                         <div class="buttons">
                             <button class="hallow butt">DISCARD</button>
-                            <button class="hallow butt save">SAVE CHANGES</button>
+                            <button class="hallow butt save" type="submit">SAVE CHANGES</button>
                         </div>
                     </div>
                 </div>

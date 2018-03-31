@@ -9,13 +9,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import beans.User;
+import beans.Address;
 import security.Encryption;
 import services.UserService;
+import services.AddressService;
 
 /**
  * Servlet implementation class UserAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser"})
+@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin/addeduser", "/admin/editeduser", "/admin/deleteusers"})
 public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -34,7 +36,7 @@ public class UserAdminServlet extends HttpServlet {
 		String path = request.getServletPath();
 
 		switch(path){
-			case "/admin/adduser": addUser(request, response);
+			case "/admin/adduser": addUserPage(request, response);
 			break;
 
 			case "/admin/allusers": allUsers(request, response);
@@ -42,7 +44,23 @@ public class UserAdminServlet extends HttpServlet {
 
 			case "/admin/viewuser": viewUser(request, response);
 			break;
+
+			case "/admin/addeduser": addUser(request, response);
+			break;
+
+			case "/admin/editeduser": editUser(request, response);
+			break;
+
+			case "/admin/deleteusers": deleteUsers(request, response);
+			break;
 		}
+	}
+
+	protected void addUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("adminAccount") != null && request.getCookies() != null)
+			request.getRequestDispatcher("add-user.jsp").forward(request, response);
+
+		else request.getRequestDispatcher("admin-page-403.jsp").forward(request, response);
 	}
 
 	protected void addUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -77,7 +95,7 @@ public class UserAdminServlet extends HttpServlet {
 		newUser.setUserType(userType);
 		
 		// dispatch to admin-users.jsp
-		request.getRequestDispatcher("admin-users.jsp").forward(request, response);
+		allUsers(request, response);
 	}
 
 	protected void allUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -111,6 +129,7 @@ public class UserAdminServlet extends HttpServlet {
 		
 		// fetch the product via the decrypted ID using the UserService. store it in a User object
 		User user = UserService.getUser(userID);
+		Address address = AddressService.getAddress(user.getUserID());
 		/*User user = UserService.getUser(userIDecrypt);*/
 
 		/*
@@ -118,9 +137,18 @@ public class UserAdminServlet extends HttpServlet {
 		EX. request.setAttribute(Obejct, "name");
 		*/
 
+		request.setAttribute("featuredAddress", address);
 		request.setAttribute("featuredUser", user);
 		// dispatch to admin-user.jsp
-		request.getRequestDispatcher("admin-user.jsp").forward(request, response);
+		request.getRequestDispatcher("view-user.jsp").forward(request, response);
+	}
+
+	protected void editUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/* DO SOME BUSINESS LOGIC HERE */
+	}
+
+	protected void deleteUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/* DO SOME BUSINESS LOGIC HERE */
 	}
 
 	/**

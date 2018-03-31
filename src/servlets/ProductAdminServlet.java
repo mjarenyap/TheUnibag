@@ -16,7 +16,7 @@ import security.Encryption;
 /**
  * Servlet implementation class ProductAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/addproducts", "/admin/allproducts", "/admin/viewproduct"})
+@WebServlet(urlPatterns = {"/admin/addproducts", "/admin/allproducts", "/admin/viewproduct", "/admin/addedproduct", "/admin/editedproduct", "/admin/deleteproducts"})
 public class ProductAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -36,7 +36,7 @@ public class ProductAdminServlet extends HttpServlet {
 		String path = request.getServletPath();
 
 		switch(path){
-			case "/admin/addproducts": addProducts(request, response);
+			case "/admin/addproducts": addProductPage(request, response);
 			break;
 
 			case "/admin/allproducts": allProducts(request, response);
@@ -44,10 +44,26 @@ public class ProductAdminServlet extends HttpServlet {
 
 			case "/admin/viewproduct": viewProduct(request, response);
 			break;
+
+			case "/admin/addedproduct": addProduct(request, response);
+			break;
+
+			case "/admin/editedproduct": editProduct(request, response);
+			break;
+
+			case "/admin/deleteproducts": deletePoducts(request, response);
+			break;
 		}
 	}
 
-	protected void addProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void addProductPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("adminAccount") != null && request.getCookies() != null)
+			request.getRequestDispatcher("add-product.jsp").forward(request, response);
+
+		else request.getRequestDispatcher("admin-page-403.jsp").forward(request, response);
+	}
+
+	protected void addProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		/*
 		Get request parameter values of the ff.
 		[ex. request.getParameter("name")]:
@@ -124,10 +140,22 @@ public class ProductAdminServlet extends HttpServlet {
 		Set the Bag object as an attribute of the request. Name it as "featuredBag"
 		EX. request.setAttribute(Obejct, "name");
 		*/
+		String optionValue = bag.getType().replace(' ', '');
+		optionValue.toLowerCase();
+
+		request.setAttribute("optionValue", optionValue);
 		request.setAttribute("featuredBag", bag);
 
 		// dispatch to admin-product.jsp
 		request.getRequestDispatcher("admin-product.jsp").forward(request, response);
+	}
+
+	protected void editProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/* DO BUSINESS LOGIC HERE */
+	}
+
+	protected void deletePoducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/* DO BUSINESS LOGIC HERE */
 	}
 
 	/**

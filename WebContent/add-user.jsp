@@ -63,7 +63,7 @@
                     <a href="admin-user.html"><span>View all users</span></a>
                 </p>
             </div>
-            <div class="info">
+            <form method="post" action="addeduser" class="info">
                 <div class="header">Add New User</div>
                 <div class="details">
                     <!--First One -->
@@ -71,60 +71,59 @@
                         <div class="type flex-between">
                             <div>
                                 <div>First name<span>*</span></div>
-                                <input type="text" placeholder="Type the first name">
+                                <input type="text" name="firstname" placeholder="Type the first name" />
                             </div>
                             <div>
                                 <div>Location<span>*</span></div>
-                                <input type="text" placeholder="Type the location">
+                                <input type="text" name="location" placeholder="Type the location" />
                             </div>
                             
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Last name<span>*</span></div>
-                                <input type="text" placeholder="Type the last name">
+                                <input type="text" name="lastname" placeholder="Type the last name" />
                             </div>
                             <div>
                                 <div>City<span>*</span></div>
-                                <input type="text" placeholder="Type the city">
+                                <input type="text" name="city" placeholder="Type the city" />
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Email address<span>*</span></div>
-                                <input type="text" placeholder="Type the first name">
+                                <input type="email" name="email" placeholder="Type the email address" />
                             </div>
                             <div>
                                 <div>Postcode<span>*</span></div>
-                                <input type="text" placeholder="Type the postcode">
+                                <input type="number" name="postcode" placeholder="Type the postcode" />
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Phone number</div>
-                                <input type="text" placeholder="Type the phone number">
+                                <input type="number" name="phone" placeholder="Type the phone number" />
                             </div>
                             <div>
                                 <div>Province<span>*</span></div>
-                                <input type="text" placeholder="Type the province">
+                                <input type="text" name="province" placeholder="Type the province" />
                             </div>
                         </div>
                     </div>
 
                     <!--Second One -->
                     <div class="part">
-                        
                         <div class="type flex-between">
                             <div>
                                 <div>Password<span>*</span></div>
-                                <input type="text" placeholder="Type the phone number">
+                                <input type="password" name="password" placeholder="Type the password" />
                             </div>
                             
                             <div>
                                 <div>Type of user<span>*</span></div>
-                                <select>
-                                    <option>Normal</option>
-                                    <option>Admin</option>
+                                <select name="usertype">
+                                    <option value="normal">Normal</option>
+                                    <option value="admin">Admin</option>
                                 </select>
                             </div>
                         </div>    
@@ -132,9 +131,8 @@
                         <div class="type">
                             <div>
                                 <div>Confirm password<span>*</span></div>
-                                <input type="text" placeholder="Type the phone number">
+                                <input type="password" name="confirmpassword" placeholder="Retype the password" />
                             </div>
-                            
                         </div>
                     </div>
                     
@@ -144,7 +142,7 @@
                         <button class="butt save">SAVE CHANGES</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </body>
 </html>

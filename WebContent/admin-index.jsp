@@ -67,22 +67,25 @@
                 <div><button id="save-changes">SAVE CHANGES</button></div>
             </div>
             <div class="table">
-                <table>  
+                <table>
                     <tr>
-                        <th>Del. Status</th>
-                        <th>Order ID</th>
-                        <th>Order Date</th>
+                        <th>Status</th>
+                        <th>Product Name</th>
                         <th>Location</th>
                         <th>City</th>
-                        <th></th>
+                        <th>Postcode</th>
+                        <th>Province</th>
+                        <th>Order Date</th>
                     </tr>
-                    <c:forEach items="${orderlist}" var="order">
+                    <c:forEach items="${orderlist}" var="order" varStatus="status">
                         <tr>
                             <td><input type="checkbox" class="delete-status"></td>
-                            <td><c:out value="${order.orderID}" /></td>
-                            <td><c:out value="${order.orderDate}" /></td>
+                            <td><c:out value="${orderProduct[status.index]}" /></td>
                             <td><c:out value="${order.location}" /></td>
                             <td><c:out value="${order.city}" /></td>
+                            <td><c:out value="${order.postcode}" /></td>
+                            <td><c:out value="${order.province}" /></td>
+                            <td><c:out value="${order.orderDate}" /></td>
                             <td><a href="view-order.html"><button class="hallow">Edit</button></a></td>
                         </tr>
                     </c:forEach>
