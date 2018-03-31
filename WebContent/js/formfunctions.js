@@ -34,10 +34,17 @@ $(document).ready(function(){
 		productItemSelect(path);
 	});
 
+	$('#product-feed .content-wrapper .view-product').click(function(){
+		var path = $(this).attr('data-id');
+		productItemSelect(path);
+	});
+
 	$('#profile-discard-changes').click(function(){
 		var profilePage = $(this).attr('data-id');
 		redirectProfile(profilePage);
 	});
+
+	$('.side-filter').change(directFilteredProducts);
 });
 
 function directHome(){
@@ -83,8 +90,24 @@ function directSuccess(){
 	$('form#directSuccess').submit();
 }
 
+function directFilteredProducts(){
+	var sorting = $('#sortProducts').val();
+	$('body').append('<form action="products" method="post" id="directFilteredProducts">' +
+		$('#price-range-1') +
+		$('#price-range-2') +
+		$('#price-range-3') +
+		$('#price-range-4') +
+		$('#price-range-5') +
+		$('#collection-1') +
+		$('#collection-2') +
+		$('#collection-3') +
+		'<input type="hidden" name="sortingMode" value="' + sorting + '" />' +
+		'</form>');
+	$('form#directFilteredProducts').submit();
+}
+
 function directAllProducts(){
-	$('body').append('<form action="products/all" method="post" id="directAllProducts"></form>');
+	$('body').append('<form action="products" method="post" id="directAllProducts"></form>');
 	$('form#directAllProducts').submit();
 }
 
@@ -125,15 +148,21 @@ function productCategorySelect(targetCategory){
 	}
 
 	if(found)
-		$('body').append('<form action="products/' + targetCategory +'" method="post" id="bagItemSelect"></form>');
+		$('body').append('<form action="products" method="get" id="bagItemSelect">'+
+			'<input type="hidden" name="typeFilter" value="' + targetCategory +'" />'+
+			'</form>');
 	
-	else $('body').append('<form action="products/all" method="post" id="bagItemSelect"></form>');
+	else $('body').append('<form action="products" method="get" id="bagItemSelect">'+
+			'<input type="hidden" name="typeFilter" value="all" />'+
+			'</form>');
 
 	$('form#bagItemSelect').submit();
 }
 
 function productItemSelect(path){
-	$('body').append('<form action="featured/'+ path +'" method="post" id="bagItemSelect">'
-		+ 
-		+ '</form>');
+	$('body').append('<form action="featured" method="get" id="bagItemSelect">' + 
+		'<input type="hidden" name="path" value="' + path + '" />' +
+		'</form>');
+
+	$('form#bagItemSelect').submit();
 }

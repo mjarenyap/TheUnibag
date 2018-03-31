@@ -1,0 +1,50 @@
+.dashboard{
+    padding-left:18%; 
+    
+}
+
+.nav-header{
+    padding: 20px 35px;
+}
+
+.nav-header button{
+    padding: 8px 25px;
+}
+
+table{
+    width: 100%;
+}
+
+td, th{
+    padding: 10px;
+}
+
+tr{
+    border-bottom: thin solid #333;
+}
+
+td{
+    text-align: center;
+    border-bottom: thin solid #ccc;
+}
+
+#bar{
+    margin: 0px 20px;
+    height: 10px;
+    width: 90%;
+    display: block;
+    background-image: url('../../assets/images/search.png');
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: center left 5px;
+    padding: 10px 30px;
+}
+
+table button{
+    padding: 2px 20px;
+}
+
+
+.table input:hover{
+    cursor: pointer;
+}
