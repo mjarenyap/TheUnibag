@@ -6,7 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>THE Unibag - Admin</title>
+        <title>THE Unibag Admin - View All Users</title>
         <!-- FONT EXTERNAL LINKS -->
         <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -62,120 +62,30 @@
         <div class="dashboard">
             <div class="nav-header flex-between">
                 <div><input type="text" placeholder="search" id="bar"></div>
-                <div><button>SAVE CHANGES</button></div>  
+                <div><button id="save-changes">SAVE CHANGES</button></div>  
             </div>
             <div class="table">
                 <table>  
                     <tr>
                         <th></th>
-                        <th>User Id</th>
+                        <th>User ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>User Type</th>
                         <th></th>
                     </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00001</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00002</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00003</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00004</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00005</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00006</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00007</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00008</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00009</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00010</td>
-                        <td>Cookie</td>
-                        <td>Monster</td>
-                        <td>umnum@gmail.com</td>
-                        <td>Registered</td>
-                        <td><a href="view-user.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
+                    <c:forEach items="${userlist}" var="user">
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td><c:out value="${user.userID}" /></td>
+                            <td><c:out value="${user.fname}" /></td>
+                            <td><c:out value="${user.lname}" /></td>
+                            <td><c:out value="${user.email}" /></td>
+                            <td><c:out value="${user.userType}" /></td>
+                            <td><a href="view-user.html"><button class="hallow">Edit</button></a></td>
+                        </tr>
+                    </c:forEach>
                 </table>
             </div>
         </div>

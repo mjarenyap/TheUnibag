@@ -1,4 +1,4 @@
-package Security;
+package security;
 
 import beans.Bag;
 
@@ -7,8 +7,8 @@ public class ProductFilter{
 	private float[] maxRange;
 
 	public ProductFilter(){
-		minRange = {0, 40, 100, 150, 201};
-		maxRange = {39.99, 99.99, 149.99, 200.99, 999};
+		minRange =  new float[]{0, 40, 100, 150, 201};
+		maxRange = new float[]{39.99f, 99.99f, 149.99f, 200.99f, 999};
 	}
 
 	public boolean checkSideFilter(String[] filter){

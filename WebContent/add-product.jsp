@@ -84,8 +84,13 @@
                             <div>
                                 <div>Type of bag<span>*</span></div>
                                 <select>
-                                    <option>Backpack</option>
-                                    <option></option>
+                                    <option value="Backpack">Backpack</option>
+                                    <option value="Handbag">Handbag</option>
+                                    <option value="Tote">Tote Bag</option>
+                                    <option value="Messenger">Messenger bag</option>
+                                    <option value="Travel">Travel bag</option>
+                                    <option value="Sling">Sling bag</option>
+                                    <option value="Weekender">Weekender bag</option>
                                 </select>
                             </div>
                         </div>

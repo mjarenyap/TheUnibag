@@ -138,7 +138,7 @@ function showSearch(){
 }
 
 function productCategorySelect(targetCategory){
-	var list = ["all", "backpack", "handbag", "totebag", "messengerbag", "travelbag", "slingbag", "weekenderbag"];
+	var list = ["all", "backpack", "dufflebag", "handbag", "messengerbag", "shoulderbag", "tote", "totebag"];
 	var found = false;
 	for(var x = 0; x < list.length; x++){
 		if(targetCategory === list[x]){

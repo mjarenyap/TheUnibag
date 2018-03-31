@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>THE Unibag - Admin</title>
+		<title>The Unibag Admin - View All Bags</title>
         <!-- FONT EXTERNAL LINKS -->
         <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -59,114 +59,33 @@
                 <div class="option">Sign out</div>
             </div>
         </div>
-        
         <div class="dashboard">
             <div class="nav-header flex-between">
                 <div><input type="text" placeholder="search" id="bar"></div>              
-                <div><button>SAVE CHANGES</button></div> 
+                <div><button id="save-changes">SAVE CHANGES</button></div> 
             </div>
             <div class="table">
                 <table>
                     <tr>
                         <th></th>
-                        <th>Bag Id</th>
+                        <th>Bag ID</th>
                         <th>Name</th>
                         <th>Brand</th>
                         <th>Type</th>
                         <th></th>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00001</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00002</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00003</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00004</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00005</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00006</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00007</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00008</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00009</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00010</td>
-                        <td>Sweet Serendipity</td>
-                        <td>Herschel</td>
-                        <td>Backpack</td>
-                        <td><a href="view-product.html"><button class="hallow">View</button></a></td>
-                    </tr>
+                    <c:forEach items="${baglist}" var="bag">
+                        <tr>
+                            <td><input type="checkbox" class="delete-status"></td>
+                            <td><c:out value="${bag.bagID}" /></td>
+                            <td><c:out value="${bag.name}" /></td>
+                            <td><c:out value="${bag.brand}" /></td>
+                            <td><c:out value="${bag.type}" /></td>
+                            <td><a href="view-product.html"><button class="hallow">Edit</button></a></td>
+                        </tr>
+                    </c:forEach>
                 </table>
             </div>
-        
         </div>
     </body>
 </html>

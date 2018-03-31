@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>THE Unibag - Admin</title>
+		<title>The Unibag Admin - View All Orders</title>
         <!-- FONT EXTERNAL LINKS -->
 		<link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -19,7 +19,7 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
-		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/sidenav.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/sidenav.css" />
         
         <!-- PAGE STYLESHEET -->
         <link rel="stylesheet" type="text/css" href="css/page-stylesheet/admin-index.css" />
@@ -64,7 +64,7 @@
                 <div>
                     <input type="text" placeholder="Search for orders" id="bar">
                 </div>
-                <div><button>SAVE CHANGES</button></div>
+                <div><button id="save-changes">SAVE CHANGES</button></div>
             </div>
             <div class="table">
                 <table>  
@@ -76,97 +76,16 @@
                         <th>City</th>
                         <th></th>
                     </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00001</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00002</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00003</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00004</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00005</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00006</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00007</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00008</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00009</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>00010</td>
-                        <td>03/11/18</td>
-                        <td>#41</td>
-                        <td>Quezon</td>
-                        <td><a href="view-order.html"><button class="hallow">View</button></a></td>
-                    </tr>
-                    
+                    <c:forEach items="${orderlist}" var="order">
+                        <tr>
+                            <td><input type="checkbox" class="delete-status"></td>
+                            <td><c:out value="${order.orderID}" /></td>
+                            <td><c:out value="${order.orderDate}" /></td>
+                            <td><c:out value="${order.location}" /></td>
+                            <td><c:out value="${order.city}" /></td>
+                            <td><a href="view-order.html"><button class="hallow">Edit</button></a></td>
+                        </tr>
+                    </c:forEach>
                 </table>
             </div>
         </div>

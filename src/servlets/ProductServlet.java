@@ -59,11 +59,11 @@ public class ProductServlet extends HttpServlet {
 		ProductFilter pf = new ProductFilter();
 		boolean[] priceRanges = new boolean[5];
 		for(int i = 0; i < priceRanges.length; i++)
-			priceRanges = pf.checkSideFilter(request.getParameterValues("price-range-" + (i+1)));
+			priceRanges[i] = pf.checkSideFilter(request.getParameterValues("price-range-" + (i+1)));
 
 		boolean[] collections = new boolean[3];
 		for(int i = 0; i < collections.length; i++)
-			priceRanges = pf.checkSideFilter(request.getParameterValues("collection-" + (i+1)));
+			priceRanges[i] = pf.checkSideFilter(request.getParameterValues("collection-" + (i+1)));
 
 		// get all products
 		List<Bag> baglist = BagService.getAllBags(sortingMode);

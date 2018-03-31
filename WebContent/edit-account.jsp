@@ -6,7 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>THE Unibag - Admin</title>
+        <title>The Unibag Admin - Edit Your Account</title>
         <!-- FONT EXTERNAL LINKS -->
         <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -29,8 +29,9 @@
         <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <script src="js/adminformfunctions.js" type="text/javascript"></script>
     </head>
-    
     <body>
+        <c:set var="loggedUser" value="${sessionScope.adminAccount}" />
+        <c:set var="loggedAddress" value="${adminAddress}" />
         <div class="sidenav">
             <div class="accent"><img id="logo" src="assets/images/Unibag-logo.png" draggable="false"></div>
             <div class="items">
@@ -62,7 +63,10 @@
         </div>
         <div class="dashboard">
             <div class="nav-header">
-                <p>&larr;<a href="admin-user.html"><span>View all users</span></a></p>
+                <p class="flex-start">
+                    <i class="fa fa-angle-left fa-2x"></i>
+                    <a href="admin-user.html"><span>View all users</span></a>
+                </p>
             </div>
             <div class="info">
                 <div class="header">Edit Your Account</div>
@@ -72,42 +76,49 @@
                         <div class="type flex-between">
                             <div>
                                 <div>First name<span>*</span></div>
-                                <input type="text" placeholder="Type the first name">
+                                <input type="text" name="firstname" placeholder="Type your first name" value="${loggedUser.fname}" />
                             </div>
                             
                             <div>
                                 <div>Location<span>*</span></div>
-                                <input type="text" placeholder="Type the location">
+                                <input type="text" name="location" placeholder="Type your location" value="${loggedAddress.location}" />
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Last name<span>*</span></div>
-                                <input type="text" placeholder="Type the last name">
+                                <input type="text" name="lastname" placeholder="Type your last name" value="${loggedUser.lname}" />
                             </div>
                             <div>
                                 <div>City<span>*</span></div>
-                                <input type="text" placeholder="Type the city">
+                                <input type="text" name="city" placeholder="Type your city" value="${loggedAddress.city}" />
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Email address<span>*</span></div>
-                                <input type="text" placeholder="Type the first name">
+                                <input type="text" name="email" placeholder="Type your email address" value="${loggedUser.email}" />
                             </div>
                             <div>
                                 <div>Postcode<span>*</span></div>
-                                <input type="text" placeholder="Type the postcode">
+                                <input type="text" name="postcode" placeholder="Type your postcode" value="${loggedAddress.postcode}" />
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Phone number</div>
-                                <input type="text" placeholder="Type the phone number">
+                                <c:choose>
+                                    <c:when test="${loggedUser.phone == null}">
+                                        <input type="number" name="phone" placeholder="Type your phone number" value="" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="number" name="phone" placeholder="Type your phone number" value="${loggedUser.phone}" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div>
                                 <div>Province<span>*</span></div>
-                                <input type="text" placeholder="Type the province">
+                                <input type="text" placeholder="Type your province" value="${loggedAddress.province}" />
                             </div>
                         </div>
                     </div>
@@ -115,22 +126,26 @@
                     <div class="part">
                         <div class="type flex-between">
                             <div>
-                                <div>Password<span>*</span></div>
-                                <input type="text" placeholder="Type the phone number">
+                                <div>Old Password<span>*</span></div>
+                                <input type="password" name="oldpassword" placeholder="Type your old password" />
                             </div>
                             
                             <div>
                                 <div>Type of user<span>*</span></div>
-                                <select>
-                                    <option>Normal</option>
-                                    <option>Admin</option>
+                                <select name="type">
+                                    <option value="normal">Normal</option>
+                                    <option value="admin">Admin</option>
                                 </select>
                             </div>
                         </div>    
                         <div class="type">
                             <div>
-                                <div>Confirm password<span>*</span></div>
-                                <input type="text" placeholder="Type the phone number">
+                                <div>New password<span>*</span></div>
+                                <input type="password" name="newpassword" placeholder="Type your new password" />
+                            </div>
+                            <div>
+                                <div>Confirm new password<span>*</span></div>
+                                <input type="password" name="confirmpassword" placeholder="Retype your new password" />
                             </div>
                         </div>    
                     </div>

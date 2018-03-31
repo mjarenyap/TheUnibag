@@ -1,6 +1,5 @@
 .dashboard{
-    padding-left:18%; 
-    
+    padding-left: 18%;
 }
 
 .nav-header{
@@ -15,8 +14,9 @@ table{
     width: 100%;
 }
 
-td, th{
+th{
     padding: 10px;
+    font-family: 'Source Serif Pro', sans-serif;
 }
 
 tr{
@@ -24,6 +24,7 @@ tr{
 }
 
 td{
+    padding: 15px 10px;
     text-align: center;
     border-bottom: thin solid #ccc;
 }
@@ -40,8 +41,13 @@ td{
     padding: 10px 30px;
 }
 
+#save-changes{
+    font-size: 0.7em;
+}
+
 table button{
-    padding: 2px 20px;
+    padding: 5px 20px;
+    font-size: 0.7em;
 }
 
 
