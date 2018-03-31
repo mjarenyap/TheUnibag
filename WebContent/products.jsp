@@ -51,7 +51,7 @@
 					</c:if>
 					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
-							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
+							<span><c:out value="${loggedUser.fname}"/> <c:out value="${loggedUser.lname}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
 						</div>
 					</c:if>
@@ -62,21 +62,14 @@
 				</li>
 			</ul>
 			<ul class="subnav flex-center">
-				<li data-id="all">All</li>
-				<li data-id="backpack">Backpack</li>
-				<li data-id="handbag">Handbag</li>
-				<li data-id="totebag">Tote bag</li>
-				<li data-id="messengerbag">Messenger bag</li>
-				<li data-id="travelbag">Travel bag</li>
-				<li data-id="slingbag">Sling bag</li>
-				<li data-id="weekenderbag">Weekender bag</li>
+				<!-- Navigation items -->
 			</ul>
 		</nav>
 		<section>
 			<div id="main-controls">
 				<h1 id="main-heading">Browse All Products</h1>
 				<div class="flex-start">
-					<select>
+					<select id="sortProducts">
 						<option value="0">Names A-Z</option>
 						<option value="1">Names Z-A</option>
 						<option value="2">Price</option>
@@ -101,27 +94,27 @@
 
 					<h4 class="criteria">Price ranges</h4>
 					<label>
-						<input type="checkbox" checked="checked" />
+						<input type="checkbox" id="price-range-1" name="price-range-1" class="side-filter" checked />
 						<span></span>
 						less than $40.00
 					</label>
 					<label>
-						<input type="checkbox" checked="checked" />
+						<input type="checkbox" id="price-range-2" name="price-range-2" class="side-filter" checked />
 						<span></span>
 						$40.00 - $99.00
 					</label>
 					<label>
-						<input type="checkbox" checked="checked" />
+						<input type="checkbox" id="price-range-3" name="price-range-3" class="side-filter" checked />
 						<span></span>
 						$100.00 - $149.00
 					</label>
 					<label>
-						<input type="checkbox" checked="checked" />
+						<input type="checkbox" id="price-range-4" name="price-range-4" class="side-filter" checked />
 						<span></span>
 						$150.00 - $200.00
 					</label>
 					<label>
-						<input type="checkbox" checked="checked" />
+						<input type="checkbox" id="price-range-5" name="price-range-5" class="side-filter" checked />
 						<span></span>
 						more than $200.00
 					</label>
@@ -129,24 +122,24 @@
 
 					<h4 class="criteria">Collections</h4>
 					<label>
-						<input type="checkbox" checked="checked" />
+						<input type="checkbox" id="collection-1" name="collection-1" class="side-filter" checked />
 						<span></span>
 						Classic Collection
 					</label>
 					<label>
-						<input type="checkbox" checked="checked" />
+						<input type="checkbox" id="collection-2" name="collection-2" class="side-filter" checked />
 						<span></span>
 						Essential Collection
 					</label>
 					<label>
-						<input type="checkbox" checked="checked" />
+						<input type="checkbox" id="collection-3" name="collection-3" class="side-filter" checked />
 						<span></span>
 						Travel System Collection
 					</label>
 				</div>
 				<div id="product-feed">
 					<c:forEach items="${baglist}" var="bag" varStatus="status">
-						<div class="content-wrapper" data-id="${bag.bagID}#${productnames[status]}">
+						<div class="content-wrapper">
 							<div class="featured-image"></div>
 							<div class="product-info">
 								<h1 class="product-name"><c:out value="${bag.name}"/></h1>
@@ -154,7 +147,7 @@
 								<h4 class="product-brand">Brand: <span><c:out value="${bag.brand}"/></span></h4>
 								<h4 class="product-type">Type of bag: <span><c:out value="${bag.type}"/></span></h4>
 								<h4 class="product-rating">Product rating: <span><c:out value="${bag.rating}"/> out of 5</span></h4>
-								<button class="hallow view-product">View product details</button>
+								<button class="hallow view-product" data-id="${productnames[status.index]}">View product details</button>
 							</div>
 						</div>
 						<hr/>

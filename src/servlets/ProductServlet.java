@@ -15,6 +15,7 @@ import beans.Size;
 import services.BagService;
 import services.SizeService;
 import security.Encryption;
+import security.ProductFilter;
 
 /**
  * Servlet implementation class ProductServlet
@@ -48,10 +49,50 @@ public class ProductServlet extends HttpServlet {
 
 	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// declare filter variables // retrieve from filter controls
+		int sortingMode = 0;
+		try{
+			sortingMode = Integer.parseInt(request.getParameter("sortingMode"));
+		} catch(Exception e){
+			sortingMode = 0;
+		}
+
+		ProductFilter pf = new ProductFilter();
+		boolean[] priceRanges = new boolean[5];
+		for(int i = 0; i < priceRanges.length; i++)
+			priceRanges[i] = pf.checkSideFilter(request.getParameterValues("price-range-" + (i+1)));
+
+		boolean[] collections = new boolean[3];
+		for(int i = 0; i < collections.length; i++)
+			priceRanges[i] = pf.checkSideFilter(request.getParameterValues("collection-" + (i+1)));
+
 		// get all products
-		List<Bag> baglist = BagService.getAllBags();
-		request.setAttribute("baglist", baglist);
+		List<Bag> baglist = BagService.getAllBags(sortingMode);
+
+		// apply filtration algorithm for the fetched bags
+		ArrayList<Bag> filteredBags = new ArrayList<>();
+		for(int i = 0; i < baglist.size(); i++){
+			boolean priceFlag = false;
+			boolean collectionFlag = false;
+
+			for(int j = 0; j < priceRanges.length; j++)
+				if(pf.checkPriceRange(baglist.get(i), priceRanges[j], j)){
+					priceFlag = true;
+					break;
+				}
+
+			for(int j = 0; j < collections.length; j++)
+				if(pf.checkCollection(baglist.get(i), collections[j], j)){
+					collectionFlag = true;
+					break;
+				}
+
+			if(priceFlag && collectionFlag)
+				filteredBags.add(baglist.get(i));
+		}
+
+		request.setAttribute("baglist", filteredBags);
 		request.getRequestDispatcher("products.jsp").forward(request, response);
+		
 		// preview 10 products according to pagination number
 		// set pagination numbers based on the total number of products
 			// products.size() / 10 [+1 if products.size() % 10 > 0]
