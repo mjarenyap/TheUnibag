@@ -24,6 +24,10 @@
         <!-- PAGE STYLESHEET -->
         <link rel="stylesheet" type="text/css" href="css/page-stylesheet/admin-index.css" />
         <link rel="stylesheet" type="text/css" href="css/page-stylesheet/add-user.css" />
+
+        <!-- JAVASCRIPT -->
+        <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="js/adminformfunctions.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="sidenav">
@@ -54,7 +58,10 @@
         </div>
         <div class="dashboard">
             <div class="nav-header">
-                <p>&larr;<a href="admin-user.html"><span>View all users</span></a></p>
+                <p class="flex-start">
+                    <i class="fa fa-angle-left fa-2x"></i>
+                    <a href="admin-user.html"><span>View all users</span></a>
+                </p>
             </div>
             <div class="info">
                 <div class="header">Edit User <span>(User ID:1234)</span></div>

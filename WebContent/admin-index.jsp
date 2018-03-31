@@ -22,9 +22,12 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/sidenav.css" />
         
         <!-- PAGE STYLESHEET -->
-        <link rel="stylesheet" type="text/css" href="css/page-stylesheet/admin-index.css" />      
+        <link rel="stylesheet" type="text/css" href="css/page-stylesheet/admin-index.css" />
+
+        <!-- JAVASCRIPT -->
+        <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="js/adminformfunctions.js" type="text/javascript"></script>
     </head>
-    
     <body>
         <div class="sidenav">
             <div class="accent"><img id="logo" src="assets/images/Unibag-logo.png" draggable="false"></div>

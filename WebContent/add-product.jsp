@@ -24,6 +24,10 @@
         <!-- PAGE STYLESHEET -->
         <link rel="stylesheet" type="text/css" href="css/page-stylesheet/admin-index.css" />
         <link rel="stylesheet" type="text/css" href="css/page-stylesheet/add-product.css" />
+
+        <!-- JAVASCRIPT -->
+        <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="js/adminformfunctions.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="sidenav">
@@ -54,7 +58,10 @@
         </div>
         <div class="dashboard">
             <div class="nav-header">
-                <p>&larr;<a href="admin-bag.html"><span>View all products</span></a></p>
+                <p class="flex-start">
+                    <i class="fa fa-angle-left fa-2x"></i>
+                    <a href="admin-bag.html"><span>View all products</span></a>
+                </p>
             </div>
             <div class="info">
                 <div class="header">Add New Product</div>
