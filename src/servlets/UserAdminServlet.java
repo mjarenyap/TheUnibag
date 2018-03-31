@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import beans.User;
+import security.Encryption;
 import services.UserService;
 
 /**
@@ -95,17 +96,31 @@ public class UserAdminServlet extends HttpServlet {
 		/*
 		Get the product ID as the request parameter.
 		Make sure to parse it as a float.
+		Get the user ID as the request parameter.
+		Make sure to parse it as a long.
 		*/
 
+		String uID = request.getParameter("userID");
+		long userID = Long.parseLong(uID);
+		/*long userIDecrypt;*/
+	
 		// decrypt the ID using the Encryption class provided.
+		Encryption e = new Encryption();
+		userID = e.decryptID(userID);
+		/*userIDecrypt = e.decryptID(userID);*/
+		
 		// fetch the product via the decrypted ID using the UserService. store it in a User object
+		User user = UserService.getUser(userID);
+		/*User user = UserService.getUser(userIDecrypt);*/
 
 		/*
 		Set the User object as an attribute of the request. Name it as "featuredUser"
 		EX. request.setAttribute(Obejct, "name");
 		*/
 
+		request.setAttribute("featuredUser", user);
 		// dispatch to admin-user.jsp
+		request.getRequestDispatcher("admin-user.jsp").forward(request, response);
 	}
 
 	/**
@@ -113,6 +128,7 @@ public class UserAdminServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//Auto-generated method stub
 		doGet(request, response);
 	}
 
