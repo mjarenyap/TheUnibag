@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import beans.User;
 import beans.Address;
 import security.Encryption;
+import security.FieldChecker;
+import security.DuplicateChecker;
 import services.UserService;
 import services.AddressService;
 
@@ -57,57 +60,103 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void addUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null)
 			request.getRequestDispatcher("add-user.jsp").forward(request, response);
 
-		else request.getRequestDispatcher("admin-page-403.jsp").forward(request, response);
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	protected void addUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		/*
 		Get request parameter values of the ff.
 		[ex. request.getParameter("name")]:
-		- firstname
-		- lastname
-		- email
-		- password
-		- phone
-		- usertype
+		- firstname - lastname - email - password - phone - usertype
 		*/
-		
-		String firstname = request.getParameter("firstname");
-		String lastname = request.getParameter("lastname");
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String phone = request.getParameter("phone");
-		String userType = request.getParameter("userType");
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+			// declare flag variables
+			boolean validCredentialFlag = false;
+			boolean duplicateFlag = false;
+			Encryption e = new Encryption();
+			FieldChecker fc = new FieldChecker();
+			DuplicateChecker dc = new DuplicateChecker();
 
-		// create a User object and set the necessary attributes
-		
-		User newUser = new User();
-		// store the new user in the database
-		
-		newUser.setFirstName(firstname);
-		newUser.setLastName(lastname);
-		newUser.setEmail(email);
-		newUser.setPassword(password);
-		newUser.setPhone(phone);
-		newUser.setUserType(userType);
-		
-		// dispatch to admin-users.jsp
-		allUsers(request, response);
+			String firstname = request.getParameter("firstname");
+			String lastname = request.getParameter("lastname");
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			String confirmPass = request.getParameter("confirmpassword");
+			String phone = request.getParameter("phone");
+			String userType = request.getParameter("userType").toLowerCase();
+			String location = request.getParameter("location");
+			String city = request.getParameter("city");
+			String province = request.getParameter("province");
+			int postcode = 1000;
+
+			try{
+				postcode = Integer.parseInt(request.getParameter("postcode"));
+			} catch(Exception er){
+				postcode = 1000;
+			}
+
+			// create a User object and set the necessary attributes
+			User newUser = new User();
+
+			// store the new user in the database
+			newUser.setFirstName(firstname);
+			newUser.setLastName(lastname);
+			newUser.setEmail(email);
+			newUser.setPassword(password);
+			newUser.setPhone(phone);
+			newUser.setUserType(userType);
+
+			validCredentialFlag = fc.checkSignup(newUser);
+			duplicateFlag = dc.checkUser(newUser, UserService.getAllUsers());
+			
+			if(validCredentialFlag && password.equals(confirmPass) && !duplicateFlag){
+				List<User> userlist = UserService.getAllUsers();
+				newUser.setPassword(e.encryptPassword(password));
+				newUser.setUserID(userlist.get(userlist.size() - 1).getUserID() + 1);
+				UserService.addUser(newUser);
+
+				Address newAddress = new Address();
+				newAddress.setUserID(newUser.getUserID());
+				newAddress.setLocation(location);
+				newAddress.setCity(city);
+				newAddress.setPostcode(postcode);
+				newAddress.setProvince(province);
+				AddressService.addAddress(newAddress);
+
+				// dispatch to admin-users.jsp
+				allUsers(request, response);
+			}
+
+			else request.getRequestDispatcher("add-user.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	protected void allUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// retrieve all Users via UserService
-		UserService us = new UserService();
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+			Encryption e = new Encryption();
 
-		//to do put all users in an arraylist
-		List<User> users = us.getAllUsers();
-		// set the arraylist as request parameter named "userlist"
-		request.setAttribute("userlist", users);
-		// dispatch to admin-users.jsp
-		request.getRequestDispatcher("admin-user.jsp");
+			//to do put all users in an arraylist
+			List<User> users = UserService.getAllUsers();
+			ArrayList<String> usernames = new ArrayList<>();
+			for(int i = 0; i < users.size(); i++){
+				long encryptedID = e.encryptID(users.get(i).getUserID());
+				String ename = users.get(i).getEmail();
+				ename = encryptedID + "#" + ename;
+				usernames.add(ename);
+			}
+
+			// dispatch to admin-users.jsp
+			request.setAttribute("userlist", users);
+			request.setAttribute("usernames", usernames);
+			request.getRequestDispatcher("admin-user.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	protected void viewUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -118,37 +167,192 @@ public class UserAdminServlet extends HttpServlet {
 		Make sure to parse it as a long.
 		*/
 
-		String uID = request.getParameter("userID");
-		long userID = Long.parseLong(uID);
-		/*long userIDecrypt;*/
-	
-		// decrypt the ID using the Encryption class provided.
-		Encryption e = new Encryption();
-		userID = e.decryptID(userID);
-		/*userIDecrypt = e.decryptID(userID);*/
-		
-		// fetch the product via the decrypted ID using the UserService. store it in a User object
-		User user = UserService.getUser(userID);
-		Address address = AddressService.getAddress(user.getUserID());
-		/*User user = UserService.getUser(userIDecrypt);*/
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+			// declare flag variables
+			boolean validUserPath = true;
+			Encryption e = new Encryption();
 
-		/*
-		Set the User object as an attribute of the request. Name it as "featuredUser"
-		EX. request.setAttribute(Obejct, "name");
-		*/
+			// get user path
+			String userPath = request.getParameter("username");
+			String[] splitParts = userPath.split("#");
+			long encryptedID = -1;
 
-		request.setAttribute("featuredAddress", address);
-		request.setAttribute("featuredUser", user);
-		// dispatch to admin-user.jsp
-		request.getRequestDispatcher("view-user.jsp").forward(request, response);
+			try{
+				encryptedID = Long.parseLong(splitParts[0]);
+			} catch(Exception er){
+				validUserPath = false;
+			}
+
+			if(splitParts.length != 2)
+				validUserPath = false;
+
+			if(validUserPath){
+				// declare second layer flag variables
+				boolean foundFlag = false;
+
+				// decrypt the id and email of the user
+				long decryptedID = e.decryptID(encryptedID);
+				String email = splitParts[1];
+
+				// check for existing selectedUser
+				User selectedUser = UserService.getUser(decryptedID);
+				if(selectedUser != null)
+					if(selectedUser.getEmail().equalsIgnoreCase(email))
+						foundFlag = true;
+
+				if(foundFlag){
+					Address selectedAddress = AddressService.getAddress(selectedUser.getUserID());
+					
+					// set selected user and address as request attribute
+					request.setAttribute("featuredUser", selectedUser);
+					request.setAttribute("featuredAddress", selectedAddress);
+					request.setAttribute("userPath", userPath);
+					request.getRequestDispatcher("view-user.jsp").forward(request, response);
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	protected void editUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/* DO SOME BUSINESS LOGIC HERE */
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+			// declare flag variables
+			boolean validUserPath = true;
+			Encryption e = new Encryption();
+			DuplicateChecker dc = new DuplicateChecker();
+			FieldChecker fc = new FieldChecker();
+
+			// get user path
+			String userPath = request.getParameter("username");
+			String[] splitParts = userPath.split("#");
+			long encryptedID = -1;
+
+			try{
+				encryptedID = Long.parseLong(splitParts[0]);
+			} catch(Exception er){
+				validUserPath = false;
+			}
+
+			if(splitParts.length != 2)
+				validUserPath = false;
+
+			if(validUserPath){
+				// declare second layer flag variables
+				boolean foundFlag = false;
+				boolean duplicateFlag = false;
+				boolean validCredentialFlag = false;
+
+				// decrypt the id and email of the user
+				long decryptedID = e.decryptID(encryptedID);
+				String emailpath = splitParts[1];
+
+				// check for existing selectedUser
+				User selectedUser = UserService.getUser(decryptedID);
+				if(selectedUser != null)
+					if(selectedUser.getEmail().equalsIgnoreCase(emailpath))
+						foundFlag = true;
+
+				if(foundFlag){
+					String firstname = request.getParameter("firstname");
+					String lastname = request.getParameter("lastname");
+					String email = request.getParameter("email");
+					String phone = request.getParameter("phone");
+					String userType = request.getParameter("userType");
+					String location = request.getParameter("location");
+					String city = request.getParameter("city");
+					String province = request.getParameter("province");
+					int postcode = 1000;
+
+					try{
+						postcode = Integer.parseInt(request.getParameter("postcode"));
+					} catch(Exception er){
+						postcode = 1000;
+					}
+
+					selectedUser.setFirstName(firstname);
+					selectedUser.setLastName(lastname);
+					selectedUser.setEmail(email);
+					selectedUser.setPhone(phone);
+					selectedUser.setUserType(userType);
+
+					validCredentialFlag = fc.checkSignup(selectedUser);
+					duplicateFlag = dc.checkUser(selectedUser, UserService.getAllUsers());
+					if(selectedUser.getEmail().equals(emailpath))
+						duplicateFlag = false;
+
+					Address selectedAddress = AddressService.getAddress(selectedUser.getUserID());
+					if(!duplicateFlag && validCredentialFlag){
+						selectedAddress.setLocation(location);
+						selectedAddress.setCity(city);
+						selectedAddress.setProvince(province);
+						selectedAddress.setPostcode(postcode);
+
+						UserService.updateUser(selectedUser.getUserID(), selectedUser);
+						AddressService.updateAddress(selectedAddress.getUserID(), selectedAddress);
+						allUsers(request, response);
+					}
+
+					else{
+						request.setAttribute("error", true);
+						viewUser(request, response);
+					}
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	protected void deleteUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/* DO SOME BUSINESS LOGIC HERE */
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+			// declare flag variables
+			boolean validUserPath = true;
+			Encryption e = new Encryption();
+
+			// get user path
+			String userPath = request.getParameter("username");
+			String[] splitParts = userPath.split("#");
+			long encryptedID = -1;
+
+			try{
+				encryptedID = Long.parseLong(splitParts[0]);
+			} catch(Exception er){
+				validUserPath = false;
+			}
+
+			if(splitParts.length != 2)
+				validUserPath = false;
+
+			if(validUserPath){
+				String email = splitParts[1];
+				long decryptedID = e.decryptID(encryptedID);
+				User selectedUser = UserService.getUser(decryptedID);
+
+				if(selectedUser != null){
+					if(selectedUser.getEmail().equals(email)){
+						UserService.deleteUser(decryptedID);
+						allUsers(request, response);
+					}
+					
+					else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	/**

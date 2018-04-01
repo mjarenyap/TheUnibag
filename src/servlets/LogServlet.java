@@ -129,7 +129,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void processAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
 			home(request, response);
 
 		else {
@@ -145,7 +145,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void loginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
 			home(request, response);
 
 		else {
@@ -163,7 +163,7 @@ public class LogServlet extends HttpServlet {
 
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		if(request.getSession().getAttribute("Account") == null && request.getCookies() == null){
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() == null){
 			//security calsses
 			FieldChecker fc = new FieldChecker();
 			Encryption e = new Encryption();
@@ -241,7 +241,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void signupPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
 			home(request, response);
 
 		else {
@@ -259,7 +259,7 @@ public class LogServlet extends HttpServlet {
 
 	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		if(request.getSession().getAttribute("Account") == null && request.getCookies() == null){
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() == null){
 			//security variables
 			FieldChecker fc = new FieldChecker();
 			DuplicateChecker dc = new DuplicateChecker();
@@ -347,6 +347,28 @@ public class LogServlet extends HttpServlet {
 		}
 
 		else home(request, response);
+	}
+
+	protected void resetAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getSession().setAttribute("Account", null);
+		request.getSession().setAttribute("adminAccount", null);
+		request.getSession().setAttribute("ShoppingCart", null);
+
+		// remove the Account cookies
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null){
+			for(int i = 0; i < cookies.length; i++)
+			{	
+				Cookie currentCookie = cookies[i];
+				if(currentCookie.getName().equals("Account") || currentCookie.getName().equals("adminUsername"))
+				{
+					currentCookie.setMaxAge(0);
+					response.addCookie(currentCookie);
+				}
+			}
+		}
+
+		home(request, response);
 	}
 
 	/**

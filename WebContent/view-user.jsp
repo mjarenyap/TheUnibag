@@ -110,7 +110,7 @@
                             <div>
                                 <div>Postcode<span>*</span></div>
                                 <c:choose>
-                                    <c:when text="${featuredAddress.postcode != null}">
+                                    <c:when test="${featuredAddress.postcode != null}">
                                         <input type="number" placeholder="Type the postcode" name="postcode" value="${featuredAddress.postcode}" />
                                     </c:when>
                                     <c:otherwise>

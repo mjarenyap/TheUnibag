@@ -24,8 +24,6 @@ public class Order {
 	@Column
 	private long bagID;
 	@Column
-	private long sizeID;
-	@Column
 	private LocalDateTime orderDate;
 	@Column
 	private String city; 
@@ -35,6 +33,8 @@ public class Order {
 	private String province;
 	@Column
 	private String location;
+	@Column
+	private boolean status;
 	
 	public String getCity() {
 		return city;
@@ -94,14 +94,6 @@ public class Order {
 		this.bagID = bagID;
 	}
 	
-	public long getSizeID() {
-		return sizeID;
-	}
-	
-	public void setSizeID(long sizeID) {
-		this.sizeID = sizeID;
-	}
-	
 	public LocalDateTime getOrderDate() {
 		return orderDate;
 	}
@@ -109,9 +101,17 @@ public class Order {
 	public void setOrderDate(LocalDateTime date) {
 		this.orderDate = date;
 	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
 	
 	@Override
 	public String toString() {
-		return "Orders [id=" + orderID + ", userID=" + userID + ", bagID" + bagID + ", sizeID=" + sizeID  + orderDate.toString() +"]";
+		return "Orders [id=" + orderID + ", userID=" + userID + ", bagID" + bagID  + orderDate.toString() +"]";
 	}
 }
