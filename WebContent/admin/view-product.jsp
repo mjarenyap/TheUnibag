@@ -35,24 +35,24 @@
             <div class="items">
                 <div class="headline">Orders</div>
                 <hr>
-                <a href="admin-index.html"><div class="option">View all orders</div></a>
+                <div class="option" data-id="allorders">View all orders</div>
             </div>
             <div class="items">
                 <div class="headline">Products</div>
                 <hr>
-                <a href="admin-bag.html"><div class="option">View all products</div></a>
-                <a href="add-product.html"><div class="option active">Add new product</div></a>
+                <div class="option active" data-id="allproducts">View all products</div>
+                <div class="option" data-id="addproduct">Add new product</div>
             </div>
             <div class="items">
                 <div class="headline">Users</div>
                 <hr>
-                <a href="admin-user.html"><div class="option">View all users</div></a>
-                <a href="add-user.html"><div class="option">Add new user</div></a>
+                <div class="option" data-id="allusers">View all users</div>
+                <div class="option" data-id="adduser">Add new user</div>
             </div>
             <div class="items admin">
                 <div class="headline">System Admin</div>
                 <hr>
-                <a href="edit-user.html"><div class="option">Edit account</div></a>
+                <div class="option">Edit account</div>
                 <div class="option">Sign out</div>
             </div>
         </div>
@@ -63,27 +63,28 @@
                     <a href="admin-bag.html"><span>View all products</span></a>
                 </p>
             </div>
-            <form method="post" action="addedproduct" class="info">
-                <div class="header">Add New Product</div>
+            <div class="info">
+                <div class="header">Edit Product <span>(User ID:1234)</span></div>
                 <div class="details flex-between" >
                     <!--First One -->
                     <div class="part">
                         <div class="type">
                             <div>
                                 <div>Name<span>*</span></div>
-                                <input type="text" name="name" placeholder="Type the product name" />
+                                <input type="text" placeholder="Type the product name" name="name" value="${featuredBag.name}" />
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Brand<span>*</span></div>
-                                <input type="text" name="brand" placeholder="Type the brand name" />
+                                <input type="text" placeholder="Type the brand name" name="brand" value="${featuredBag.brand}" />
                             </div>
                         </div>
                         <div class="type">
                             <div>
                                 <div>Type of bag<span>*</span></div>
                                 <select name="type">
+                                    <option value="${optionValue}"><c:out value="${featuredBag.type}" /></option>
                                     <option value="backpack">Backpack</option>
                                     <option value="dufflebag">Duffle Bag</option>
                                     <option value="handbag">Handbag</option>
@@ -97,13 +98,14 @@
                         <div class="type">
                             <div>
                                 <div>Price</div>
-                                <input type="number" name="price" placeholder="Type the price" />
+                                <input type="number" placeholder="Type the price" name="price" value="${featuredBag.price}" />
                             </div>
+                            
                         </div>
                         <div class="type">
                             <div>
                                 <div>Color</div>
-                                <input type="text" name="color" placeholder="Type the color" />
+                                <input type="text" placeholder="Type the color" name="color" value="${featuredBag.color}" />
                             </div>
                         </div>
                     </div>
@@ -113,6 +115,7 @@
                             <div>
                                 <div>Rating<span>*</span></div>
                                 <select name="rating">
+                                    <option value="${featuredBag.rating}"><c:out value="${featuredBag.rating}" /> out of 5</option>
                                     <option value="1">1 out of 5</option>
                                     <option value="2">2 out of 5</option>
                                     <option value="3">3 out of 5</option>
@@ -120,36 +123,34 @@
                                     <option value="5">5 out of 5</option>
                                 </select>
                             </div>
-                        </div>
+                            
+                        </div>    
                         <div class="type flex-between">
                             <div>
                                 <div>Width<span>*</span></div>
-                                <input class="dimension" type="text" name="width" placeholder="Width" />
+                                <input class="dimension" type="text" placeholder="Width" name="width" value="${featuredBag.width}" />
                             </div>
-                            
                             <div>
                                 <div>Height<span>*</span></div>
-                                <input class="dimension" type="text" name="height" placeholder="Height" />
+                                <input class="dimension" type="text" placeholder="Height" name="height" value="${featuredBag.height}" />
                             </div>
-                            
                             <div>
                                 <div>Length<span>*</span></div>
-                                <input class="dimension" type="text" name="length" placeholder="Length" />
+                                <input class="dimension" type="text" placeholder="Length" name="length" value="${featuredBag.length}" />
                             </div>
                         </div>
                         <div class="type">
                             <div>Description<span>*</span></div>
-                            <textarea class="description" name="description" placeholder="Give a short description of the product"></textarea>
+                            <textarea class="description" placeholder="Give a short description of the product" name="description" value="${featuredBag.description}"></textarea>
                         </div>
-                        
                         <!-- Save Changes -->
                         <div class="buttons">
                             <button class="hallow butt">DISCARD</button>
-                            <button class="butt save">SAVE CHANGES</button>
+                            <button class="hallow butt save" type="submit">SAVE CHANGES</button>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </body>
 </html>

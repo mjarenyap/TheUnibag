@@ -26,8 +26,8 @@
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />

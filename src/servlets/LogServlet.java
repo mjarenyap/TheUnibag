@@ -23,7 +23,7 @@ import security.Encryption;
 /**
  * Servlet implementation class LogServlet
  */
-@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account"})
+@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset"})
 public class LogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -53,6 +53,10 @@ public class LogServlet extends HttpServlet {
 			break;
 
 			case "/account": processAccount(request, response);
+			break;
+
+			case "/reset": resetAll(request, response);
+			break;
 
 			/*
 			default: home(request, response);
@@ -129,23 +133,18 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void processAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
-			home(request, response);
+		String purpose = request.getParameter("processAccount");
+		if(purpose.equals("login"))
+			login(request, response);
 
-		else {
-			String purpose = request.getParameter("purpose");
-			if(purpose.equals("login"))
-				login(request, response);
+		else if(purpose.equals("signup"))
+			signup(request, response);
 
-			else if(purpose.equals("signup"))
-				signup(request, response);
-
-			else home(request, response);
-		}
+		else home(request, response);
 	}
 
 	protected void loginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
+		if((User)request.getSession().getAttribute("Account") != null && (User)request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
 			home(request, response);
 
 		else {
@@ -163,7 +162,7 @@ public class LogServlet extends HttpServlet {
 
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() == null){
+		if((User)request.getSession().getAttribute("Account") == null && (User)request.getSession().getAttribute("adminAccount") == null && request.getCookies() == null){
 			//security calsses
 			FieldChecker fc = new FieldChecker();
 			Encryption e = new Encryption();
@@ -195,8 +194,8 @@ public class LogServlet extends HttpServlet {
 				if(userlist != null){
 					for(int i = 0; i < userlist.size(); i++){
 						String decryptedPassword = e.decryptPassword(userlist.get(i).getPassword());
-						if(email.equals(userlist.get(i).getEmail()) && password.equals(decryptedPassword) &&
-							userlist.get(i).getUserType().equals("normal")){
+						if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && password.equals(decryptedPassword) &&
+							userlist.get(i).getUserType().equalsIgnoreCase("normal")){
 							correctUser = userlist.get(i);
 							correctUser.setPassword("");
 							break;
@@ -212,7 +211,7 @@ public class LogServlet extends HttpServlet {
 					Cookie userCookie = new Cookie("Username", correctUser.getEmail());
 					response.addCookie(userCookie);
 
-					if(!redirect.equals("index"))
+					if(!redirect.equals("home"))
 						request.getRequestDispatcher(redirect + ".jsp").forward(request, response);
 
 					else home(request, response);
@@ -241,7 +240,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void signupPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
+		if((User)request.getSession().getAttribute("Account") != null && (User)request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
 			home(request, response);
 
 		else {
@@ -259,7 +258,7 @@ public class LogServlet extends HttpServlet {
 
 	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null && request.getCookies() == null){
+		if((User)request.getSession().getAttribute("Account") == null && (User)request.getSession().getAttribute("adminAccount") == null){
 			//security variables
 			FieldChecker fc = new FieldChecker();
 			DuplicateChecker dc = new DuplicateChecker();
@@ -353,6 +352,7 @@ public class LogServlet extends HttpServlet {
 		request.getSession().setAttribute("Account", null);
 		request.getSession().setAttribute("adminAccount", null);
 		request.getSession().setAttribute("ShoppingCart", null);
+		request.getSession().invalidate();
 
 		// remove the Account cookies
 		Cookie[] cookies = request.getCookies();
@@ -360,7 +360,7 @@ public class LogServlet extends HttpServlet {
 			for(int i = 0; i < cookies.length; i++)
 			{	
 				Cookie currentCookie = cookies[i];
-				if(currentCookie.getName().equals("Account") || currentCookie.getName().equals("adminUsername"))
+				if(currentCookie.getName().equals("Username") || currentCookie.getName().equals("adminUsername"))
 				{
 					currentCookie.setMaxAge(0);
 					response.addCookie(currentCookie);

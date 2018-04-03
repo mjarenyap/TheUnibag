@@ -23,7 +23,7 @@ import security.FieldChecker;
 /**
  * Servlet implementation class OrderAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/allorders", "/admin", "/admin/archiveorders"})
+@WebServlet(urlPatterns = {"/admin/allorders", "/admin", "/admin/archiveorders", "/admin/user"})
 public class OrderAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -51,6 +51,9 @@ public class OrderAdminServlet extends HttpServlet {
 
 			case "/admin": adminLoginPage(request, response);
 			break;
+
+			case "/admin/user": adminLogin(request, response);
+			break;
 		}
 	}
 
@@ -59,30 +62,35 @@ public class OrderAdminServlet extends HttpServlet {
 	}
 
 	protected void allOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// Retrieve all of the orders through OrderService
 			Encryption e = new Encryption();
 
 			// Store all the orders in an ArrayList
 			List<Order> orderList = OrderService.getAllOrders();
 			ArrayList<Order> filteredList = new ArrayList<>();
-			for(int i = 0; i < orderList.size(); i++)
-				if(orderList.get(i).getStatus()){
-					filteredList.add(orderList.get(i));
-				}
+			if(orderList != null){
+				for(int i = 0; i < orderList.size(); i++)
+					if(orderList.get(i).getStatus()){
+						filteredList.add(orderList.get(i));
+					}
+			}
 			
 			ArrayList<String> productNames = new ArrayList<>();
+			ArrayList<String> orderProducts = new ArrayList<>();
 			for(int i = 0; i < filteredList.size(); i++){
 				long encryptedID = e.encryptID(filteredList.get(i).getOrderID());
 				Bag associatedBag = BagService.getBag(filteredList.get(i).getBagID());
 				String pname = associatedBag.getName().replace(' ', '+');
 				pname = encryptedID + "#" + pname;
 				productNames.add(pname);
+				orderProducts.add(associatedBag.getName());
 			}
 			
 			// Set the ArrayList as request attribute named "orderlist"
 			request.setAttribute("orderlist", filteredList);
 			request.setAttribute("productNames", productNames);
+			request.setAttribute("orderProducts", orderProducts);
 			// Dispatch to admin-orders.jsp
 			request.getRequestDispatcher("admin-index.jsp").forward(request, response);
 		}
@@ -138,37 +146,45 @@ public class OrderAdminServlet extends HttpServlet {
 			Encryption e = new Encryption();
 
 			// fetch parameter values to archive orders
-			String[] toDelete = request.getParameterValues("archiveOrder");
+			String[] toDelete = request.getParameterValues("deletelist");
 			ArrayList<Order> archivelist = new ArrayList<>();
 			if(toDelete != null){
 				for(int i = 0; i < toDelete.length; i++){
-					String productPath = request.getParameter("path");
-					String[] splitParts = productPath.split("#");
-					long encryptedID = -1;
+					if(toDelete[i] != null){
+						String productPath = request.getParameter("path");
+						String[] splitParts = productPath.split("#");
+						long encryptedID = -1;
 
-					try{
-						encryptedID = Long.parseLong(splitParts[0]);
-					} catch(Exception er){
-						validPaths = false;
-						foundFlag = false;
-					}
+						try{
+							encryptedID = Long.parseLong(splitParts[0]);
+						} catch(Exception er){
+							validPaths = false;
+							foundFlag = false;
+						}
 
-					if(splitParts.length == 2 && validPaths && foundFlag){
-						// decrype the id and name of the product
-						long decryptedID = e.decryptID(encryptedID);
-						String productName = splitParts[1].replace('+', ' ');
+						if(splitParts.length == 2 && validPaths && foundFlag){
+							// decrype the id and name of the product
+							long decryptedID = e.decryptID(encryptedID);
+							String productName = splitParts[1].replace('+', ' ');
 
-						// search for a matched result
-						Order selectedOrder = OrderService.getOrder(decryptedID);
-						Bag associatedBag = null;
+							// search for a matched result
+							Order selectedOrder = OrderService.getOrder(decryptedID);
+							Bag associatedBag = null;
 
-						if(selectedOrder != null){
-							associatedBag = BagService.getBag(selectedOrder.getBagID());
+							if(selectedOrder != null){
+								associatedBag = BagService.getBag(selectedOrder.getBagID());
 
-							// check matching product name
-							if(associatedBag != null)
-								if(productName.equalsIgnoreCase(associatedBag.getName()))
-									archivelist.add(selectedOrder);
+								// check matching product name
+								if(associatedBag != null)
+									if(productName.equalsIgnoreCase(associatedBag.getName()))
+										archivelist.add(selectedOrder);
+							}
+
+							else{
+								validPaths = false;
+								foundFlag = false;
+								break;
+							}
 						}
 
 						else{
@@ -176,12 +192,6 @@ public class OrderAdminServlet extends HttpServlet {
 							foundFlag = false;
 							break;
 						}
-					}
-
-					else{
-						validPaths = false;
-						foundFlag = false;
-						break;
 					}
 				}
 
@@ -228,7 +238,7 @@ public class OrderAdminServlet extends HttpServlet {
 			for(int i = 0; i < userlist.size(); i++){
 				String decryptedPassword = e.decryptPassword(userlist.get(i).getPassword());
 				String userType = userlist.get(i).getUserType();
-				if(email.equals(userlist.get(i).getEmail()) && decryptedPassword.equals(userlist.get(i).getPassword()) &&
+				if(email.equals(userlist.get(i).getEmail()) && decryptedPassword.equals(password) &&
 					userType.equalsIgnoreCase("admin")){
 					correctUser = userlist.get(i);
 					correctUser.setPassword("");

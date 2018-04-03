@@ -1,0 +1,74 @@
+/* user profile stylesheet */
+
+form#profile-form{
+	max-width: 55%;
+	width: 100%;
+}
+
+section#account > div.flex-start{
+	align-items: flex-start;
+}
+
+#profile-title{
+	font-size: 2.0em;
+	margin-bottom: 0.5em;
+}
+
+section#account > hr{
+	margin-bottom: 2.5em;
+}
+
+#context-wrapper{
+	max-width: 30%;
+	width: 100%;
+	margin-right: 3em;
+	overflow: hidden;
+}
+
+#context-wrapper button{
+	display: block;
+	width: 100%;
+	padding: 10px 1em;
+	font-size: 0.83em;
+	border-radius: 0;
+	background-color: transparent;
+	border-color: transparent;
+	color: var(--theme-color);
+	text-align: left;
+}
+
+#context-wrapper button.active{
+	background-color: var(--theme-color);
+	color: white;
+}
+
+#context-wrapper button:hover{
+	background-color: var(--theme-color);
+	color: white;
+}
+
+#profile-form label{
+	display: block;
+	margin-bottom: 1em;
+}
+
+#profile-form label span{
+	margin-bottom: 0.5em;
+	display: block;
+}
+
+#profile-form label input.full-width{
+	width: 92.5%;
+}
+
+#context-title{
+	margin-bottom: 1em;
+}
+
+#confirm-buttons button{
+	margin-right: 1em;
+}
+
+#confirm-buttons button, #confirm-buttons input{
+	font-size: 0.8em;
+}

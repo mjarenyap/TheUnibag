@@ -25,8 +25,8 @@
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -117,7 +117,8 @@
 					<span class="help">Already have an account? <a href="#" id="go-login">Login</a> here.</span>
 					<input type="submit" value="Sign Up" />
 				</div>
-				<input type="hidden" id="pRedirect" name="purpose" value="${purpose}" />
+				<input type="hidden" id="pRedirect" name="redirect" value="${purpose}" />
+				<input type="hidden" name="processAccount" value="signup" />
 			</form>
 		</section>
 

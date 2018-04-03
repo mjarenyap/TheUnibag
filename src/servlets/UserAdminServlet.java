@@ -20,7 +20,7 @@ import services.AddressService;
 /**
  * Servlet implementation class UserAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin/addeduser", "/admin/editeduser", "/admin/deleteusers"})
+@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin/addeduser", "/admin/editeduser", "/admin/deleteuser", "/admin/deleteusers"})
 public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -52,6 +52,9 @@ public class UserAdminServlet extends HttpServlet {
 			break;
 
 			case "/admin/editeduser": editUser(request, response);
+			break;
+
+			case "/admin/deleteuser": deleteUser(request, response);
 			break;
 
 			case "/admin/deleteusers": deleteUsers(request, response);
@@ -301,6 +304,49 @@ public class UserAdminServlet extends HttpServlet {
 						request.setAttribute("error", true);
 						viewUser(request, response);
 					}
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+	}
+
+	protected void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+			// declare flag variables
+			boolean validUserPath = true;
+			Encryption e = new Encryption();
+
+			// get user path
+			String userPath = request.getParameter("username");
+			String[] splitParts = userPath.split("#");
+			long encryptedID = -1;
+
+			try{
+				encryptedID = Long.parseLong(splitParts[0]);
+			} catch(Exception er){
+				validUserPath = false;
+			}
+
+			if(splitParts.length != 2)
+				validUserPath = false;
+
+			if(validUserPath){
+				String email = splitParts[1];
+				long decryptedID = e.decryptID(encryptedID);
+				User selectedUser = UserService.getUser(decryptedID);
+
+				if(selectedUser != null){
+					if(selectedUser.getEmail().equals(email)){
+						UserService.deleteUser(decryptedID);
+						allUsers(request, response);
+					}
+					
+					else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 				}
 
 				else request.getRequestDispatcher("page-403.jsp").forward(request, response);

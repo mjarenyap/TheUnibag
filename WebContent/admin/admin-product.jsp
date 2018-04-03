@@ -34,34 +34,34 @@
             <div class="items">
                 <div class="headline">Orders</div>
                 <hr>
-                <a href="admin-index.html"><div class="option">View all orders</div></a>
+                <div class="option" data-id="allorders">View all orders</div>
             </div>
             
             <div class="items">
                 <div class="headline">Products</div>
                 <hr>
-                <a href="admin-bag.html"><div class="option active">View all products</div></a>
-                <a href="add-product.html"><div class="option">Add new product</div></a>
+                <div class="option active" data-id="allproducts">View all products</div>
+                <div class="option" data-id="addproduct">Add new product</div>
             </div>
             
             <div class="items">
                 <div class="headline">Users</div>
                 <hr>
-                <a href="admin-user.html"><div class="option">View all users</div></a>
-                <a href="add-user.html"><div class="option">Add new user</div></a>
+                <div class="option" data-id="allusers">View all users</div>
+                <div class="option" data-id="adduser">Add new user</div>
             </div>
             
             <div class="items admin">
                 <div class="headline">System Admin</div>
                 <hr>
-                <a href="edit-user.html"><div class="option">Edit account</div></a>
+                <div class="option">Edit account</div>
                 <div class="option">Sign out</div>
             </div>
         </div>
         <div class="dashboard">
             <div class="nav-header flex-between">
                 <div><input type="text" placeholder="search" id="bar"></div>              
-                <div><button id="save-changes">SAVE CHANGES</button></div> 
+                <div><button id="save-changes" data-id="dp">SAVE CHANGES</button></div> 
             </div>
             <div class="table">
                 <table>
@@ -75,16 +75,16 @@
                         <th>Price</th>
                         <th></th>
                     </tr>
-                    <c:forEach items="${baglist}" var="bag">
-                        <tr>
-                            <td><input type="checkbox" class="delete-status" /></td>
+                    <c:forEach items="${baglist}" var="bag" varStatus="status">
+                        <tr class="content-product-row">
+                            <td><input type="checkbox" class="delete-status" data-id="${productNames[status.index]}" /></td>
                             <td><c:out value="${bag.name}" /></td>
                             <td><c:out value="${bag.brand}" /></td>
                             <td><c:out value="${bag.type}" /></td>
                             <td><c:out value="${bag.collection}" /></td>
                             <td><c:out value="${bag.rating}" /> out of 5</td>
                             <td>$<c:out value="${bag.price}" /></td>
-                            <td><a href="view-product.html"><button class="hallow">Edit</button></a></td>
+                            <td><button class="hallow" data-id="${productNames[status.index]}">Edit</button></td>
                         </tr>
                     </c:forEach>
                 </table>

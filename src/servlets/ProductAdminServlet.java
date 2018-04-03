@@ -19,7 +19,7 @@ import security.Encryption;
 /**
  * Servlet implementation class ProductAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/addproducts", "/admin/allproducts", "/admin/viewproduct", "/admin/addedproduct", "/admin/editedproduct", "/admin/deleteproducts"})
+@WebServlet(urlPatterns = {"/admin/addproduct", "/admin/allproducts", "/admin/viewproduct", "/admin/addedproduct", "/admin/editedproduct", "/admin/deleteproduct", "/admin/deleteproducts"})
 public class ProductAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -39,7 +39,7 @@ public class ProductAdminServlet extends HttpServlet {
 		String path = request.getServletPath();
 
 		switch(path){
-			case "/admin/addproducts": addProductPage(request, response);
+			case "/admin/addproduct": addProductPage(request, response);
 			break;
 
 			case "/admin/allproducts": allProducts(request, response);
@@ -54,7 +54,10 @@ public class ProductAdminServlet extends HttpServlet {
 			case "/admin/editedproduct": editProduct(request, response);
 			break;
 
-			case "/admin/deleteproducts": deletePoducts(request, response);
+			case "/admin/deleteproduct": deletePoduct(request, response);
+			break;
+
+			case "/admin/deleteproducts": deleteProducts(request, response);
 			break;
 		}
 	}
@@ -124,7 +127,7 @@ public class ProductAdminServlet extends HttpServlet {
 			// set the arraylist as a request attribute named "baglist"
 			request.setAttribute("baglist", bags);
 			request.setAttribute("productNames", productNames);
-			request.getRequestDispatcher("admin-products.jsp").forward(request, response);
+			request.getRequestDispatcher("admin-product.jsp").forward(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
@@ -133,7 +136,7 @@ public class ProductAdminServlet extends HttpServlet {
 	protected void viewProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
 			// declare flag variables
-			boolean validProductPath = false;
+			boolean validProductPath = true;
 			
 			Encryption e = new Encryption();
 			// get contextualized url parametr of the product
@@ -194,7 +197,7 @@ public class ProductAdminServlet extends HttpServlet {
 	protected void editProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
 			// declare flag variables
-			boolean validProductPath = false;
+			boolean validProductPath = true;
 			
 			Encryption e = new Encryption();
 			// get contextualized url parametr of the product
@@ -288,10 +291,69 @@ public class ProductAdminServlet extends HttpServlet {
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
-	protected void deletePoducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void deletePoduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
 			// declare flag variables
-			boolean validProductPath = false;
+			boolean validProductPath = true;
+			
+			Encryption e = new Encryption();
+			// get contextualized url parametr of the product
+			String productPath = request.getParameter("path");
+			String[] splitParts = productPath.split("#");
+			long encryptedID = -1;
+
+			try{
+				encryptedID = Long.parseLong(splitParts[0]);
+			} catch(Exception er){
+				validProductPath = false;
+			}
+
+			if(splitParts.length != 2)
+				validProductPath = false;
+
+			if(validProductPath){
+				// declare second layer flag variables
+				boolean foundFlag = false;
+
+				// decrype the id and name of the product
+				long decryptedID = e.decryptID(encryptedID);
+				String productName = splitParts[1].replace('+', ' ');
+
+				// search for a matched result
+				Bag selectedBag = BagService.getBag(decryptedID);
+				if(selectedBag != null && productName.equalsIgnoreCase(selectedBag.getName()))
+					foundFlag = true;
+
+				// proceed to deleting the product if found
+				if(foundFlag){
+					Size selectedSize = null;
+					List<Size> sizelist = SizeService.getAllSizes();
+					for(int i = 0; i < sizelist.size(); i++)
+						if(selectedBag.getBagID() == sizelist.get(i).getBagID()){
+							selectedSize = sizelist.get(i);
+							break;
+						}
+
+					// delete in the database
+					BagService.deleteBag(selectedBag.getBagID());
+					SizeService.deleteSize(selectedSize.getSizeID());
+
+					allProducts(request, response);
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+	}
+
+	protected void deleteProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+			// declare flag variables
+			boolean validProductPath = true;
 			
 			Encryption e = new Encryption();
 			// get contextualized url parametr of the product

@@ -27,12 +27,13 @@
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
 		<c:set var="loggedUser" value="${sessionScope.Account}" />
+		<input type="hidden" id="typeFilter" value="${typeFilter}" />
 		<!-- Sticky navigation -->
 		<nav class="sticky">
 			<ul class="mainnav flex-between">
@@ -67,7 +68,7 @@
 		</nav>
 		<section>
 			<div id="main-controls">
-				<h1 id="main-heading">Browse All Products</h1>
+				<h1 id="main-heading">Browse <c:out value="${bagType}" /> Products</h1>
 				<div class="flex-start">
 					<select id="sortProducts">
 						<option value="0">Names A-Z</option>

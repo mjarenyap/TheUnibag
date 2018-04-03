@@ -27,7 +27,7 @@
 
         <!-- JAVASCRIPT -->
         <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="js/adminformfunctions.js" type="text/javascript"></script>
+        <script src="js/adminformfunctoins.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="sidenav">
@@ -35,24 +35,27 @@
             <div class="items">
                 <div class="headline">Orders</div>
                 <hr>
-                <a href="admin-index.html"><div class="option active">View all orders</div></a>
+                <div class="option" data-id="allorders">View all orders</div>
             </div>
+            
             <div class="items">
                 <div class="headline">Products</div>
                 <hr>
-                <a href="admin-bag.html"><div class="option">View all products</div></a>
-                <a href="add-product.html"><div class="option">Add new product</div></a>
+                <div class="option" data-id="allproducts">View all products</div>
+                <div class="option" data-id="addproduct">Add new product</div>
             </div>
+            
             <div class="items">
                 <div class="headline">Users</div>
                 <hr>
-                <a href="admin-user.html"><div class="option">View all users</div></a>
-                <a href="add-user.html"><div class="option">Add new user</div></a>
+                <div class="option" data-id="allusers">View all users</div>
+                <div class="option active" data-id="adduser">Add new user</div>
             </div>
+            
             <div class="items admin">
                 <div class="headline">System Admin</div>
                 <hr>
-                <a href="edit-user.html"><div class="option">Edit account</div></a>
+                <div class="option">Edit account</div>
                 <div class="option">Sign out</div>
             </div>
         </div>
@@ -60,65 +63,89 @@
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <a href="admin-order.html"><span>View all order</span></a>
+                    <a href="admin-user.html"><span>View all users</span></a>
                 </p>
             </div>
-            <div class="info">
-                <div class="header">Edit User <span>(User ID:1234)</span></div>
+            <form method="post" action="addeduser" class="info">
+                <div class="header">Add New User</div>
                 <div class="details">
                     <!--First One -->
                     <div class="part">
                         <div class="type flex-between">
                             <div>
-                                <div>Order ID</div>
-                                <input type="text" value="00001" disabled="true">
+                                <div>First name<span>*</span></div>
+                                <input type="text" name="firstname" placeholder="Type the first name" />
                             </div>
                             <div>
-                                <div>User ID</div>
-                                <input type="text" value="00001" disabled="true">
+                                <div>Location<span>*</span></div>
+                                <input type="text" name="location" placeholder="Type the location" />
+                            </div>
+                            
+                        </div>
+                        <div class="type flex-between">
+                            <div>
+                                <div>Last name<span>*</span></div>
+                                <input type="text" name="lastname" placeholder="Type the last name" />
+                            </div>
+                            <div>
+                                <div>City<span>*</span></div>
+                                <input type="text" name="city" placeholder="Type the city" />
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
-                                <div>Bag ID</div>
-                                <input type="text" value="00001" disabled="true">
+                                <div>Email address<span>*</span></div>
+                                <input type="email" name="email" placeholder="Type the email address" />
                             </div>
                             <div>
-                                <div>Size ID</div>
-                                <input type="text" value="00001" disabled="true">
-                            </div>
-                        </div>
-                        <div class="type flex-between">
-                            <div>
-                                <div>City</div>
-                                <input type="text" value="00001" disabled="true">
-                            </div>
-                            <div>
-                                <div>Postcode</div>
-                                <input type="text" value="00001" disabled="true">
+                                <div>Postcode<span>*</span></div>
+                                <input type="number" name="postcode" placeholder="Type the postcode" />
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
-                                <div>Province</div>
-                                <input type="text" value="00001" disabled="true">
+                                <div>Phone number</div>
+                                <input type="number" name="phone" placeholder="Type the phone number" />
+                            </div>
+                            <div>
+                                <div>Province<span>*</span></div>
+                                <input type="text" name="province" placeholder="Type the province" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Second One -->
+                    <div class="part">
+                        <div class="type flex-between">
+                            <div>
+                                <div>Password<span>*</span></div>
+                                <input type="password" name="password" placeholder="Type the password" />
                             </div>
                             
                             <div>
-                                <div>Location</div>
-                                <input type="text" value="00001" disabled="true">
+                                <div>Type of user<span>*</span></div>
+                                <select name="usertype">
+                                    <option value="normal">Normal</option>
+                                    <option value="admin">Admin</option>
+                                </select>
                             </div>
-                        </div>
+                        </div>    
                         
                         <div class="type">
                             <div>
-                                <div>Order Date</div>
-                                <input type="text" value="00001" disabled="true">
+                                <div>Confirm password<span>*</span></div>
+                                <input type="password" name="confirmpassword" placeholder="Retype the password" />
                             </div>
                         </div>
-                    </div>  
+                    </div>
+                    
+                    <!-- Save Changes -->
+                    <div class="buttons">
+                        <button class="hallow butt">DISCARD</button>
+                        <button class="butt save">SAVE CHANGES</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </body>
 </html>

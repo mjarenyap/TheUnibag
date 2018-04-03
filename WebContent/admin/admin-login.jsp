@@ -30,7 +30,7 @@
 	</head>
 	<body>
 		<section>
-			<form action="login" method="post" id="login-form">
+			<form action="admin/user" method="post" id="login-form">
 				<c:if test="${error == true}">
 					<div class="error-banner flex-between">
 						<p>Oops! It looks like your email address and password did not match.</p>

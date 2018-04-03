@@ -27,14 +27,12 @@
         <div id="center">
             <div class="flex-between">
                 <div><img src="assets/images/cat.png" draggable="false"></div>
-                
-                <div class="error-msg">
+                <form method="post" action="home" class="error-msg" id="redirectForm">
                     <div id="error-number">404</div>
                     <div id="error-name" class="msg">Not Found</div>
                     <div id="msg" class="msg">Oppsie, we can't seem to find this page</div>
-                    <a href="index.html"><span>Go Back to Home</span></a>
-                </div>
-
+                    <a href="#" onclick="document.getElementById('redirectForm').submit()"><span>Go Back to Home</span></a>
+                </form>
             </div>
         </div>
     </body>
