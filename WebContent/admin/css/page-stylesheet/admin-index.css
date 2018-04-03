@@ -1,0 +1,70 @@
+.dashboard{
+    padding-left: 18%;
+}
+
+.nav-header{
+    padding: 20px 35px;
+}
+
+.nav-header button{
+    padding: 8px 25px;
+}
+
+table{
+    width: 100%;
+}
+
+th{
+    padding: 10px;
+    font-family: 'Source Serif Pro', sans-serif;
+    text-align: left;
+}
+
+th:nth-child(1){
+    text-align: center;
+}
+
+th:last-of-type{
+    text-align: center;
+}
+
+tr{
+    border-bottom: thin solid #333;
+}
+
+td{
+    padding: 15px 10px;
+    text-align: left;
+    border-bottom: thin solid #ccc;
+    font-size: 0.9em;
+}
+
+td:nth-child(1), td:last-of-type{
+    text-align: center;
+}
+
+#bar{
+    margin: 0px 20px;
+    height: 10px;
+    width: 90%;
+    display: block;
+    background-image: url('../../assets/images/search.png');
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: center left 5px;
+    padding: 10px 30px;
+}
+
+#save-changes{
+    font-size: 0.7em;
+}
+
+table button{
+    padding: 5px 20px;
+    font-size: 0.7em;
+}
+
+
+.table input:hover{
+    cursor: pointer;
+}

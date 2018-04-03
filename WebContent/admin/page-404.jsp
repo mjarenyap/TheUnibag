@@ -13,20 +13,20 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
 		<!-- FRAMEWORK STYLESHEET | NOTE: DO NOT EDIT -->
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/theme.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/nav.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/footer.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/flex.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/button.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/field.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/sidenav.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/theme.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/nav.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/footer.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/sidenav.css" />
         
-		<link rel="stylesheet" type="text/css" href="../css/page-stylesheet/errorpage.css" />
+		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/errorpage.css" />
     </head>
     <body>
         <div id="center">
             <div class="flex-between">
-                <div><img src="../assets/images/cat.png" draggable="false"></div>
+                <div><img src="assets/images/cat.png" draggable="false"></div>
                 <form method="post" action="../home" class="error-msg" id="redirectForm">
                     <div id="error-number">404</div>
                     <div id="error-name" class="msg">Not Found</div>

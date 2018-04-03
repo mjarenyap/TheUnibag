@@ -211,8 +211,25 @@ public class LogServlet extends HttpServlet {
 					Cookie userCookie = new Cookie("Username", correctUser.getEmail());
 					response.addCookie(userCookie);
 
-					if(!redirect.equals("home"))
+					if(!redirect.equals("home")){
+						switch(redirect){
+							case "cart":
+							case "checkout":
+								// check cart session for items
+								@SuppressWarnings("unchecked")
+								ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+								float subtotal = 0;
+								// check if there are items in the shopping cart
+								if(cartlist.size() > 0 && cartlist != null)
+									for(int i = 0; i < cartlist.size(); i++)
+										subtotal += cartlist.get(i).getPrice();
+
+								request.setAttribute("subtotal", subtotal);
+							break;
+						}
+
 						request.getRequestDispatcher(redirect + ".jsp").forward(request, response);
+					}
 
 					else home(request, response);
 				}
@@ -240,7 +257,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void signupPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if((User)request.getSession().getAttribute("Account") != null && (User)request.getSession().getAttribute("adminAccount") == null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null)
 			home(request, response);
 
 		else {

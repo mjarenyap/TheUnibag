@@ -2,8 +2,8 @@ package beans;
 import javax.persistence.Entity;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import java.time.LocalDateTime;
@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class Order {
 	@Id
 	@Column(name="orderID")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long orderID;
 	@Column
 	private long userID;

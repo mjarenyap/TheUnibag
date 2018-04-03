@@ -1,0 +1,100 @@
+/* Theme setup for the website */
+
+:root{
+	--theme-color: #7f0641;
+	--theme-dark-accent: #400221;
+	--theme-light-neutral: #e8e8e4;
+	--theme-dark-neutral: #333333;
+}
+
+body, html{
+	margin: 0;
+	padding: 0;
+	background-color: var(--theme-light-neutral);
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+/*
+body.nav-sticky{
+	margin-top: 114.55px;
+}
+*/
+
+h1, h2, h3, h4, h5, h6{
+	margin: 0;
+	padding: 0;
+	font-family: 'Source Serif Pro', sans-serif;
+	color: var(--theme-dark-neutral);
+}
+
+p{
+	margin: 0;
+	padding: 0;
+	font-size: 1em;
+	font-family: 'Source Sans Pro', sans-serif;
+	word-wrap: break-word;
+	color: var(--theme-dark-neutral);
+}
+
+a{
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+p a, span a, h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{
+	color: var(--theme-color);
+}
+
+p a:hover, span a:hover, h1 a:hover, h2 a:hover,
+h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover{
+	text-decoration: underline;
+}
+
+section{
+	padding: 8em 15%;
+}
+
+section.white{
+	background-color: white;
+}
+
+form{
+	margin: 0;
+	padding: 0;
+}
+
+hr{
+	border: none;
+	border-top: thin solid #ccc;
+}
+
+b.important{
+	color: var(--theme-color);
+}
+
+div.error-banner{
+	border: thin solid var(--theme-color);
+	box-sizing: border-box;
+	padding: 1em;
+	border-radius: 0.2em;
+	margin-bottom: 1.5em;
+	align-items: flex-start;
+}
+
+div.error-banner p{
+	color: var(--theme-color);
+	font-size: 0.85em;
+}
+
+div.error-banner p.large{
+	font-size: 1.5em;
+	text-align: center;
+}
+
+div.error-banner .fa{
+	color: var(--theme-color);
+	cursor: pointer;
+	margin-left: 1em;
+	font-size: 1.1em;
+}

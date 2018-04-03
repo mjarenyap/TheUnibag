@@ -64,7 +64,7 @@
 			</ul>
 		</nav>
 
-		<section id="product-info" class="flex-start">
+		<section id="product-info" class="flex-start" data-id="${productPath}">
 			<div id="featured-image"></div>
 			<div class="content-wrapper">
 				<h1 id="product-name"><c:out value="${featuredBag.name}" /></h1>

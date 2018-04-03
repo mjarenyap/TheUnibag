@@ -20,7 +20,7 @@ import services.AddressService;
 /**
  * Servlet implementation class UserAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin/addeduser", "/admin/editeduser", "/admin/deleteuser", "/admin/deleteusers"})
+@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin/addeduser", "/admin/editeduser", "/admin/deleteuser", "/admin/deleteusers", "/admin/editaccount"})
 public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -59,7 +59,14 @@ public class UserAdminServlet extends HttpServlet {
 
 			case "/admin/deleteusers": deleteUsers(request, response);
 			break;
+
+			case "/admin/editaccount": editAccount(request, response);
+			break;
 		}
+	}
+
+	protected void editAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("edit-account.jsp").forward(request, response);
 	}
 
 	protected void addUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -361,41 +368,65 @@ public class UserAdminServlet extends HttpServlet {
 	protected void deleteUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
-			boolean validUserPath = true;
+			boolean validPaths = true;
+			boolean foundFlag = true;
+
+			// declare security variables
 			Encryption e = new Encryption();
 
-			// get user path
-			String userPath = request.getParameter("username");
-			String[] splitParts = userPath.split("#");
-			long encryptedID = -1;
+			// fetch parameter values to archive orders
+			String[] toDelete = request.getParameterValues("deletelist");
+			ArrayList<User> archivelist = new ArrayList<>();
+			if(toDelete != null){
+				for(int i = 0; i < toDelete.length; i++){
+					if(toDelete[i] != null){
+						String userPath = toDelete[i];
+						String[] splitParts = userPath.split("#");
+						long encryptedID = -1;
 
-			try{
-				encryptedID = Long.parseLong(splitParts[0]);
-			} catch(Exception er){
-				validUserPath = false;
-			}
+						try{
+							encryptedID = Long.parseLong(splitParts[0]);
+						} catch(Exception er){
+							validPaths = false;
+							foundFlag = false;
+						}
 
-			if(splitParts.length != 2)
-				validUserPath = false;
+						if(splitParts.length == 2 && validPaths && foundFlag){
+							// decrype the id and name of the product
+							long decryptedID = e.decryptID(encryptedID);
+							String username = splitParts[1];
 
-			if(validUserPath){
-				String email = splitParts[1];
-				long decryptedID = e.decryptID(encryptedID);
-				User selectedUser = UserService.getUser(decryptedID);
+							// search for a matched result
+							User selectedUser = UserService.getUser(decryptedID);
+							if(selectedUser != null){
+								if(username.equalsIgnoreCase(selectedUser.getEmail()))
+									archivelist.add(selectedUser);
+							}
 
-				if(selectedUser != null){
-					if(selectedUser.getEmail().equals(email)){
-						UserService.deleteUser(decryptedID);
-						allUsers(request, response);
+							else{
+								validPaths = false;
+								foundFlag = false;
+								break;
+							}
+						}
+
+						else{
+							validPaths = false;
+							foundFlag = false;
+							break;
+						}
 					}
-					
-					else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 				}
 
-				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+				// update selected archived orders in the database
+				if(validPaths && foundFlag)
+					for(int i = 0; i < archivelist.size(); i++)
+						UserService.deleteUser(archivelist.get(i).getUserID());
 			}
 
-			else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			request.setAttribute("errorPath", !validPaths);
+			request.setAttribute("errorFound", !foundFlag);
+			allUsers(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);

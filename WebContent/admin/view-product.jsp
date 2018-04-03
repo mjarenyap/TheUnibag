@@ -13,25 +13,25 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
         <!-- FRAMEWORK STYLESHEET | NOTE: DO NOT EDIT -->
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/theme.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/nav.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/footer.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/flex.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/button.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/field.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/sidenav.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/theme.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/nav.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/footer.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/sidenav.css" />
         
         <!-- PAGE STYLESHEET -->
-        <link rel="stylesheet" type="text/css" href="../css/page-stylesheet/admin-index.css" />
-        <link rel="stylesheet" type="text/css" href="../css/page-stylesheet/add-product.css" />
+        <link rel="stylesheet" type="text/css" href="css/page-stylesheet/admin-index.css" />
+        <link rel="stylesheet" type="text/css" href="css/page-stylesheet/add-product.css" />
 
         <!-- JAVASCRIPT -->
-        <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../js/adminformfunctions.js" type="text/javascript"></script>
+        <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="js/adminformfunctions.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="sidenav">
-            <div class="accent"><img id="logo" src="../assets/images/Unibag-logo.png" draggable="false"></div>
+            <div class="accent"><img id="logo" src="assets/images/unibag-logo.png" draggable="false"></div>
             <div class="items">
                 <div class="headline">Orders</div>
                 <hr>
@@ -60,11 +60,11 @@
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <a href="admin-bag.html"><span>View all products</span></a>
+                    <span id="back-all-products">View all products</span>
                 </p>
             </div>
-            <div class="info">
-                <div class="header">Edit Product <span>(User ID:1234)</span></div>
+            <form method="post" action="editedproduct" class="info">
+                <div class="header">Edit Product</div>
                 <div class="details flex-between" >
                     <!--First One -->
                     <div class="part">
@@ -85,13 +85,13 @@
                                 <div>Type of bag<span>*</span></div>
                                 <select name="type">
                                     <option value="${optionValue}"><c:out value="${featuredBag.type}" /></option>
-                                    <option value="backpack">Backpack</option>
-                                    <option value="dufflebag">Duffle Bag</option>
-                                    <option value="handbag">Handbag</option>
-                                    <option value="messengerbag">Messenger Bag</option>
-                                    <option value="shoulderbag">Shoulder Bag</option>
-                                    <option value="tote">Tote</option>
-                                    <option value="totebag">Tote Bag</option>
+                                    <option value="Backpack">Backpack</option>
+                                    <option value="Duffle Bag">Duffle Bag</option>
+                                    <option value="Hand Bag">Handbag</option>
+                                    <option value="Messenger Bag">Messenger Bag</option>
+                                    <option value="Shoulder Bag">Shoulder Bag</option>
+                                    <option value="Tote">Tote</option>
+                                    <option value="Tote Bag">Tote Bag</option>
                                 </select>
                             </div>
                         </div>
@@ -128,29 +128,32 @@
                         <div class="type flex-between">
                             <div>
                                 <div>Width<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Width" name="width" value="${featuredBag.width}" />
+                                <input class="dimension" type="text" placeholder="Width" name="width" value="${featuredSize.width}" />
                             </div>
                             <div>
                                 <div>Height<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Height" name="height" value="${featuredBag.height}" />
+                                <input class="dimension" type="text" placeholder="Height" name="height" value="${featuredSize.height}" />
                             </div>
                             <div>
                                 <div>Length<span>*</span></div>
-                                <input class="dimension" type="text" placeholder="Length" name="length" value="${featuredBag.length}" />
+                                <input class="dimension" type="text" placeholder="Length" name="length" value="${featuredSize.length}" />
                             </div>
                         </div>
                         <div class="type">
                             <div>Description<span>*</span></div>
-                            <textarea class="description" placeholder="Give a short description of the product" name="description" value="${featuredBag.description}"></textarea>
+                            <textarea class="description" placeholder="Give a short description of the product" name="description">
+                                <c:out value="${featuredBag.description}" />
+                            </textarea>
                         </div>
                         <!-- Save Changes -->
                         <div class="buttons">
+                            <input type="hidden" name="path" value="${productPath}" />
                             <button class="hallow butt">DISCARD</button>
                             <button class="hallow butt save" type="submit">SAVE CHANGES</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </body>
 </html>

@@ -82,7 +82,7 @@
 							<span>First name<b class="important">*</b></span>
 							<c:choose>
 								<c:when test="${loggedUser != null}">
-									<input type="text" name="firstname" value="${loggedUser.firstname}" placeholder="Type here your first name" class="full-width" />
+									<input type="text" name="firstname" value="${loggedUser.firstName}" placeholder="Type here your first name" class="full-width" />
 								</c:when>
 								<c:otherwise>
 									<input type="text" name="firstname" value="" placeholder="Type here your first name" class="full-width" />
@@ -93,7 +93,7 @@
 							<span>Last name<b class="important">*</b></span>
 							<c:choose>
 								<c:when test="${loggedUser != null}">
-									<input type="text" name="lastname" value="${loggedUser.lastname}" placeholder="Type here your last name" class="full-width" />
+									<input type="text" name="lastname" value="${loggedUser.lastName}" placeholder="Type here your last name" class="full-width" />
 								</c:when>
 								<c:otherwise>
 									<input type="text" name="lastname" value="" placeholder="Type here your last name" class="full-width" />
@@ -158,13 +158,20 @@
 					</label>
 					<label>
 						<span>Province<b class="important">*</b></span>
-						<input type="text" name="province" value="Laguna" class="full-width" />
+						<c:choose>
+							<c:when test="${loggedUser != null}">
+								<input type="text" name="province" value="${address.province}" placeholder="Type here your province" class="full-width" />
+							</c:when>
+							<c:otherwise>
+								<input type="text" name="province" placeholder="Type here your province" value="" class="full-width" />
+							</c:otherwise>
+						</c:choose>
 					</label>
 				</form>
 				<div id="confirm-pane">
 					<h1 id="confirm-title"><b class="important">Step 2:</b> Confirm Your Order</h1>
 					<div id="product-feed">
-						<c:forEach items="shoppingcart" var="bag">
+						<c:forEach items="${shoppingcart}" var="bag">
 							<div class="content-wrapper">
 								<div class="featured-image"></div>
 								<h4 class="product-name"><c:out value="${bag.name}" /></h4>

@@ -182,6 +182,7 @@ public class ProductAdminServlet extends HttpServlet {
 					request.setAttribute("featuredSize", selectedSize);
 					request.setAttribute("featuredBag", selectedBag);
 					request.setAttribute("productPath", productPath);
+					request.setAttribute("optionValue", selectedBag.getType());
 					request.getRequestDispatcher("view-product.jsp").forward(request, response);
 				}
 
@@ -351,59 +352,66 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void deleteProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
-			boolean validProductPath = true;
-			
+			boolean validPaths = true;
+			boolean foundFlag = true;
+
+			// declare security variables
 			Encryption e = new Encryption();
-			// get contextualized url parametr of the product
-			String productPath = request.getParameter("path");
-			String[] splitParts = productPath.split("#");
-			long encryptedID = -1;
 
-			try{
-				encryptedID = Long.parseLong(splitParts[0]);
-			} catch(Exception er){
-				validProductPath = false;
-			}
+			// fetch parameter values to archive orders
+			String[] toDelete = request.getParameterValues("deletelist");
+			ArrayList<Bag> archivelist = new ArrayList<>();
+			if(toDelete != null){
+				for(int i = 0; i < toDelete.length; i++){
+					if(toDelete[i] != null){
+						String productPath = toDelete[i];
+						String[] splitParts = productPath.split("#");
+						long encryptedID = -1;
 
-			if(splitParts.length != 2)
-				validProductPath = false;
-
-			if(validProductPath){
-				// declare second layer flag variables
-				boolean foundFlag = false;
-
-				// decrype the id and name of the product
-				long decryptedID = e.decryptID(encryptedID);
-				String productName = splitParts[1].replace('+', ' ');
-
-				// search for a matched result
-				Bag selectedBag = BagService.getBag(decryptedID);
-				if(selectedBag != null && productName.equalsIgnoreCase(selectedBag.getName()))
-					foundFlag = true;
-
-				// proceed to deleting the product if found
-				if(foundFlag){
-					Size selectedSize = null;
-					List<Size> sizelist = SizeService.getAllSizes();
-					for(int i = 0; i < sizelist.size(); i++)
-						if(selectedBag.getBagID() == sizelist.get(i).getBagID()){
-							selectedSize = sizelist.get(i);
-							break;
+						try{
+							encryptedID = Long.parseLong(splitParts[0]);
+						} catch(Exception er){
+							validPaths = false;
+							foundFlag = false;
 						}
 
-					// delete in the database
-					BagService.deleteBag(selectedBag.getBagID());
-					SizeService.deleteSize(selectedSize.getSizeID());
+						if(splitParts.length == 2 && validPaths && foundFlag){
+							// decrypt the id and name of the product
+							long decryptedID = e.decryptID(encryptedID);
+							String productName = splitParts[1].replace('+', ' ');
 
-					allProducts(request, response);
+							// search for a matched result
+							Bag selectedBag = BagService.getBag(decryptedID);
+							if(selectedBag != null)
+								if(productName.equalsIgnoreCase(selectedBag.getName()))
+									archivelist.add(selectedBag);
+
+							else{
+								validPaths = false;
+								foundFlag = false;
+								break;
+							}
+						}
+
+						else{
+							validPaths = false;
+							foundFlag = false;
+							break;
+						}
+					}
 				}
 
-				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+				// update selected archived orders in the database
+				if(validPaths && foundFlag)
+					for(int i = 0; i < archivelist.size(); i++)
+						BagService.deleteBag(archivelist.get(i).getBagID());
 			}
 
-			else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			request.setAttribute("errorPath", !validPaths);
+			request.setAttribute("errorFound", !foundFlag);
+			allProducts(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);

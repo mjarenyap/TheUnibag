@@ -151,7 +151,7 @@ public class OrderAdminServlet extends HttpServlet {
 			if(toDelete != null){
 				for(int i = 0; i < toDelete.length; i++){
 					if(toDelete[i] != null){
-						String productPath = request.getParameter("path");
+						String productPath = toDelete[i];
 						String[] splitParts = productPath.split("#");
 						long encryptedID = -1;
 
@@ -213,7 +213,7 @@ public class OrderAdminServlet extends HttpServlet {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null)
 			allOrders(request, response);
 
-		else request.getRequestDispatcher("admin/admin-login.jsp").forward(request, response);
+		else request.getRequestDispatcher("/admin/admin-login.jsp").forward(request, response);
 	}
 
 	protected void adminLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

@@ -13,24 +13,24 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
 		<!-- FRAMEWORK STYLESHEET | NOTE: DO NOT EDIT -->
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/theme.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/nav.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/footer.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/flex.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/button.css" />
-		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/theme.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/nav.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/footer.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
 
 		<!-- PAGE STYLESHEET -->
-		<link rel="stylesheet" type="text/css" href="../css/page-stylesheet/login.css" />
+		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/login.css" />
 
 		<!-- JAVASCRIPT -->
-		<script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="../js/formfunctions.js" type="text/javascript"></script>
-		<script src="../js/layout.js" type="text/javascript"></script>
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
+		<script src="js/layout.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<section>
-			<form action="admin/user" method="post" id="login-form">
+			<form action="/TheUnibag/admin/user" method="post" id="login-form">
 				<c:if test="${error == true}">
 					<div class="error-banner flex-between">
 						<p>Oops! It looks like your email address and password did not match.</p>

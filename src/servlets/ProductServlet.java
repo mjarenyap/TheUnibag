@@ -271,6 +271,7 @@ public class ProductServlet extends HttpServlet {
 
 				request.setAttribute("featuredSize", selectedSize);
 				request.setAttribute("featuredBag", selectedBag);
+				request.setAttribute("productPath", productPath);
 				request.getRequestDispatcher("single.jsp").forward(request, response);
 			}
 

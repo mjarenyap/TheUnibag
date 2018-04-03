@@ -78,12 +78,16 @@ function directCart(){
 }
 
 function directCheckout(){
-	$('body').append('<form action="checkout" method="post" id="directCheckout"></form>');
+	$('body').append('<form action="checkout" method="post" id="directCheckout">' +
+		'<input type="hidden" name="purpose" value="cart" />' +
+		'</form>');
 	$('form#directCheckout').submit();
 }
 
 function directSuccess(){
-	$('body').append('<form action="success" method="post" id="directSuccess"></form>');
+	$('body').append('<form action="success" method="post" id="directSuccess">' +
+		'<input type="hidden" name="purpose" value="checkout" />' +
+		'</form>');
 	$('form#directSuccess').submit();
 }
 
@@ -110,7 +114,9 @@ function directAllProducts(){
 }
 
 function directAddToCart(){
-	$('body').append('<form action="addtocart" method="post" id="directAddToCart"></form>');
+	$('body').append('<form action="addtocart" method="post" id="directAddToCart">' +
+		'<input type="hidden" name="productPath" value = "' + $('#product-info').attr("data-id") + '"/>' +
+		'</form>');
 	$('form#directAddToCart').submit();
 }
 

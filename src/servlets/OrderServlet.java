@@ -66,13 +66,12 @@ public class OrderServlet extends HttpServlet {
 		// check cart session for items
 		@SuppressWarnings("unchecked")
 		ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
-
+		float subtotal = 0;
 		// check if there are items in the shopping cart
 		if(cartlist.size() > 0 && cartlist != null){
 			emptyFlag = false;
 
 			// compute for subtotal
-			float subtotal = 0;
 			for(int i = 0; i < cartlist.size(); i++)
 				subtotal += cartlist.get(i).getPrice();
 
@@ -81,7 +80,7 @@ public class OrderServlet extends HttpServlet {
 		}
 
 		request.setAttribute("empty", emptyFlag);
-		request.setAttribute("subtotal", 0);
+		request.setAttribute("subtotal", subtotal);
 		request.getRequestDispatcher("cart.jsp").forward(request, response);
 	}
 
@@ -101,8 +100,8 @@ public class OrderServlet extends HttpServlet {
 		if(cartlist.size() > 0 && cartlist != null)
 			emptyFlag = false;
 		
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
-			User currentUser = (User) request.getSession().getAttribute("Account");
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
+			User currentUser = (User)request.getSession().getAttribute("Account");
 			if(UserService.getUser(currentUser.getUserID()) != null)
 				authenticFlag = true;
 
@@ -153,11 +152,11 @@ public class OrderServlet extends HttpServlet {
 		// check for empty cartlist
 		@SuppressWarnings("unchecked")
 		ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
-		if(cartlist.size() > 0 && cartlist != null)
+		if(cartlist.size() > 0)
 			emptyFlag = false;
 
 		// check for user type
-		User currentUser = (User) request.getSession().getAttribute("Account");
+		User currentUser = (User)request.getSession().getAttribute("Account");
 
 		String firstname = request.getParameter("firstname");
 		String lastname = request.getParameter("lastname");
@@ -165,8 +164,13 @@ public class OrderServlet extends HttpServlet {
 		String phone = request.getParameter("phone");
 		String location = request.getParameter("location");
 		String city = request.getParameter("city");
-		int postcode = Integer.parseInt(request.getParameter("postcode"));
 		String province = request.getParameter("province");
+		int postcode = 1000;
+		try{
+			postcode = Integer.parseInt(request.getParameter("postcode"));
+		} catch(Exception er){
+			postcode = 1000;
+		}
 
 		FieldChecker fc = new FieldChecker();
 		User tempUser = new User();
@@ -284,7 +288,7 @@ public class OrderServlet extends HttpServlet {
 			}
 		}
 
-		request.getRequestDispatcher("products.jsp").forward(request, response);
+		shoppingCart(request, response);
 	}
 
 	/**

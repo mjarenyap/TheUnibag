@@ -13,24 +13,24 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
         <!-- FRAMEWORK STYLESHEET | NOTE: DO NOT EDIT -->
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/theme.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/nav.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/footer.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/flex.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/button.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/field.css" />
-        <link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/sidenav.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/theme.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/nav.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/footer.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+        <link rel="stylesheet" type="text/css" href="css/framework-stylesheet/sidenav.css" />
         
         <!-- PAGE STYLESHEET -->
-        <link rel="stylesheet" type="text/css" href="../css/page-stylesheet/admin-index.css" />
+        <link rel="stylesheet" type="text/css" href="css/page-stylesheet/admin-index.css" />
 
         <!-- JAVASCRIPT -->
-        <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../js/adminformfunctions.js" type="text/javascript"></script> 
+        <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="js/adminformfunctions.js" type="text/javascript"></script> 
     </head>
     <body>
         <div class="sidenav">
-            <div class="accent"><img id="logo" src="../assets/images/Unibag-logo.png" draggable="false"></div>
+            <div class="accent"><img id="logo" src="assets/images/unibag-logo.png" draggable="false"></div>
             <div class="items">
                 <div class="headline">Orders</div>
                 <hr>
@@ -74,15 +74,15 @@
                         <th>User Type</th>
                         <th></th>
                     </tr>
-                    <c:forEach items="${userlist}" var="user">
+                    <c:forEach items="${userlist}" var="user" varStatus="status">
                         <tr>
-                            <td><input type="checkbox" class="delete-status" /></td>
+                            <td><input type="checkbox" class="delete-status" name="deletelist" value="${usernames[status.index]}" /></td>
                             <td><c:out value="${user.firstName}" /></td>
                             <td><c:out value="${user.lastName}" /></td>
                             <td><c:out value="${user.email}" /></td>
                             <td><c:out value="${user.phone}" /></td>
                             <td><c:out value="${user.userType}" /></td>
-                            <td><a href="view-user.html"><button class="hallow">Edit</button></a></td>
+                            <td><button class="hallow edit" data-id="${usernames[status.index]}">Edit</button></td>
                         </tr>
                     </c:forEach>
                 </table>
