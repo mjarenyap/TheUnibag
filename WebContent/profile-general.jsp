@@ -48,7 +48,7 @@
 					</c:if>
 					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
-							<span><c:out value="${loggedUser.fname}"/> <c:out value="${loggedUser.lname}"/></span>
+							<span><c:out value="${loggedUser.firstName}"/> <c:out value="${loggedUser.lastName}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
 						</div>
 					</c:if>
@@ -78,11 +78,11 @@
 					<h1 id="context-title">General Information</h1>
 					<label>
 						<span>First name</span>
-						<input type="text" name="firstname" value="${loggedUser.fname}" placeholder="Edit your first name" class="full-width" />
+						<input type="text" name="firstname" value="${loggedUser.firstName}" placeholder="Edit your first name" class="full-width" />
 					</label>
 					<label>
 						<span>Last name</span>
-						<input type="text" name="lastname" value="${loggedUser.lname}" placeholder="Edit your last name" class="full-width" />
+						<input type="text" name="lastname" value="${loggedUser.lastName}" placeholder="Edit your last name" class="full-width" />
 					</label>
 					<label>
 						<span>Email address</span>

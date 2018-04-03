@@ -24,7 +24,7 @@ header #tagline{
 	text-shadow: 0px 0px 21px #000;
 }
 
-header #cta{
+header #cta, #view-profile{
 	text-align: center;
 	display: block;
 	margin: auto;

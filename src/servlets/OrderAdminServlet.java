@@ -213,7 +213,7 @@ public class OrderAdminServlet extends HttpServlet {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null)
 			allOrders(request, response);
 
-		else request.getRequestDispatcher("admin-login.jsp").forward(request, response);
+		else request.getRequestDispatcher("admin/admin-login.jsp").forward(request, response);
 	}
 
 	protected void adminLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

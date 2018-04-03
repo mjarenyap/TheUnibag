@@ -23,7 +23,7 @@ import security.Encryption;
 /**
  * Servlet implementation class LogServlet
  */
-@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset"})
+@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset", "/logout"})
 public class LogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -58,6 +58,9 @@ public class LogServlet extends HttpServlet {
 			case "/reset": resetAll(request, response);
 			break;
 
+			case "/logout": logout(request, response);
+			break;
+
 			/*
 			default: home(request, response);
 			break;
@@ -70,41 +73,6 @@ public class LogServlet extends HttpServlet {
 		if(request.getSession().getAttribute("ShoppingCart") == null){
 			ArrayList<Bag> shoppingcart = new ArrayList<>();
 			request.getSession().setAttribute("ShoppingCart", shoppingcart);
-		}
-
-		// declare needed variables
-		boolean purposeFlag = false;
-		boolean loggedFlag = false;
-
-		String purpose = null;
- 
-		// get the prupose parameter // check if they are trying to logout
-		if(request.getParameter("purpose") != null && request.getParameter("purpose").equals("logout")){
-			purpose = request.getParameter("purpose");
-			purposeFlag = true;
-		}
-
-		// check for logged user
-		if(request.getSession().getAttribute("Account") != null)
-			loggedFlag = true;
-
-		// invalidate the session
-		if(loggedFlag && purpose.equals("logout") && purposeFlag){
-			request.getSession().setAttribute("Account", null);
-
-			// remove the Account cookies
-			Cookie[] cookies = request.getCookies();
-			if(cookies != null){
-				for(int i = 0; i < cookies.length; i++)
-				{	
-					Cookie currentCookie = cookies[i];
-					if(currentCookie.getName().equals("Account"))
-					{
-						currentCookie.setMaxAge(0);
-						response.addCookie(currentCookie);
-					}
-				}
-			}
 		}
 
 		// IMPORTANT: GET ALL PROMOTIONS
@@ -130,6 +98,38 @@ public class LogServlet extends HttpServlet {
 
 		// dispatch to the homepage
 		request.getRequestDispatcher("index.jsp").forward(request, response);
+	}
+
+	protected void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// declare needed variables
+		boolean loggedFlag = false;
+
+		// check for logged user
+		if(request.getSession().getAttribute("Account") != null)
+			loggedFlag = true;
+
+		// invalidate the session
+		if(loggedFlag){
+			request.getSession().setAttribute("Account", null);
+
+			// remove the Account cookies
+			Cookie[] cookies = request.getCookies();
+			if(cookies != null){
+				for(int i = 0; i < cookies.length; i++)
+				{	
+					Cookie currentCookie = cookies[i];
+					if(currentCookie.getName().equals("Username"))
+					{
+						currentCookie.setMaxAge(0);
+						response.addCookie(currentCookie);
+					}
+				}
+			}
+
+			home(request, response);
+		}
+
+		else home(request, response);
 	}
 
 	protected void processAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

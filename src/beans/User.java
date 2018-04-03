@@ -23,9 +23,9 @@ public class User {
 	private long userID;
 	
 	@Column
-	private String fname;
+	private String firstName;
 	@Column
-	private String lname;
+	private String lastName;
 	@Column
 	private String email;
 	@Column
@@ -47,19 +47,19 @@ public class User {
 	}
 	
 	public String getFirstName() {
-		return fname;
+		return firstName;
 	}
 	
 	public void setFirstName(String fname) {
-		this.fname = fname;
+		this.firstName = fname;
 	}
 	
 	public String getLastName() {
-		return lname;
+		return lastName;
 	}
 	
 	public void setLastName (String lname) {
-		this.lname = lname;
+		this.lastName = lname;
 	}
 	
 	public String getEmail() {
@@ -97,7 +97,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "Users [id=" + userID + ", fname=" + fname + ", lname=" + lname + ", email=" + email + ", password=" + password + ", phone=" + phone + ", userType=" + userType  + "]";
+		return "Users [id=" + userID + ", fname=" + firstName + ", lname=" + lastName + ", email=" + email + ", password=" + password + ", phone=" + phone + ", userType=" + userType  + "]";
 	}
 	
 

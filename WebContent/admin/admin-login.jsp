@@ -21,7 +21,7 @@
 		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/field.css" />
 
 		<!-- PAGE STYLESHEET -->
-		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/login.css" />
+		<link rel="stylesheet" type="text/css" href="../css/page-stylesheet/login.css" />
 
 		<!-- JAVASCRIPT -->
 		<script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>

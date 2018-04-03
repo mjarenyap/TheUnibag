@@ -76,7 +76,7 @@
                         <div class="type flex-between">
                             <div>
                                 <div>First name<span>*</span></div>
-                                <input type="text" name="firstname" placeholder="Type your first name" value="${loggedUser.fname}" />
+                                <input type="text" name="firstname" placeholder="Type your first name" value="${loggedUser.firstName}" />
                             </div>
                             
                             <div>
@@ -87,7 +87,7 @@
                         <div class="type flex-between">
                             <div>
                                 <div>Last name<span>*</span></div>
-                                <input type="text" name="lastname" placeholder="Type your last name" value="${loggedUser.lname}" />
+                                <input type="text" name="lastname" placeholder="Type your last name" value="${loggedUser.lastName}" />
                             </div>
                             <div>
                                 <div>City<span>*</span></div>

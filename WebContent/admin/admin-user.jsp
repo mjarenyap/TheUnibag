@@ -77,8 +77,8 @@
                     <c:forEach items="${userlist}" var="user">
                         <tr>
                             <td><input type="checkbox" class="delete-status" /></td>
-                            <td><c:out value="${user.fname}" /></td>
-                            <td><c:out value="${user.lname}" /></td>
+                            <td><c:out value="${user.firstName}" /></td>
+                            <td><c:out value="${user.lastName}" /></td>
                             <td><c:out value="${user.email}" /></td>
                             <td><c:out value="${user.phone}" /></td>
                             <td><c:out value="${user.userType}" /></td>
