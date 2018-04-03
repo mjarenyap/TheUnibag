@@ -63,7 +63,7 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void addProductPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null)
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null)
 			request.getRequestDispatcher("add-product.jsp").forward(request, response);
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
@@ -75,7 +75,7 @@ public class ProductAdminServlet extends HttpServlet {
 		[ex. request.getParameter("name")]:
 		- name - brand - description - color - type - collection - rating - price
 		*/
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			String name = request.getParameter("name");
 			String brand= request.getParameter("brand");
 			String description = request.getParameter("description");
@@ -111,7 +111,7 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void allProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// put all bags in an arraylist
 			List<Bag> bags = BagService.getAllBags();
 			ArrayList<String> productNames = new ArrayList<>();
@@ -134,7 +134,7 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void viewProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validProductPath = true;
 			
@@ -195,7 +195,7 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void editProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validProductPath = true;
 			
@@ -292,7 +292,7 @@ public class ProductAdminServlet extends HttpServlet {
 	}
 
 	protected void deletePoduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validProductPath = true;
 			

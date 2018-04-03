@@ -63,7 +63,7 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void addUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null)
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null)
 			request.getRequestDispatcher("add-user.jsp").forward(request, response);
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
@@ -75,7 +75,7 @@ public class UserAdminServlet extends HttpServlet {
 		[ex. request.getParameter("name")]:
 		- firstname - lastname - email - password - phone - usertype
 		*/
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validCredentialFlag = false;
 			boolean duplicateFlag = false;
@@ -140,7 +140,7 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void allUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			Encryption e = new Encryption();
 
 			//to do put all users in an arraylist
@@ -170,7 +170,7 @@ public class UserAdminServlet extends HttpServlet {
 		Make sure to parse it as a long.
 		*/
 
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validUserPath = true;
 			Encryption e = new Encryption();
@@ -223,7 +223,7 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void editUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validUserPath = true;
 			Encryption e = new Encryption();
@@ -316,7 +316,7 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validUserPath = true;
 			Encryption e = new Encryption();
@@ -359,7 +359,7 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void deleteUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validUserPath = true;
 			Encryption e = new Encryption();

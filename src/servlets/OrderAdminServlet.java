@@ -106,7 +106,7 @@ public class OrderAdminServlet extends HttpServlet {
 		Get the order ID as the request parameter.
 		Make sure to parse it as a long.
 		*/
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			String orderID = request.getParameter("orderID");
 			long orID = Long.parseLong(orderID);
 			/*long orIDecrypt;*/
@@ -137,7 +137,7 @@ public class OrderAdminServlet extends HttpServlet {
 
 	protected void archiveOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null){
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validPaths = true;
 			boolean foundFlag = true;
@@ -210,7 +210,7 @@ public class OrderAdminServlet extends HttpServlet {
 	}
 
 	protected void adminLoginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null && request.getCookies() != null)
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null)
 			allOrders(request, response);
 
 		else request.getRequestDispatcher("admin-login.jsp").forward(request, response);

@@ -13,20 +13,20 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
 		<!-- FRAMEWORK STYLESHEET | NOTE: DO NOT EDIT -->
-		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/theme.css" />
-		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/nav.css" />
-		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/footer.css" />
-		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
-		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
-		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/theme.css" />
+		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/nav.css" />
+		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/footer.css" />
+		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/flex.css" />
+		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/button.css" />
+		<link rel="stylesheet" type="text/css" href="../css/framework-stylesheet/field.css" />
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/login.css" />
 
 		<!-- JAVASCRIPT -->
-		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
-		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+		<script src="../js/formfunctions.js" type="text/javascript"></script>
+		<script src="../js/layout.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<section>

@@ -23,7 +23,7 @@ $(document).ready(function(){
 });
 
 function directAdminControlPage(url){
-	$('body').append('<form method="post" id="directAdminControlPage" action="admin/' + url + '"></form>');
+	$('body').append('<form method="post" id="directAdminControlPage" action="' + url + '"></form>');
 	$('form#directAdminControlPage').submit();
 }
 

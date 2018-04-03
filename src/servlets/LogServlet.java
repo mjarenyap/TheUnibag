@@ -144,7 +144,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void loginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if((User)request.getSession().getAttribute("Account") != null && (User)request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null)
 			home(request, response);
 
 		else {
@@ -162,7 +162,7 @@ public class LogServlet extends HttpServlet {
 
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		if((User)request.getSession().getAttribute("Account") == null && (User)request.getSession().getAttribute("adminAccount") == null && request.getCookies() == null){
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
 			//security calsses
 			FieldChecker fc = new FieldChecker();
 			Encryption e = new Encryption();
@@ -240,7 +240,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void signupPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if((User)request.getSession().getAttribute("Account") != null && (User)request.getSession().getAttribute("adminAccount") == null && request.getCookies() != null)
+		if((User)request.getSession().getAttribute("Account") != null && (User)request.getSession().getAttribute("adminAccount") == null)
 			home(request, response);
 
 		else {
@@ -258,7 +258,7 @@ public class LogServlet extends HttpServlet {
 
 	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		if((User)request.getSession().getAttribute("Account") == null && (User)request.getSession().getAttribute("adminAccount") == null){
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
 			//security variables
 			FieldChecker fc = new FieldChecker();
 			DuplicateChecker dc = new DuplicateChecker();

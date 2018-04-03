@@ -57,6 +57,8 @@ public class ProductServlet extends HttpServlet {
 			sortingMode = 0;
 		}
 
+		Encryption e = new Encryption();
+
 		// declare typeFilterFlag
 		boolean typeFilterFlag = false;
 		String bagType = "All";
@@ -112,13 +114,14 @@ public class ProductServlet extends HttpServlet {
 
 			if(typeFlag){
 				filteredBags.add(baglist.get(i));
-				productNames.add("");
+				productNames.add(e.encryptID(baglist.get(i).getBagID()) + "#" + baglist.get(i).getName().replace(' ', '+'));
 			}
 		}
 		
 		request.setAttribute("typeFilter", typeFilter);
 		request.setAttribute("bagType", bagType);
-		request.setAttribute("baglist", baglist);
+		request.setAttribute("baglist", filteredBags);
+		request.setAttribute("productnames", productNames);
 		request.getRequestDispatcher("products.jsp").forward(request, response);
 		
 		// preview 10 products according to pagination number
