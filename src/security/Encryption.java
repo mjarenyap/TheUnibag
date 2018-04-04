@@ -21,13 +21,14 @@ public class Encryption{
 
 	public String encryptPassword(String password){
 		String encrypted = "";
-		int[] charOffset = {10, -7};
+		int[] charOffset = {10, 17};
 
 		for(int i = 0; i < password.length(); i++){
-			if(i % 2 == 0)
-				encrypted += (password.charAt(i) + charOffset[0]);
-
-			else encrypted += (password.charAt(i) + charOffset[1]);
+			int shifted = password.charAt(i) + charOffset[i % 2];
+			int bounded = shifted % 126;
+			if(bounded >= 0 && bounded <= 32)
+				bounded += 33;
+			encrypted += Character.toString((char)bounded);
 		}
 
 		return encrypted;
@@ -35,15 +36,18 @@ public class Encryption{
 
 	public String decryptPassword(String password){
 		String decrypted = "";
-		int[] charOffset = {10, -7};
+		int[] charOffset = {10, 17};
 
 		for(int i = 0; i < password.length(); i++){
-			if(i % 2 == 0)
-				decrypted += (password.charAt(i) - charOffset[0]);
+			int bounded = password.charAt(i) - charOffset[i % 2];
+			if(bounded >= 0 && bounded <= 32){
+				bounded = 33 - bounded;
+				bounded = 126 - bounded;
+			}
 
-			else decrypted += (password.charAt(i) - charOffset[1]);
+			int shifted = bounded;
+			decrypted += Character.toString((char)shifted);
 		}
-
 		return decrypted;
 	}
 }

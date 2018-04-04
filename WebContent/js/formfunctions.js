@@ -29,7 +29,7 @@ $(document).ready(function(){
 		productItemSelect(path);
 	});
 
-	$('#product-feed .content-wrapper').click(function(){
+	$('#product-feed .content-wrapper .view-product').click(function(){
 		var path = $(this).attr('data-id');
 		productItemSelect(path);
 	});
@@ -38,6 +38,8 @@ $(document).ready(function(){
 		var profilePage = $(this).attr('data-id');
 		redirectProfile(profilePage);
 	});
+
+	$('.side-filter').change(directFilteredProducts);
 });
 
 function directHome(){
@@ -53,8 +55,9 @@ function directProfile(){
 function directLogin(){
 	$('body').append('<form action="login" method="post" id="directLogin">'+
 		'<input type="hidden" name="purpose" value="'+
-		$('#pRedirect').val()+ 
+		$('#pRedirect').val()+
 		'" />'+
+		'<input type="hidden" name="processAccount" value="login" />'+
 		'</form>');
 	$('form#directLogin').submit();
 }
@@ -64,6 +67,7 @@ function directSignup(){
 		'<input type="hidden" name="purpose" value="'+
 		$('#pRedirect').val()+ 
 		'" />'+
+		'<input type="hidden" name="processAccount" value="login" />'+
 		'</form>');
 	$('form#directSignup').submit();
 }
@@ -74,22 +78,45 @@ function directCart(){
 }
 
 function directCheckout(){
-	$('body').append('<form action="checkout" method="post" id="directCheckout"></form>');
+	$('body').append('<form action="checkout" method="post" id="directCheckout">' +
+		'<input type="hidden" name="purpose" value="cart" />' +
+		'</form>');
 	$('form#directCheckout').submit();
 }
 
 function directSuccess(){
-	$('body').append('<form action="success" method="post" id="directSuccess"></form>');
+	$('body').append('<form action="success" method="post" id="directSuccess">' +
+		'<input type="hidden" name="purpose" value="checkout" />' +
+		'</form>');
 	$('form#directSuccess').submit();
 }
 
+function directFilteredProducts(){
+	var sorting = $('#sortProducts').val();
+	$('body').append('<form action="products" method="post" id="directFilteredProducts">' +
+		$('#price-range-1') +
+		$('#price-range-2') +
+		$('#price-range-3') +
+		$('#price-range-4') +
+		$('#price-range-5') +
+		$('#collection-1') +
+		$('#collection-2') +
+		$('#collection-3') +
+		'<input type="hidden" name="typeFilter" value="' + sorting + '" />' +
+		'<input type="hidden" name="sortingMode" value="' + sorting + '" />' +
+		'</form>');
+	$('form#directFilteredProducts').submit();
+}
+
 function directAllProducts(){
-	$('body').append('<form action="products/all" method="post" id="directAllProducts"></form>');
+	$('body').append('<form action="products" method="post" id="directAllProducts"></form>');
 	$('form#directAllProducts').submit();
 }
 
 function directAddToCart(){
-	$('body').append('<form action="addtocart" method="post" id="directAddToCart"></form>');
+	$('body').append('<form action="addtocart" method="post" id="directAddToCart">' +
+		'<input type="hidden" name="productPath" value = "' + $('#product-info').attr("data-id") + '"/>' +
+		'</form>');
 	$('form#directAddToCart').submit();
 }
 
@@ -115,7 +142,7 @@ function showSearch(){
 }
 
 function productCategorySelect(targetCategory){
-	var list = ["all", "backpack", "handbag", "totebag", "messengerbag", "travelbag", "slingbag", "weekenderbag"];
+	var list = ["all", "backpack", "dufflebag", "handbag", "messengerbag", "shoulderbag", "tote", "totebag"];
 	var found = false;
 	for(var x = 0; x < list.length; x++){
 		if(targetCategory === list[x]){
@@ -125,15 +152,21 @@ function productCategorySelect(targetCategory){
 	}
 
 	if(found)
-		$('body').append('<form action="products/' + targetCategory +'" method="post" id="bagItemSelect"></form>');
+		$('body').append('<form action="products" method="get" id="bagItemSelect">'+
+			'<input type="hidden" name="typeFilter" value="' + targetCategory +'" />'+
+			'</form>');
 	
-	else $('body').append('<form action="products/all" method="post" id="bagItemSelect"></form>');
+	else $('body').append('<form action="products" method="get" id="bagItemSelect">'+
+			'<input type="hidden" name="typeFilter" value="all" />'+
+			'</form>');
 
 	$('form#bagItemSelect').submit();
 }
 
 function productItemSelect(path){
-	$('body').append('<form action="featured/'+ path +'" method="post" id="bagItemSelect">'
-		+ 
-		+ '</form>');
+	$('body').append('<form action="featured" method="get" id="bagItemSelect">' + 
+		'<input type="hidden" name="path" value="' + path + '" />' +
+		'</form>');
+
+	$('form#bagItemSelect').submit();
 }

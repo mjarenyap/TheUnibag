@@ -84,8 +84,11 @@ public class BagService {
 			//find a bag
 			Bag a = em.find(Bag.class, id);
 			
-			//change Bag Color, description, price, rating
+			a.setName(newinfo.getName());
+			a.setBrand(newinfo.getBrand());
 			a.setColor(newinfo.getColor());
+			a.setType(newinfo.getType());
+			a.setCollection(newinfo.getCollection());
 			a.setDescription(newinfo.getDescription());
 			a.setPrice(newinfo.getPrice());
 			a.setRating(newinfo.getRating());

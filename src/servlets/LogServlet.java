@@ -23,7 +23,7 @@ import security.Encryption;
 /**
  * Servlet implementation class LogServlet
  */
-@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account"})
+@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset", "/logout"})
 public class LogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -53,6 +53,13 @@ public class LogServlet extends HttpServlet {
 			break;
 
 			case "/account": processAccount(request, response);
+			break;
+
+			case "/reset": resetAll(request, response);
+			break;
+
+			case "/logout": logout(request, response);
+			break;
 
 			/*
 			default: home(request, response);
@@ -66,41 +73,6 @@ public class LogServlet extends HttpServlet {
 		if(request.getSession().getAttribute("ShoppingCart") == null){
 			ArrayList<Bag> shoppingcart = new ArrayList<>();
 			request.getSession().setAttribute("ShoppingCart", shoppingcart);
-		}
-
-		// declare needed variables
-		boolean purposeFlag = false;
-		boolean loggedFlag = false;
-
-		String purpose = null;
- 
-		// get the prupose parameter // check if they are trying to logout
-		if(request.getParameter("purpose") != null && request.getParameter("purpose").equals("logout")){
-			purpose = request.getParameter("purpose");
-			purposeFlag = true;
-		}
-
-		// check for logged user
-		if(request.getSession().getAttribute("Account") != null)
-			loggedFlag = true;
-
-		// invalidate the session
-		if(loggedFlag && purpose.equals("logout") && purposeFlag){
-			request.getSession().setAttribute("Account", null);
-
-			// remove the Account cookies
-			Cookie[] cookies = request.getCookies();
-			if(cookies != null){
-				for(int i = 0; i < cookies.length; i++)
-				{	
-					Cookie currentCookie = cookies[i];
-					if(currentCookie.getName().equals("Account"))
-					{
-						currentCookie.setMaxAge(0);
-						response.addCookie(currentCookie);
-					}
-				}
-			}
 		}
 
 		// IMPORTANT: GET ALL PROMOTIONS
@@ -128,24 +100,51 @@ public class LogServlet extends HttpServlet {
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
-	protected void processAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+	protected void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// declare needed variables
+		boolean loggedFlag = false;
+
+		// check for logged user
+		if(request.getSession().getAttribute("Account") != null)
+			loggedFlag = true;
+
+		// invalidate the session
+		if(loggedFlag){
+			request.getSession().setAttribute("Account", null);
+
+			// remove the Account cookies
+			Cookie[] cookies = request.getCookies();
+			if(cookies != null){
+				for(int i = 0; i < cookies.length; i++)
+				{	
+					Cookie currentCookie = cookies[i];
+					if(currentCookie.getName().equals("Username"))
+					{
+						currentCookie.setMaxAge(0);
+						response.addCookie(currentCookie);
+					}
+				}
+			}
+
 			home(request, response);
-
-		else {
-			String purpose = request.getParameter("purpose");
-			if(purpose.equals("login"))
-				login(request, response);
-
-			else if(purpose.equals("signup"))
-				signup(request, response);
-
-			else home(request, response);
 		}
+
+		else home(request, response);
+	}
+
+	protected void processAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String purpose = request.getParameter("processAccount");
+		if(purpose.equals("login"))
+			login(request, response);
+
+		else if(purpose.equals("signup"))
+			signup(request, response);
+
+		else home(request, response);
 	}
 
 	protected void loginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null)
 			home(request, response);
 
 		else {
@@ -163,7 +162,7 @@ public class LogServlet extends HttpServlet {
 
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		if(request.getSession().getAttribute("Account") == null && request.getCookies() == null){
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
 			//security calsses
 			FieldChecker fc = new FieldChecker();
 			Encryption e = new Encryption();
@@ -195,8 +194,8 @@ public class LogServlet extends HttpServlet {
 				if(userlist != null){
 					for(int i = 0; i < userlist.size(); i++){
 						String decryptedPassword = e.decryptPassword(userlist.get(i).getPassword());
-						if(email.equals(userlist.get(i).getEmail()) && password.equals(decryptedPassword) &&
-							userlist.get(i).getUserType().equals("normal")){
+						if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && password.equals(decryptedPassword) &&
+							userlist.get(i).getUserType().equalsIgnoreCase("normal")){
 							correctUser = userlist.get(i);
 							correctUser.setPassword("");
 							break;
@@ -212,8 +211,25 @@ public class LogServlet extends HttpServlet {
 					Cookie userCookie = new Cookie("Username", correctUser.getEmail());
 					response.addCookie(userCookie);
 
-					if(!redirect.equals("index"))
+					if(!redirect.equals("home")){
+						switch(redirect){
+							case "cart":
+							case "checkout":
+								// check cart session for items
+								@SuppressWarnings("unchecked")
+								ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+								float subtotal = 0;
+								// check if there are items in the shopping cart
+								if(cartlist.size() > 0 && cartlist != null)
+									for(int i = 0; i < cartlist.size(); i++)
+										subtotal += cartlist.get(i).getPrice();
+
+								request.setAttribute("subtotal", subtotal);
+							break;
+						}
+
 						request.getRequestDispatcher(redirect + ".jsp").forward(request, response);
+					}
 
 					else home(request, response);
 				}
@@ -241,7 +257,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void signupPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null)
 			home(request, response);
 
 		else {
@@ -259,7 +275,7 @@ public class LogServlet extends HttpServlet {
 
 	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if there is a logged user
-		if(request.getSession().getAttribute("Account") == null && request.getCookies() == null){
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
 			//security variables
 			FieldChecker fc = new FieldChecker();
 			DuplicateChecker dc = new DuplicateChecker();
@@ -347,6 +363,29 @@ public class LogServlet extends HttpServlet {
 		}
 
 		else home(request, response);
+	}
+
+	protected void resetAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getSession().setAttribute("Account", null);
+		request.getSession().setAttribute("adminAccount", null);
+		request.getSession().setAttribute("ShoppingCart", null);
+		request.getSession().invalidate();
+
+		// remove the Account cookies
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null){
+			for(int i = 0; i < cookies.length; i++)
+			{	
+				Cookie currentCookie = cookies[i];
+				if(currentCookie.getName().equals("Username") || currentCookie.getName().equals("adminUsername"))
+				{
+					currentCookie.setMaxAge(0);
+					response.addCookie(currentCookie);
+				}
+			}
+		}
+
+		home(request, response);
 	}
 
 	/**

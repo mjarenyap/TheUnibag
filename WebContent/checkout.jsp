@@ -26,8 +26,8 @@
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -50,7 +50,7 @@
 					</c:if>
 					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
-							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
+							<span><c:out value="${loggedUser.firstName}"/> <c:out value="${loggedUser.lastName}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
 						</div>
 					</c:if>
@@ -61,14 +61,7 @@
 				</li>
 			</ul>
 			<ul class="subnav flex-center">
-				<li data-id="all">All</li>
-				<li data-id="backpack">Backpack</li>
-				<li data-id="handbag">Handbag</li>
-				<li data-id="totebag">Tote bag</li>
-				<li data-id="messengerbag">Messenger bag</li>
-				<li data-id="travelbag">Travel bag</li>
-				<li data-id="slingbag">Sling bag</li>
-				<li data-id="weekenderbag">Weekender bag</li>
+				<!-- Navigation items -->
 			</ul>
 		</nav>
 
@@ -89,7 +82,7 @@
 							<span>First name<b class="important">*</b></span>
 							<c:choose>
 								<c:when test="${loggedUser != null}">
-									<input type="text" name="firstname" value="${loggedUser.firstname}" placeholder="Type here your first name" class="full-width" />
+									<input type="text" name="firstname" value="${loggedUser.firstName}" placeholder="Type here your first name" class="full-width" />
 								</c:when>
 								<c:otherwise>
 									<input type="text" name="firstname" value="" placeholder="Type here your first name" class="full-width" />
@@ -100,7 +93,7 @@
 							<span>Last name<b class="important">*</b></span>
 							<c:choose>
 								<c:when test="${loggedUser != null}">
-									<input type="text" name="lastname" value="${loggedUser.lastname}" placeholder="Type here your last name" class="full-width" />
+									<input type="text" name="lastname" value="${loggedUser.lastName}" placeholder="Type here your last name" class="full-width" />
 								</c:when>
 								<c:otherwise>
 									<input type="text" name="lastname" value="" placeholder="Type here your last name" class="full-width" />
@@ -165,13 +158,20 @@
 					</label>
 					<label>
 						<span>Province<b class="important">*</b></span>
-						<input type="text" name="province" value="Laguna" class="full-width" />
+						<c:choose>
+							<c:when test="${loggedUser != null}">
+								<input type="text" name="province" value="${address.province}" placeholder="Type here your province" class="full-width" />
+							</c:when>
+							<c:otherwise>
+								<input type="text" name="province" placeholder="Type here your province" value="" class="full-width" />
+							</c:otherwise>
+						</c:choose>
 					</label>
 				</form>
 				<div id="confirm-pane">
 					<h1 id="confirm-title"><b class="important">Step 2:</b> Confirm Your Order</h1>
 					<div id="product-feed">
-						<c:forEach items="shoppingcart" var="bag">
+						<c:forEach items="${shoppingcart}" var="bag">
 							<div class="content-wrapper">
 								<div class="featured-image"></div>
 								<h4 class="product-name"><c:out value="${bag.name}" /></h4>

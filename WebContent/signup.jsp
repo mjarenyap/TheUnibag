@@ -25,8 +25,8 @@
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -48,7 +48,7 @@
 					</c:if>
 					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
-							<span><c:out value="${loggedUser.firstname}"/> <c:out value="${loggedUser.lastname}"/></span>
+							<span><c:out value="${loggedUser.firstName}"/> <c:out value="${loggedUser.lastName}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
 						</div>
 					</c:if>
@@ -59,14 +59,7 @@
 				</li>
 			</ul>
 			<ul class="subnav flex-center">
-				<li data-id="all">All</li>
-				<li data-id="backpack">Backpack</li>
-				<li data-id="handbag">Handbag</li>
-				<li data-id="totebag">Tote bag</li>
-				<li data-id="messengerbag">Messenger bag</li>
-				<li data-id="travelbag">Travel bag</li>
-				<li data-id="slingbag">Sling bag</li>
-				<li data-id="weekenderbag">Weekender bag</li>
+				<!-- Navigation items -->
 			</ul>
 		</nav>
 
@@ -124,7 +117,8 @@
 					<span class="help">Already have an account? <a href="#" id="go-login">Login</a> here.</span>
 					<input type="submit" value="Sign Up" />
 				</div>
-				<input type="hidden" id="pRedirect" name="purpose" value="${purpose}" />
+				<input type="hidden" id="pRedirect" name="redirect" value="${purpose}" />
+				<input type="hidden" name="processAccount" value="signup" />
 			</form>
 		</section>
 

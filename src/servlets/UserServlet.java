@@ -56,7 +56,7 @@ public class UserServlet extends HttpServlet {
 	}
 
 	protected void profileRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			String purpose = request.getParameter("purpose");
 
 			if(purpose.equals("edit-pa"))
@@ -76,7 +76,7 @@ public class UserServlet extends HttpServlet {
 
 	protected void editGeneral(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//check for logged users
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			// security variables
 			Encryption e = new Encryption();
 			FieldChecker fc= new FieldChecker();
@@ -140,14 +140,14 @@ public class UserServlet extends HttpServlet {
 				request.getRequestDispatcher("profile-general.jsp").forward(request, response);
 			}
 
-			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+			else request.getRequestDispatcher("page-404.jsp").forward(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 	}
 
 	protected void profileGeneral(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null)
 			request.getRequestDispatcher("profile-general.jsp").forward(request, response);
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
@@ -155,7 +155,7 @@ public class UserServlet extends HttpServlet {
 
 	protected void editAddress(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//check for logged users
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			// security variables
 			Encryption e = new Encryption();
 			FieldChecker fc = new FieldChecker();
@@ -239,7 +239,7 @@ public class UserServlet extends HttpServlet {
 	}
 
 	protected void profileAddress(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			List<Address> addresslist = AddressService.getAllAddress();
 			User currentUser = (User) request.getSession().getAttribute("Account");
 			Address currentAddress = null;
@@ -258,7 +258,7 @@ public class UserServlet extends HttpServlet {
 
 	protected void editPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//check for logged users
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null){
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			// security variables
 			Encryption e = new Encryption();
 			FieldChecker fc= new FieldChecker();
@@ -317,7 +317,7 @@ public class UserServlet extends HttpServlet {
 	}
 
 	protected void profilePassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getCookies() != null)
+		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null)
 			request.getRequestDispatcher("profile-password.jsp").forward(request, response);
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
