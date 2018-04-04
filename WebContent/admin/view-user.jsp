@@ -31,28 +31,28 @@
     </head>
     <body>
         <div class="sidenav">
-            <div class="accent"><img id="logo" src="assets/images/Unibag-logo.png" draggable="false"></div>
+            <div class="accent"><img id="logo" src="assets/images/unibag-logo.png" draggable="false"></div>
             <div class="items">
                 <div class="headline">Orders</div>
                 <hr>
-                <a href="admin-index.html"><div class="option">View all orders</div></a>
+                <div class="option" data-id="allorders">View all orders</div>
             </div>
             <div class="items">
                 <div class="headline">Products</div>
                 <hr>
-                <a href="admin-bag.html"><div class="option">View all products</div></a>
-                <a href="add-product.html"><div class="option">Add new product</div></a>
+                <div class="option" data-id="allproducts">View all products</div>
+                <div class="option" data-id="addproduct">Add new product</div>
             </div>
             <div class="items">
                 <div class="headline">Users</div>
                 <hr>
-                <a href="admin-user.html"><div class="option active">View all users</div></a>
-                <a href="add-user.html"><div class="option">Add new user</div></a>
+                <div class="option active" data-id="allusers">View all users</div>
+                <div class="option" data-id="adduser">Add new user</div>
             </div>
             <div class="items admin">
                 <div class="headline">System Admin</div>
                 <hr>
-                <a href="edit-user.html"><div class="option">Edit account</div></a>
+                <div class="option">Edit account</div>
                 <div class="option">Sign out</div>
             </div>
         </div>
@@ -60,10 +60,10 @@
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <a href="admin-user.html"><span>View all users</span></a>
+                    <span id="back-all-users">View all users</span>
                 </p>
             </div>
-            <div class="info">
+            <form method="post" action="editeduser" class="info">
                 <div class="header">Edit User <span>(User ID:1234)</span></div>
                 <div class="details">
                     <!--First One -->
@@ -71,42 +71,77 @@
                         <div class="type flex-between">
                             <div>
                                 <div>First name<span>*</span></div>
-                                <input type="text" placeholder="Type the first name">
+                                <input type="text" placeholder="Type the first name" name="firstname" value="${featuredUser.firstName}" />
                             </div>
                             <div>
                                 <div>Location<span>*</span></div>
-                                <input type="text" placeholder="Type the location">
+                                <c:choose>
+                                    <c:when test="${featuredAddress.location != null}">
+                                        <input type="text" placeholder="Type the location" name="location" value="${featuredAddress.location}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" placeholder="Type the location" name="location" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Last name<span>*</span></div>
-                                <input type="text" placeholder="Type the last name">
+                                <input type="text" placeholder="Type the last name" name="lastname" value="${featuredUser.lastName}" />
                             </div>
                             <div>
                                 <div>City<span>*</span></div>
-                                <input type="text" placeholder="Type the city">
+                                <c:choose>
+                                    <c:when test="${featuredAddress.city != null}">
+                                        <input type="text" placeholder="Type the city" name="city" value="${featuredAddress.city}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" placeholder="Type the city" name="city" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Email address<span>*</span></div>
-                                <input type="text" placeholder="Type the first name">
+                                <input type="email" placeholder="Type the email address" name="email" value="${featuredUser.email}" />
                             </div>
                             <div>
                                 <div>Postcode<span>*</span></div>
-                                <input type="text" placeholder="Type the postcode">
+                                <c:choose>
+                                    <c:when test="${featuredAddress.postcode != null}">
+                                        <input type="number" placeholder="Type the postcode" name="postcode" value="${featuredAddress.postcode}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="number" placeholder="Type the postcode" name="postcode" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="type flex-between">
                             <div>
                                 <div>Phone number</div>
-                                <input type="text" placeholder="Type the phone number">
+                                <c:choose>
+                                    <c:when test="${featuredUser.phone != null}">
+                                        <input type="number" placeholder="Type the phone number" name="phone" value="${featuredUser.phone}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="number" placeholder="Type the phone number" name="phone" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             
                             <div>
                                 <div>Province<span>*</span></div>
-                                <input type="text" placeholder="Type the province">
+                                <c:choose>
+                                    <c:when test="${featuredAddress.province != null}">
+                                        <input type="text" placeholder="Type the province" name="province" value="${featuredAddress.province}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" placeholder="Type the province" name="province" value="" />
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>
@@ -114,21 +149,12 @@
                     <div class="part">
                         <div class="type flex-between">
                             <div>
-                                <div>Password<span>*</span></div>
-                                <input type="text" placeholder="Type the phone number">
-                            </div>
-                            <div>
                                 <div>Type of user<span>*</span></div>
-                                <select>
-                                    <option>Normal</option>
-                                    <option>Admin</option>
+                                <select name="userType">
+                                    <option value="${featuredUser.userType}"><c:out value="${featuredUser.userType}" /></option>
+                                    <option value="normal">Normal</option>
+                                    <option value="admin">Admin</option>
                                 </select>
-                            </div>
-                        </div>    
-                        <div class="type">
-                            <div>
-                                <div>Confirm password<span>*</span></div>
-                                <input type="text" placeholder="Type the phone number">
                             </div>
                         </div>    
                     </div>
@@ -136,10 +162,10 @@
                     <!-- Save Changes -->
                     <div class="buttons">
                         <button class="hallow butt">DISCARD</button>
-                        <button class="hallow butt save">SAVE CHANGES</button>
+                        <button class="hallow butt save" type="submit">SAVE CHANGES</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </body>
 </html>

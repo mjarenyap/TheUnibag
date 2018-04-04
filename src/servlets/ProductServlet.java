@@ -49,12 +49,132 @@ public class ProductServlet extends HttpServlet {
 
 	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// declare filter variables // retrieve from filter controls
+		String typeFilter = request.getParameter("typeFilter");
 		int sortingMode = 0;
 		try{
 			sortingMode = Integer.parseInt(request.getParameter("sortingMode"));
 		} catch(Exception e){
 			sortingMode = 0;
 		}
+
+		Encryption e = new Encryption();
+
+		// declare typeFilterFlag
+		boolean typeFilterFlag = false;
+		String bagType = "All";
+		if(typeFilter != null){
+			switch(typeFilter){
+				case "backpack": bagType = "Backpack";
+				typeFilterFlag = true;
+				break;
+
+				case "dufflebag": bagType = "Duffle Bag";
+				typeFilterFlag = true;
+				break;
+
+				case "handbag": bagType = "Handbag";
+				typeFilterFlag = true;
+				break;
+
+				case "messengerbag": bagType = "Messenger Bag";
+				typeFilterFlag = true;
+				break;
+
+				case "shoulderbag": bagType = "Shoulder Bag";
+				typeFilterFlag = true;
+				break;
+
+				case "tote": bagType = "Tote";
+				typeFilterFlag = true;
+				break;
+				
+				case "totebag": bagType = "Tote Bag";
+				typeFilterFlag = true;
+				break;
+
+				default: bagType = "All";
+			}
+		} else typeFilter = "All";
+
+		// get all products
+		List<Bag> baglist = BagService.getAllBags(sortingMode);
+
+		// apply filtration algorithm for the fetched bags
+		ArrayList<Bag> filteredBags = new ArrayList<>();
+		ArrayList<String> productNames = new ArrayList<>();
+		for(int i = 0; i < baglist.size(); i++){
+			boolean typeFlag = false;
+			if(typeFilterFlag){
+				if(baglist.get(i).getType().equalsIgnoreCase(bagType))
+					typeFlag = true;
+			}
+
+			else if(bagType.equalsIgnoreCase("All"))
+				typeFlag = true;
+
+			if(typeFlag){
+				filteredBags.add(baglist.get(i));
+				productNames.add(e.encryptID(baglist.get(i).getBagID()) + "#" + baglist.get(i).getName().replace(' ', '+'));
+			}
+		}
+		
+		request.setAttribute("typeFilter", typeFilter);
+		request.setAttribute("bagType", bagType);
+		request.setAttribute("baglist", filteredBags);
+		request.setAttribute("productnames", productNames);
+		request.getRequestDispatcher("products.jsp").forward(request, response);
+		
+		// preview 10 products according to pagination number
+		// set pagination numbers based on the total number of products
+			// products.size() / 10 [+1 if products.size() % 10 > 0]
+	}
+
+	protected void filteredProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// declare filter variables // retrieve from filter controls
+		String typeFilter = request.getParameter("typeFilter");
+		int sortingMode = 0;
+		try{
+			sortingMode = Integer.parseInt(request.getParameter("sortingMode"));
+		} catch(Exception e){
+			sortingMode = 0;
+		}
+
+		// declare typeFilterFlag
+		boolean typeFilterFlag = false;
+		String bagType = "All";
+		if(typeFilter != null){
+			switch(typeFilter){
+				case "backpack": bagType = "Backpack";
+				typeFilterFlag = true;
+				break;
+
+				case "dufflebag": bagType = "Duffle Bag";
+				typeFilterFlag = true;
+				break;
+
+				case "handbag": bagType = "Handbag";
+				typeFilterFlag = true;
+				break;
+
+				case "messengerbag": bagType = "Messenger Bag";
+				typeFilterFlag = true;
+				break;
+
+				case "shoulderbag": bagType = "Shoulder Bag";
+				typeFilterFlag = true;
+				break;
+
+				case "tote": bagType = "Tote";
+				typeFilterFlag = true;
+				break;
+				
+				case "totebag": bagType = "Tote Bag";
+				typeFilterFlag = true;
+				break;
+
+				default: bagType = "All";
+			}
+		} else typeFilter = "All";
 
 		ProductFilter pf = new ProductFilter();
 		boolean[] priceRanges = new boolean[5];
@@ -73,6 +193,7 @@ public class ProductServlet extends HttpServlet {
 		for(int i = 0; i < baglist.size(); i++){
 			boolean priceFlag = false;
 			boolean collectionFlag = false;
+			boolean typeFlag = false;
 
 			for(int j = 0; j < priceRanges.length; j++)
 				if(pf.checkPriceRange(baglist.get(i), priceRanges[j], j)){
@@ -85,25 +206,31 @@ public class ProductServlet extends HttpServlet {
 					collectionFlag = true;
 					break;
 				}
+			
+			if(typeFilterFlag){
+				if(baglist.get(i).getType().equalsIgnoreCase(bagType))
+					typeFlag = true;
+			}
 
-			if(priceFlag && collectionFlag)
+			else if(bagType.equalsIgnoreCase("All"))
+				typeFlag = true;
+
+			if(priceFlag && collectionFlag && typeFlag)
 				filteredBags.add(baglist.get(i));
 		}
-
+		
+		request.setAttribute("typeFilter", typeFilter);
+		request.setAttribute("bagType", bagType);
 		request.setAttribute("baglist", filteredBags);
 		request.getRequestDispatcher("products.jsp").forward(request, response);
-		
-		// preview 10 products according to pagination number
-		// set pagination numbers based on the total number of products
-			// products.size() / 10 [+1 if products.size() % 10 > 0]
 	}
 
 	protected void product(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// declare flag variables
-		boolean validProductPath = false;
+		boolean validProductPath = true;
 		
 		Encryption e = new Encryption();
-		// get contextualized url parametr of the product
+		// get contextualized url parameter of the product
 		String productPath = request.getParameter("path");
 		String[] splitParts = productPath.split("#");
 		long encryptedID = -1;
@@ -144,6 +271,7 @@ public class ProductServlet extends HttpServlet {
 
 				request.setAttribute("featuredSize", selectedSize);
 				request.setAttribute("featuredBag", selectedBag);
+				request.setAttribute("productPath", productPath);
 				request.getRequestDispatcher("single.jsp").forward(request, response);
 			}
 

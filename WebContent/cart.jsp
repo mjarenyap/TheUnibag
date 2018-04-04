@@ -25,8 +25,8 @@
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
 	</head>
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -49,7 +49,7 @@
 					</c:if>
 					<c:if test="${loggedUser != null}">
 						<div class="flex-start" id="logged-account">
-							<span><c:out value="${loggedUser.fname}"/> <c:out value="${loggedUser.lname}"/></span>
+							<span><c:out value="${loggedUser.firstName}"/> <c:out value="${loggedUser.lastName}"/></span>
 							<img src="assets/icons/avatar.svg" class="icon" />
 						</div>
 					</c:if>

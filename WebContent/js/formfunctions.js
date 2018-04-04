@@ -29,11 +29,6 @@ $(document).ready(function(){
 		productItemSelect(path);
 	});
 
-	$('#product-feed .content-wrapper').click(function(){
-		var path = $(this).attr('data-id');
-		productItemSelect(path);
-	});
-
 	$('#product-feed .content-wrapper .view-product').click(function(){
 		var path = $(this).attr('data-id');
 		productItemSelect(path);
@@ -60,8 +55,9 @@ function directProfile(){
 function directLogin(){
 	$('body').append('<form action="login" method="post" id="directLogin">'+
 		'<input type="hidden" name="purpose" value="'+
-		$('#pRedirect').val()+ 
+		$('#pRedirect').val()+
 		'" />'+
+		'<input type="hidden" name="processAccount" value="login" />'+
 		'</form>');
 	$('form#directLogin').submit();
 }
@@ -71,6 +67,7 @@ function directSignup(){
 		'<input type="hidden" name="purpose" value="'+
 		$('#pRedirect').val()+ 
 		'" />'+
+		'<input type="hidden" name="processAccount" value="login" />'+
 		'</form>');
 	$('form#directSignup').submit();
 }
@@ -81,12 +78,16 @@ function directCart(){
 }
 
 function directCheckout(){
-	$('body').append('<form action="checkout" method="post" id="directCheckout"></form>');
+	$('body').append('<form action="checkout" method="post" id="directCheckout">' +
+		'<input type="hidden" name="purpose" value="cart" />' +
+		'</form>');
 	$('form#directCheckout').submit();
 }
 
 function directSuccess(){
-	$('body').append('<form action="success" method="post" id="directSuccess"></form>');
+	$('body').append('<form action="success" method="post" id="directSuccess">' +
+		'<input type="hidden" name="purpose" value="checkout" />' +
+		'</form>');
 	$('form#directSuccess').submit();
 }
 
@@ -101,6 +102,7 @@ function directFilteredProducts(){
 		$('#collection-1') +
 		$('#collection-2') +
 		$('#collection-3') +
+		'<input type="hidden" name="typeFilter" value="' + sorting + '" />' +
 		'<input type="hidden" name="sortingMode" value="' + sorting + '" />' +
 		'</form>');
 	$('form#directFilteredProducts').submit();
@@ -112,7 +114,9 @@ function directAllProducts(){
 }
 
 function directAddToCart(){
-	$('body').append('<form action="addtocart" method="post" id="directAddToCart"></form>');
+	$('body').append('<form action="addtocart" method="post" id="directAddToCart">' +
+		'<input type="hidden" name="productPath" value = "' + $('#product-info').attr("data-id") + '"/>' +
+		'</form>');
 	$('form#directAddToCart').submit();
 }
 

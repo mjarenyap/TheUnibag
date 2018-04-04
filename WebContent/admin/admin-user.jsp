@@ -28,62 +28,61 @@
         <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <script src="js/adminformfunctions.js" type="text/javascript"></script> 
     </head>
-    
     <body>
         <div class="sidenav">
-            <div class="accent"><img id="logo" src="assets/images/Unibag-logo.png" draggable="false"></div>
+            <div class="accent"><img id="logo" src="assets/images/unibag-logo.png" draggable="false"></div>
             <div class="items">
                 <div class="headline">Orders</div>
                 <hr>
-                <a href="admin-index.html"><div class="option">View all orders</div></a>
+                <div class="option" data-id="allorders">View all orders</div>
             </div>
             
             <div class="items">
                 <div class="headline">Products</div>
                 <hr>
-                <a href="admin-bag.html"><div class="option">View all products</div></a>
-                <a href="add-product.html"><div class="option">Add new product</div></a>
+                <div class="option" data-id="allproducts">View all products</div>
+                <div class="option" data-id="addproduct">Add new product</div>
             </div>
             
             <div class="items">
                 <div class="headline">Users</div>
                 <hr>
-                <a href="admin-user.html"><div class="option active">View all users</div></a>
-                <a href="add-user.html"><div class="option">Add new user</div></a>
+                <div class="option active" data-id="allusers">View all users</div>
+                <div class="option" data-id="adduser">Add new user</div>
             </div>
             
             <div class="items admin">
                 <div class="headline">System Admin</div>
                 <hr>
-                <a href="edit-user.html"><div class="option">Edit account</div></a>
+                <div class="option">Edit account</div>
                 <div class="option">Sign out</div>
             </div>
         </div>
         <div class="dashboard">
             <div class="nav-header flex-between">
                 <div><input type="text" placeholder="search" id="bar"></div>
-                <div><button id="save-changes">SAVE CHANGES</button></div>  
+                <div><button id="save-changes" data-id="du">SAVE CHANGES</button></div>  
             </div>
             <div class="table">
                 <table>  
                     <tr>
                         <th></th>
-                        <th>User ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
+                        <th>Phone number</th>
                         <th>User Type</th>
                         <th></th>
                     </tr>
-                    <c:forEach items="${userlist}" var="user">
+                    <c:forEach items="${userlist}" var="user" varStatus="status">
                         <tr>
-                            <td><input type="checkbox"></td>
-                            <td><c:out value="${user.userID}" /></td>
-                            <td><c:out value="${user.fname}" /></td>
-                            <td><c:out value="${user.lname}" /></td>
+                            <td><input type="checkbox" class="delete-status" name="deletelist" value="${usernames[status.index]}" /></td>
+                            <td><c:out value="${user.firstName}" /></td>
+                            <td><c:out value="${user.lastName}" /></td>
                             <td><c:out value="${user.email}" /></td>
+                            <td><c:out value="${user.phone}" /></td>
                             <td><c:out value="${user.userType}" /></td>
-                            <td><a href="view-user.html"><button class="hallow">Edit</button></a></td>
+                            <td><button class="hallow edit" data-id="${usernames[status.index]}">Edit</button></td>
                         </tr>
                     </c:forEach>
                 </table>
