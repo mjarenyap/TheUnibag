@@ -48,7 +48,9 @@ function directHome(){
 }
 
 function directProfile(){
-	$('body').append('<form action="profile" method="post" id="directProfile"></form>');
+	$('body').append('<form action="profile" method="post" id="directProfile">' +
+		'<input type="hidden" name="purpose" value="edit-pg" />'
+		'</form>');
 	$('form#directProfile').submit();
 }
 

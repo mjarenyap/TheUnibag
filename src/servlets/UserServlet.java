@@ -19,7 +19,7 @@ import security.FieldChecker;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(urlPatterns = {"/profile/general", "/profile/address", "/password/password", "/profile"})
+@WebServlet(urlPatterns = {"/profile-general", "/profile-address", "/password-password", "/profile"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -41,13 +41,13 @@ public class UserServlet extends HttpServlet {
 			case "/profile": profileRequest(request, response);
 			break;
 
-			case "/profile/general": profileGeneral(request, response);
+			case "/profile-general": profileGeneral(request, response);
 			break;
 
-			case "/profile/address": profileAddress(request, response);
+			case "/profile-address": profileAddress(request, response);
 			break;
 
-			case "/profile/password": profilePassword(request, response);
+			case "/profile-password": profilePassword(request, response);
 			break;
 
 			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
@@ -59,14 +59,18 @@ public class UserServlet extends HttpServlet {
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			String purpose = request.getParameter("purpose");
 
-			if(purpose.equals("edit-pa"))
-				editAddress(request, response);
+			if(purpose != null){
+				if(purpose.equals("edit-pa"))
+					editAddress(request, response);
 
-			else if(purpose.equals("edit-pg"))
-				editGeneral(request, response);
+				else if(purpose.equals("edit-pg"))
+					editGeneral(request, response);
 
-			else if (purpose.equals("edit-pp"))
-				editPassword(request, response);
+				else if (purpose.equals("edit-pp"))
+					editPassword(request, response);
+
+				else profileGeneral(request, response);
+			}
 
 			else profileGeneral(request, response);
 		}

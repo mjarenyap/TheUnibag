@@ -73,6 +73,11 @@
 					<button>Change Password</button>
 					<hr/>
 					<button>Address Information</button>
+					<br/>
+					<br/>
+					<br/>
+					<hr/>
+					<button>Logout</button>
 				</div>
 				<form action="profile" method="post" id="profile-form">
 					<h1 id="context-title">General Information</h1>
