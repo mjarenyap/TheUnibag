@@ -68,16 +68,16 @@
 			<hr/>
 			<div class="flex-start">
 				<div id="context-wrapper">
-					<button class="active">General Information</button>
+					<button class="active" data-id="profile-general">General Information</button>
 					<hr/>
-					<button>Change Password</button>
+					<button data-id="profile-password">Change Password</button>
 					<hr/>
-					<button>Address Information</button>
+					<button data-id="profile-address">Address Information</button>
 					<br/>
 					<br/>
 					<br/>
 					<hr/>
-					<button>Logout</button>
+					<button id="logout">Logout</button>
 				</div>
 				<form action="profile" method="post" id="profile-form">
 					<h1 id="context-title">General Information</h1>

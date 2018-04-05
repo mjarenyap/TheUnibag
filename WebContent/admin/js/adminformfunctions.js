@@ -28,6 +28,8 @@ $(document).ready(function(){
 		var url = $(this).attr("data-id");
 		directViewUserPage(url);
 	});
+
+	$('#logout').click(directLogout);
 });
 
 function directAdminControlPage(url){
@@ -70,4 +72,9 @@ function directDelete(target){
 	else $('form#directDelete').append('<input type="checkbox" class="delete-status" name="deletelist" />');
 
 	$('form#directDelete').submit();
+}
+
+function directLogout(){
+	$('body').append('<form action="/TheUnibag/logout" method="post" id="directLogout"></form>');
+	$('#directLogout').submit();
 }

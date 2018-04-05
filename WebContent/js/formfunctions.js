@@ -18,6 +18,7 @@ $(document).ready(function(){
 	$('#add-to-cart').click(directAddToCart);
 	$('#back-home').click(directHome);
 	$('#browse-products').click(directAllProducts);
+	$('#logout').click(directLogout);
 
 	$('nav ul.subnav li').click(function(){
 		var category = $(this).attr('data-id');
@@ -48,9 +49,7 @@ function directHome(){
 }
 
 function directProfile(){
-	$('body').append('<form action="profile" method="post" id="directProfile">' +
-		'<input type="hidden" name="purpose" value="edit-pg" />'
-		'</form>');
+	$('body').append('<form method="post" id="directProfile" action="profile-general"></form>');
 	$('form#directProfile').submit();
 }
 
@@ -120,6 +119,11 @@ function directAddToCart(){
 		'<input type="hidden" name="productPath" value = "' + $('#product-info').attr("data-id") + '"/>' +
 		'</form>');
 	$('form#directAddToCart').submit();
+}
+
+function directLogout(){
+	$('body').append('<form action="/TheUnibag/logout" method="post" id="directLogout"></form>');
+	$('#directLogout').submit();
 }
 
 function redirectProfile(profilePage){
