@@ -80,6 +80,13 @@
 					<button id="logout">Logout</button>
 				</div>
 				<form action="profile" method="post" id="profile-form">
+					<c:if test="${error == true}">
+						<div class="error-banner flex-between">
+							<p>Oh no! There was an error saving your changes.</p>
+							<i class="fa fa-close"></i>
+						</div>
+						<br/>
+					</c:if>
 					<h1 id="context-title">General Information</h1>
 					<label>
 						<span>First name</span>

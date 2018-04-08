@@ -49,9 +49,6 @@ public class UserServlet extends HttpServlet {
 
 			case "/profile-password": profilePassword(request, response);
 			break;
-
-			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
-			break;
 		}
 	}
 
@@ -126,7 +123,8 @@ public class UserServlet extends HttpServlet {
 					currentUser.setEmail(email);
 					currentUser.setPhone(phone);
 
-					UserService.updateUser(currentUser.getUserID(), currentUser);
+					UserService.updateUser(decryptedID, currentUser);
+					request.getSession().setAttribute("Account", currentUser);
 
 					successFlag = true;
 					errorFlag = false;
@@ -204,7 +202,7 @@ public class UserServlet extends HttpServlet {
 					Address currentAddress = AddressService.getAddress(currentUser.getUserID());
 					if(currentAddress == null){
 						currentAddress = new Address();
-						currentAddress.setUserID(currentUser.getUserID());
+						currentAddress.setUserID(decryptedID);
 						currentAddress.setLocation(location);
 						currentAddress.setCity(city);
 						currentAddress.setPostcode(postcode);
@@ -213,7 +211,7 @@ public class UserServlet extends HttpServlet {
 					}
 
 					else{
-						currentAddress.setUserID(currentUser.getUserID());
+						currentAddress.setUserID(decryptedID);
 						currentAddress.setLocation(location);
 						currentAddress.setCity(city);
 						currentAddress.setPostcode(postcode);
@@ -297,7 +295,7 @@ public class UserServlet extends HttpServlet {
 				// modify the currentUser's credentials
 				if(validCredentialsFlag && validPasswordFlag && !errorFlag){
 					currentUser.setPassword(newPassword);
-					UserService.updateUser(currentUser.getUserID(), currentUser);
+					UserService.updateUser(decryptedID, currentUser);
 
 					successFlag = true;
 					errorFlag = false;

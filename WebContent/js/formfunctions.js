@@ -19,6 +19,7 @@ $(document).ready(function(){
 	$('#back-home').click(directHome);
 	$('#browse-products').click(directAllProducts);
 	$('#logout').click(directLogout);
+	$('#sortProducts').change(directSortProducts);
 
 	$('nav ul.subnav li').click(function(){
 		var category = $(this).attr('data-id');
@@ -97,21 +98,70 @@ function directSuccess(){
 	$('form#directSuccess').submit();
 }
 
-function directFilteredProducts(){
-	var sorting = $('#sortProducts').val();
-	$('body').append('<form action="products" method="post" id="directFilteredProducts">' +
-		$('#price-range-1') +
-		$('#price-range-2') +
-		$('#price-range-3') +
-		$('#price-range-4') +
-		$('#price-range-5') +
-		$('#collection-1') +
-		$('#collection-2') +
-		$('#collection-3') +
-		'<input type="hidden" name="typeFilter" value="' + sorting + '" />' +
-		'<input type="hidden" name="sortingMode" value="' + sorting + '" />' +
+function directSortProducts(){
+	var mode = $("#sortProducts").val();
+	$('body').append('<form method="get" action="products" id="directSortProducts">' +
+		'<input type="hidden" name="sortingMode" value="' + mode + '" />' +
 		'</form>');
-	$('form#directFilteredProducts').submit();
+	$('form#directSortProducts').submit();
+}
+
+function directFilteredProducts(){
+	$("#product-feed .content-wrapper").hide();
+
+	var prange1 = $("#price-range-1");
+	var prange2 = $("#price-range-2");
+	var prange3 = $("#price-range-3");
+	var prange4 = $("#price-range-4");
+	var prange5 = $("#price-range-5");
+
+	var collect1 = $("collection-1");
+	var collect2 = $("collection-2");
+	var collect3 = $("collection-3");
+
+	// 1st wave
+	if(prange1.is(":checked"))
+		$("#product-feed .prange1").show();
+
+	if(prange2.is(":checked"))
+		$("#product-feed .prange2").show();
+
+	if(prange3.is(":checked"))
+		$("#product-feed .prange3").show();
+
+	if(prange4.is(":checked"))
+		$("#product-feed .prange4").show();
+
+	if(prange5.is(":checked"))
+		$("#product-feed .prange5").show();
+
+	// 2nd wave
+	if(collect1.is(":checked"))
+		$("#product-feed .collect1").show();
+
+	if(collect2.is(":checked"))
+		$("#product-feed .collect2").show();
+
+	if(collect3.is(":checked"))
+		$("#product-feed .collect3").show();
+
+	// 3rd wave
+	if(prange1.is(":checked"))
+		$("#product-feed .prange1").show();
+
+	if(prange2.is(":checked"))
+		$("#product-feed .prange2").show();
+
+	if(prange3.is(":checked"))
+		$("#product-feed .prange3").show();
+
+	if(prange4.is(":checked"))
+		$("#product-feed .prange4").show();
+
+	if(prange5.is(":checked"))
+		$("#product-feed .prange5").show();
+
+
 }
 
 function directAllProducts(){

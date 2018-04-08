@@ -61,10 +61,8 @@ public class LogServlet extends HttpServlet {
 			case "/logout": logout(request, response);
 			break;
 
-			/*
-			default: home(request, response);
+			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
 			break;
-			*/
 		}
 	}
 
@@ -144,10 +142,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void loginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null)
-			home(request, response);
-
-		else {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
 			String pRedirect = request.getParameter("purpose");
 			PurposeChecker pc = new PurposeChecker();
 
@@ -158,6 +153,8 @@ public class LogServlet extends HttpServlet {
 
 			else home(request, response);
 		}
+		
+		else home(request, response);
 	}
 
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -238,6 +235,7 @@ public class LogServlet extends HttpServlet {
 				else{
 					errorFlag = true;
 					request.setAttribute("error", errorFlag);
+					request.setAttribute("purpose", redirect);
 					request.getRequestDispatcher("login.jsp").forward(request, response);
 				}
 			}
@@ -248,6 +246,7 @@ public class LogServlet extends HttpServlet {
 			else if(!validCredentialFlag && validRedirectFlag){
 				errorFlag = true;
 				request.setAttribute("error", errorFlag);
+				request.setAttribute("purpose", redirect);
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 			}
 
@@ -258,10 +257,7 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void signupPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null)
-			home(request, response);
-
-		else {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
 			String pRedirect = request.getParameter("purpose");
 			PurposeChecker pc = new PurposeChecker();
 
@@ -272,6 +268,8 @@ public class LogServlet extends HttpServlet {
 
 			else home(request, response);
 		}
+
+		else home(request, response);
 	}
 
 	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -348,6 +346,7 @@ public class LogServlet extends HttpServlet {
 					errorFlag = true;
 					request.setAttribute("error", errorFlag);
 					request.setAttribute("duplicate", duplicateFlag);
+					request.setAttribute("purpose", redirect);
 					request.getRequestDispatcher("signup.jsp").forward(request, response);
 				}
 
@@ -359,6 +358,7 @@ public class LogServlet extends HttpServlet {
 				duplicateFlag = false;
 				request.setAttribute("error", errorFlag);
 				request.setAttribute("duplicate", duplicateFlag);
+				request.setAttribute("purpose", redirect);
 				request.getRequestDispatcher("signup.jsp").forward(request, response);
 			}
 		}

@@ -90,6 +90,8 @@ public class OrderServlet extends HttpServlet {
 		boolean emptyFlag = true;
 		boolean authenticFlag = false;
 
+		Encryption e = new Encryption();
+
 		// check purpose if it contains "cart"
 		String purpose = request.getParameter("purpose");
 		if(purpose.equals("cart"))
@@ -102,7 +104,7 @@ public class OrderServlet extends HttpServlet {
 		
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			User currentUser = (User)request.getSession().getAttribute("Account");
-			if(UserService.getUser(currentUser.getUserID()) != null)
+			if(UserService.getUser(e.encryptID(currentUser.getUserID())) != null)
 				authenticFlag = true;
 
 			// autofill the fields for logged and authentic users
@@ -143,6 +145,8 @@ public class OrderServlet extends HttpServlet {
 		boolean purposeFlag = false;
 		boolean emptyFlag = true;
 		boolean validFieldFlag = false;
+
+		Encryption e = new Encryption();
 
 		// check for purpose
 		String purpose = request.getParameter("purpose");
@@ -193,12 +197,12 @@ public class OrderServlet extends HttpServlet {
 
 			// check the type of user ordering
 			if(currentUser != null)
-				userid = currentUser.getUserID();
+				userid = e.decryptID(currentUser.getUserID());
 
 			else{
 				// create new temporary user
-				userid = (long)UserService.getAllUsers().size();
-				userid++;
+				List<User> userlist = UserService.getAllUsers();
+				userid = userlist.get(userlist.size() - 1).getUserID() + 1;
 
 				tempUser.setUserID(userid);
 				tempUser.setPassword("");
@@ -223,6 +227,7 @@ public class OrderServlet extends HttpServlet {
 				newOrder.setProvince(province);
 				LocalDateTime now = LocalDateTime.now();
 				newOrder.setOrderDate(now);
+				newOrder.setStatus(false);
 				OrderService.addOrder(newOrder);
 			}
 
@@ -236,7 +241,7 @@ public class OrderServlet extends HttpServlet {
 		}
 
 		else if(purposeFlag && !emptyFlag && !validFieldFlag){
-			request.setAttribute("error", validFieldFlag);
+			request.setAttribute("error", !validFieldFlag);
 			request.getRequestDispatcher("checkout.jsp").forward(request, response);
 		}
 
