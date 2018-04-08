@@ -33,7 +33,7 @@
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
 		<c:set var="loggedUser" value="${sessionScope.Account}" />
-		<input type="hidden" id="typeFilter" value="${typeFilter}" />
+		<input type="hidden" id="typeFilter" name="typeFilter" value="${typeFilter}" />
 		<!-- Sticky navigation -->
 		<nav class="sticky">
 			<ul class="mainnav flex-between">

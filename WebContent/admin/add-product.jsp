@@ -55,8 +55,8 @@
             <div class="items admin">
                 <div class="headline">System Admin</div>
                 <hr>
-                <div class="option">Edit account</div>
-                <div class="option">Sign out</div>
+                <div class="option" id="edit-account">Edit account</div>
+                <div class="option" id="logout">Sign out</div>
             </div>
         </div>
         <div class="dashboard">

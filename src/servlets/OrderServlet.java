@@ -25,7 +25,7 @@ import security.Encryption;
 /**
  * Servlet implementation class OrderServlet
  */
-@WebServlet(urlPatterns = {"/shoppingcart", "/checkout", "/success", "/addtocart"})
+@WebServlet(urlPatterns = {"/shoppingcart", "/checkout", "/success", "/addtocart", "/clear", "/removeitem"})
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -56,6 +56,11 @@ public class OrderServlet extends HttpServlet {
 
 			case "/addtocart": addToCart(request, response);
 			break;
+
+			case "/clear": clearCart(request, response);
+			break;
+
+			case "/removeitem": removeFromCart(request, response);
 		}
 	}
 
@@ -66,14 +71,18 @@ public class OrderServlet extends HttpServlet {
 		// check cart session for items
 		@SuppressWarnings("unchecked")
 		ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+		ArrayList<String> productNames = new ArrayList<>();
 		float subtotal = 0;
 		// check if there are items in the shopping cart
 		if(cartlist.size() > 0 && cartlist != null){
 			emptyFlag = false;
 
 			// compute for subtotal
-			for(int i = 0; i < cartlist.size(); i++)
+			for(int i = 0; i < cartlist.size(); i++){
+				String pname = cartlist.get(i).getName().replace(' ', '+');
+				String productPath = cartlist.get(i).getBagID() + "#" + pname;
 				subtotal += cartlist.get(i).getPrice();
+			}
 
 			// set computed total as request attribute "subtotal"
 			request.setAttribute("subtotal", subtotal);
@@ -81,6 +90,7 @@ public class OrderServlet extends HttpServlet {
 
 		request.setAttribute("empty", emptyFlag);
 		request.setAttribute("subtotal", subtotal);
+		response.setAttribute("productPaths", productNames);
 		request.getRequestDispatcher("cart.jsp").forward(request, response);
 	}
 
@@ -288,11 +298,69 @@ public class OrderServlet extends HttpServlet {
 			request.setAttribute("error", foundFlag);
 
 			if(foundFlag){
+				selectedBag.setBagID(e.encryptID(selectedBag.getBagID()));
 				cartlist.add(selectedBag);
 				request.getSession().setAttribute("ShoppingCart", cartlist);
 			}
 		}
 
+		shoppingCart(request, response);
+	}
+
+	protected void removeFromCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String productPath = request.getParameter("item");
+
+		// declare boolean variables
+		boolean validProductPath = true;
+
+		@SuppressWarnings("unchecked")
+		ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+		if(cartlist.size() > 0 && cartlist != null){
+			String[] splitParts = productPath.split("#");
+			long encryptedID = -1;
+
+			try{
+				encryptedID = Long.parseLong(splitParts[0]);
+			} catch(Exception er){
+				validProductPath = false;
+			}
+
+			if(splitParts.length != 2)
+				validProductPath = false;
+
+			if(validProductPath){
+				// declare second layer flag variables
+				boolean foundFlag = false;
+
+				long decryptedID = e.decryptID(encryptedID);
+				String productName = splitParts[1].replace('+', ' ');
+
+				Bag selectedBag = BagService.getBag(decryptedID);
+				if(selectedBag != null && productName.equalsIgnoreCase(selectedBag.getName()))
+					foundFlag = true;
+
+				request.setAttribute("error", foundFlag);
+
+				if(foundFlag){
+					for(int i = 0; i < cartlist.size(); i++)
+						if(encryptedID == cartlist.get(i).getBagID()){
+							cartlist.remove(i);
+							break;
+						}
+
+					request.getSession().setAttribute("ShoppingCart", cartlist);
+				}
+			}
+
+			shoppingCart(request, response);
+		}
+
+		else shoppingCart(request, response);
+	}
+
+	protected void clearCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ArrayList<Bag> emptylist = new ArrayList<>();
+		request.getSession().setAttribute("ShoppingCart", emptylist);
 		shoppingCart(request, response);
 	}
 

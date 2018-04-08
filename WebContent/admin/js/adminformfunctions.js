@@ -30,7 +30,13 @@ $(document).ready(function(){
 	});
 
 	$('#logout').click(directLogout);
+	$('#edit-account').click(directEditAccount);
 });
+
+function directEditAccount(){
+	$('body').append('<form method="post" id="directEditAccount" action="editaccount"></form>');
+	$('form#directEditAccount').submit();
+}
 
 function directAdminControlPage(url){
 	$('body').append('<form method="post" id="directAdminControlPage" action="' + url + '"></form>');

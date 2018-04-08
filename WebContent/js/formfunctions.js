@@ -10,6 +10,7 @@ $(document).ready(function(){
 	$('#cta').click(directSignup);
 	$('#checkout').click(directCheckout);
 	$('#continue-shopping').click(directHome);
+	$('#clear-cart').click(directClearCart);
 	$('#go-back').click(directCart);
 	$('#confirm-button').click(directSuccess);
 	$('#see-more').click(directAllProducts);
@@ -46,6 +47,11 @@ $(document).ready(function(){
 	$('#context-wrapper button.profile-nav').click(function(){
 		var nav = $(this).attr("data-id");
 		directProfileNav(nav);
+	});
+
+	$('#table-of-cart .remove').click(function(){
+		var url = $(this).attr("data-id");
+		directRemoveItem(url);
 	});
 });
 
@@ -84,6 +90,18 @@ function directCart(){
 	$('form#directCart').submit();
 }
 
+function directClearCart(){
+	$('body').append('<form action="clear" method="post" id="directClearCart"></form>');
+	$('form#directClearCart').submit();
+}
+
+function directRemoveItem(url){
+	$('body').append('<form action="removeitem" method="get" id="directRemoveItem">' +
+		'<input type="hidden" name="item" value="' + url + '" />'
+		'</form>');
+	$('form#directRemoveItem').submit();
+}
+
 function directCheckout(){
 	$('body').append('<form action="checkout" method="post" id="directCheckout">' +
 		'<input type="hidden" name="purpose" value="cart" />' +
@@ -102,6 +120,7 @@ function directSortProducts(){
 	var mode = $("#sortProducts").val();
 	$('body').append('<form method="get" action="products" id="directSortProducts">' +
 		'<input type="hidden" name="sortingMode" value="' + mode + '" />' +
+		$("#typeFilter") + 
 		'</form>');
 	$('form#directSortProducts').submit();
 }

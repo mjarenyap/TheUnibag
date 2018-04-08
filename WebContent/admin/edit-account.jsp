@@ -57,15 +57,15 @@
             <div class="items admin">
                 <div class="headline">System Admin</div>
                 <hr>
-                <a href="edit-user.html"><div class="option active">Edit account</div></a>
-                <div class="option">Sign out</div>
+                <div class="option active" id="edit-account">Edit account</div>
+                <div class="option" id="logout">Sign out</div>
             </div>
         </div>
         <div class="dashboard">
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <a href="admin-user.html"><span>View all users</span></a>
+                    <span id="back-all-products">View all users</span>
                 </p>
             </div>
             <div class="info">
