@@ -52,8 +52,8 @@
             <div class="items admin">
                 <div class="headline">System Admin</div>
                 <hr>
-                <div class="option">Edit account</div>
-                <div class="option">Sign out</div>
+                <div class="option" id="edit-account">Edit account</div>
+                <div class="option" id="logout">Sign out</div>
             </div>
         </div>
         <div class="dashboard">
@@ -64,7 +64,14 @@
                 </p>
             </div>
             <form method="post" action="editeduser" class="info">
-                <div class="header">Edit User <span>(User ID:1234)</span></div>
+                <div class="header">Edit User <span>(User ID:<c:out value="${featuredUser.userID}" />)</span></div>
+                <c:if test="${error == true}">
+                    <br/>
+                    <div class="error-banner flex-between">
+                        <p>An error has occured. Please try again.</p>
+                        <i class="fa fa-close"></i>
+                    </div>
+                </c:if>
                 <div class="details">
                     <!--First One -->
                     <div class="part">

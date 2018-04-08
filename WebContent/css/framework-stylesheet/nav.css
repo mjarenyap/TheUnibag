@@ -26,6 +26,7 @@ nav ul li{
 	font-size: 0.8em;
 	text-transform: uppercase;
 	letter-spacing: 1px;
+	cursor: pointer;
 }
 
 nav #main-logo{

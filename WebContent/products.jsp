@@ -33,7 +33,7 @@
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
 		<c:set var="loggedUser" value="${sessionScope.Account}" />
-		<input type="hidden" id="typeFilter" value="${typeFilter}" />
+		<input type="hidden" id="typeFilter" name="typeFilter" value="${typeFilter}" />
 		<!-- Sticky navigation -->
 		<nav class="sticky">
 			<ul class="mainnav flex-between">
@@ -71,21 +71,14 @@
 				<h1 id="main-heading">Browse <c:out value="${bagType}" /> Products</h1>
 				<div class="flex-start">
 					<select id="sortProducts">
+						<option value="${sortingMode}"><c:out value="${sortName}" /></option>
 						<option value="0">Names A-Z</option>
 						<option value="1">Names Z-A</option>
-						<option value="2">Price</option>
-						<option value="3">Type of bag</option>
-						<option value="4">Brand</option>
+						<option value="2">Price Ascending</option>
+						<option value="3">Price Descending</option>
+						<option value="4">Type of bag</option>
+						<option value="5">Brand</option>
 					</select>
-					<div id="pagination">
-						<ul>
-							<li class="active">1</li>
-							<li>2</li>
-							<li>3</li>
-							<li>4</li>
-							<li>5</li>
-						</ul>
-					</div>
 				</div>
 			</div>
 			<div class="flex-between" id="product-list">
@@ -102,12 +95,12 @@
 					<label>
 						<input type="checkbox" id="price-range-2" name="price-range-2" class="side-filter" checked />
 						<span></span>
-						$40.00 - $99.00
+						$40.00 - $99.99
 					</label>
 					<label>
 						<input type="checkbox" id="price-range-3" name="price-range-3" class="side-filter" checked />
 						<span></span>
-						$100.00 - $149.00
+						$100.00 - $149.99
 					</label>
 					<label>
 						<input type="checkbox" id="price-range-4" name="price-range-4" class="side-filter" checked />
@@ -119,7 +112,6 @@
 						<span></span>
 						more than $200.00
 					</label>
-
 
 					<h4 class="criteria">Collections</h4>
 					<label>
@@ -140,7 +132,7 @@
 				</div>
 				<div id="product-feed">
 					<c:forEach items="${baglist}" var="bag" varStatus="status">
-						<div class="content-wrapper">
+						<div class="content-wrapper ${pfilter[status.index]} ${cfilter[status.index]}">
 							<div class="featured-image"></div>
 							<div class="product-info">
 								<h1 class="product-name"><c:out value="${bag.name}"/></h1>
@@ -151,7 +143,7 @@
 								<button class="hallow view-product" data-id="${productnames[status.index]}">View product details</button>
 							</div>
 						</div>
-						<hr/>
+						<hr class="${pfilter[status.index]} ${cfilter[status.index]}" />
 					</c:forEach>
 				</div>
 			</div>

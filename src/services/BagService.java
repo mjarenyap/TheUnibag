@@ -142,7 +142,7 @@ public class BagService {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction trans = em.getTransaction();
 
-		String[] modes = {"bag.name ASC", "bag.name DESC", "bag.price ASC", "bag.type ASC", "bag.brand ASC"};
+		String[] modes = {"bag.name ASC", "bag.name DESC", "bag.price ASC", "bag.price DESC", "bag.type ASC", "bag.brand ASC"};
 		
 		try{
 			trans.begin();
