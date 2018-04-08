@@ -19,7 +19,7 @@ import security.FieldChecker;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(urlPatterns = {"/profile-general", "/profile-address", "/password-password", "/profile"})
+@WebServlet(urlPatterns = {"/profile-general", "/profile-address", "/profile-password", "/profile"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -102,7 +102,7 @@ public class UserServlet extends HttpServlet {
 			User currentUser = (User)request.getSession().getAttribute("Account");
 			long decryptedID = e.decryptID(currentUser.getUserID());
 			if(UserService.getUser(decryptedID) != null){
-
+				currentUser = UserService.getUser(decryptedID);
 				// decrypt the current user's password
 				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
 
@@ -181,7 +181,8 @@ public class UserServlet extends HttpServlet {
 			User currentUser = (User)request.getSession().getAttribute("Account");
 			long decryptedID = e.decryptID(currentUser.getUserID());
 			if(UserService.getUser(decryptedID) != null){
-
+				currentUser = UserService.getUser(decryptedID);
+				
 				// decrypt the current user's password
 				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
 
@@ -236,7 +237,7 @@ public class UserServlet extends HttpServlet {
 				request.getRequestDispatcher("profile-address.jsp").forward(request, response);
 			}
 
-			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+			else request.getRequestDispatcher("page-404.jsp").forward(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
@@ -281,7 +282,7 @@ public class UserServlet extends HttpServlet {
 			User currentUser = (User)request.getSession().getAttribute("Account");
 			long decryptedID = e.decryptID(currentUser.getUserID());
 			if(UserService.getUser(decryptedID) != null){
-
+				currentUser = UserService.getUser(decryptedID);
 				// decrypt the current user's password
 				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
 
@@ -314,7 +315,7 @@ public class UserServlet extends HttpServlet {
 				request.getRequestDispatcher("profile-password.jsp").forward(request, response);
 			}
 
-			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+			else request.getRequestDispatcher("page-404.jsp").forward(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);

@@ -70,6 +70,13 @@
             </div>
             <div class="info">
                 <div class="header">Edit Your Account</div>
+                <c:if test="${error == true}">
+                    <br/>
+                    <div class="error-banner flex-between">
+                        <p>An error has occured. Please try again.</p>
+                        <i class="fa fa-close"></i>
+                    </div>
+                </c:if>
                 <div class="details">
                     <!--First One -->
                     <div class="part">

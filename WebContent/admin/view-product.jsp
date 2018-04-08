@@ -64,7 +64,14 @@
                 </p>
             </div>
             <form method="post" action="editedproduct" class="info">
-                <div class="header">Edit Product</div>
+                <div class="header">Edit Product <span>(Product ID:<c:out value="${featuredBag.bagID}" />)</span></div>
+                <c:if test="${error == true}">
+                    <br/>
+                    <div class="error-banner flex-between">
+                        <p>An error has occured. Please try again.</p>
+                        <i class="fa fa-close"></i>
+                    </div>
+                </c:if>
                 <div class="details flex-between" >
                     <!--First One -->
                     <div class="part">

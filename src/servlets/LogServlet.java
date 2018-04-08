@@ -197,6 +197,7 @@ public class LogServlet extends HttpServlet {
 						if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && password.equals(decryptedPassword) &&
 							userlist.get(i).getUserType().equalsIgnoreCase("normal")){
 							correctUser = userlist.get(i);
+							correctUser.setUserID(e.encryptID(correctUser.getUserID()));
 							correctUser.setPassword("");
 							break;
 						}

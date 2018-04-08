@@ -41,6 +41,11 @@ $(document).ready(function(){
 	});
 
 	$('.side-filter').change(directFilteredProducts);
+
+	$('#context-wrapper button.profile-nav').click(function(){
+		var nav = $(this).attr("data-id");
+		directProfileNav(nav);
+	});
 });
 
 function directHome(){
@@ -126,17 +131,21 @@ function directLogout(){
 	$('#directLogout').submit();
 }
 
+function directProfileNav(nav){
+	$('body').append('<form method="post" id="directProfileNav" action="' + nav + '"></form>');
+	$('#directProfileNav').submit();
+}
+
 function redirectProfile(profilePage){
 	if(profilePage === 'pa')
-		$('body').append('<form action="profile/address" method="post" id="dicardChanges"></form>');
+		$('body').append('<form action="profile-address" method="post" id="dicardChanges"></form>');
 
 	else if(profilePage === 'pg'){
-		$('body').append('<form action="profile/general" method="post" id="dicardChanges"></form>');
-		$('form#discardChanges').submit();
+		$('body').append('<form action="profile-general" method="post" id="dicardChanges"></form>');
 	}
 
 	else if(profilePage === 'pp')
-		$('body').append('<form action="profile/password" method="post" id="dicardChanges"></form>');
+		$('body').append('<form action="profile-password" method="post" id="dicardChanges"></form>');
 
 	else $('body').append('<form action="profile" method="post" id="dicardChanges"></form>');
 

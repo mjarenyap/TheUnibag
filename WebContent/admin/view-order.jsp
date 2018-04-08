@@ -64,7 +64,14 @@
                 </p>
             </div>
             <div class="info">
-                <div class="header">Edit User <span>(User ID:1234)</span></div>
+                <div class="header">Edit User <span>(User ID:<c:out value="${}" />)</span></div>
+                <c:if test="${error == true}">
+                    <br/>
+                    <div class="error-banner flex-between">
+                        <p>An error has occured. Please try again.</p>
+                        <i class="fa fa-close"></i>
+                    </div>
+                </c:if>
                 <div class="details">
                     <!--First One -->
                     <div class="part">

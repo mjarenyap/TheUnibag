@@ -68,11 +68,11 @@
 			<hr/>
 			<div class="flex-start">
 				<div id="context-wrapper">
-					<button data-id="profile-general">General Information</button>
+					<button class="profile-nav" data-id="profile-general">General Information</button>
 					<hr/>
-					<button class="active" data-id="profile-password">Change Password</button>
+					<button class="active profile-nav" data-id="profile-password">Change Password</button>
 					<hr/>
-					<button data-id="profile-address">Address Information</button>
+					<button class="profile-nav" data-id="profile-address">Address Information</button>
 					<br/>
 					<br/>
 					<br/>

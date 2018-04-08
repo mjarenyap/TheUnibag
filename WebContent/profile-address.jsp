@@ -68,11 +68,11 @@
 			<hr/>
 			<div class="flex-start">
 				<div id="context-wrapper">
-					<button data-id="profile-general">General Information</button>
+					<button class="profile-nav" data-id="profile-general">General Information</button>
 					<hr/>
-					<button data-id="profile-password">Change Password</button>
+					<button class="profile-nav" data-id="profile-password">Change Password</button>
 					<hr/>
-					<button class="active" data-id="profile-address">Address Information</button>
+					<button class="active profile-nav" data-id="profile-address">Address Information</button>
 					<br/>
 					<br/>
 					<br/>
@@ -124,6 +124,11 @@
 								<input type="text" name="province" value="" placeholder="Edit your province" class="full-width" />
 							</c:otherwise>
 						</c:choose>
+					</label>
+					<br/><br/>
+					<label>
+						<span>Confirm Password</span>
+						<input type="password" name="securityPassword" placeholder="Type your password to continue" class="full-width" />
 					</label>
 					<div id="confirm-buttons" class="flex-end">
 						<button class="hallow" data-id="pa" id="profile-discard-changes">Cancel</button>

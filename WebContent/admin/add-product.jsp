@@ -68,6 +68,13 @@
             </div>
             <form method="post" action="addedproduct" class="info">
                 <div class="header">Add New Product</div>
+                <c:if test="${error == true}">
+                    <br/>
+                    <div class="error-banner flex-between">
+                        <p>An error has occured. Please try again.</p>
+                        <i class="fa fa-close"></i>
+                    </div>
+                </c:if>
                 <div class="details flex-between" >
                     <!--First One -->
                     <div class="part">
