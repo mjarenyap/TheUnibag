@@ -6,16 +6,13 @@ import javax.persistence.Entity;
 //import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
 /**
  * @author gisellenodalo
  * version 1.0.02.25.18
  */
 
-
 @Entity(name = "bag")
 public class Bag {
-
 	@Id
 	@Column(name = "bagID")
 	private long bagID;

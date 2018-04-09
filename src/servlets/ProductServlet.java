@@ -15,12 +15,11 @@ import beans.Size;
 import services.BagService;
 import services.SizeService;
 import security.Encryption;
-import security.ProductFilter;
 
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(urlPatterns = {"/products", "/featured"})
+@WebServlet(urlPatterns = {"/products", "/featured", "/search"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -44,6 +43,9 @@ public class ProductServlet extends HttpServlet {
 			break;
 
 			case "/featured": product(request, response);
+			break;
+
+			case "/search": search(request, response);
 			break;
 		}
 	}
@@ -226,6 +228,47 @@ public class ProductServlet extends HttpServlet {
 		}
 
 		else request.getRequestDispatcher("page-404.jsp").forward(request, response);
+	}
+
+	protected void search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// get search keyword
+		String keyword = request.getParameter("keyword");
+		ArrayList<Bag> searchlist = new ArrayList<>();
+		ArrayList<String> productPaths = new ArrayList<>();
+
+		Encryption e = new Encryption();
+
+		// get all bags
+		List<Bag> baglist = BagService.getAllBags();
+		for(int i = 0; i < baglist.size(); i++){
+			if(baglist.get(i).getName().toLowerCase().contains(keyword))
+				searchlist.add(baglist.get(i));
+
+			else if(baglist.get(i).getBrand().toLowerCase().contains(keyword))
+				searchlist.add(baglist.get(i));
+
+			else if(baglist.get(i).getColor().toLowerCase().contains(keyword))
+				searchlist.add(baglist.get(i));
+
+			else if(baglist.get(i).getType().toLowerCase().contains(keyword))
+				searchlist.add(baglist.get(i));
+
+			else if(baglist.get(i).getCollection() != null)
+				if(baglist.get(i).getCollection().toLowerCase().contains(keyword))
+					searchlist.add(baglist.get(i));
+		}
+
+		for(int i = 0; i < searchlist.size(); i++){
+			String encryptedID = String.valueOf(e.encryptID(searchlist.get(i).getBagID()));
+			String pname = searchlist.get(i).getName().replace(' ', '+');
+			String path = encryptedID + "#" + pname;
+			productPaths.add(path);
+		}
+
+		request.setAttribute("keyword", keyword);
+		request.setAttribute("baglist", searchlist);
+		request.setAttribute("productnames", productPaths);
+		request.getRequestDispatcher("search.jsp").forward(request, response);
 	}
 
 	/**

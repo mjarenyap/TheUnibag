@@ -75,6 +75,7 @@
                         <th>Postcode</th>
                         <th>Province</th>
                         <th>Order Date</th>
+                        <th>Time</th>
                     </tr>
                     <c:forEach items="${orderlist}" var="order" varStatus="status">
                         <tr class="content-row">
@@ -85,6 +86,7 @@
                             <td><c:out value="${order.postcode}" /></td>
                             <td><c:out value="${order.province}" /></td>
                             <td><c:out value="${order.orderDate}" /></td>
+                            <td><c:out value="${order.orderTime}" /></td>
                         </tr>
                     </c:forEach>
                 </table>

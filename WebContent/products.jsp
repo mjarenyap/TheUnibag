@@ -21,6 +21,7 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/select.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/checkbox.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/modal.css" />
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/product-list.css" />
@@ -35,6 +36,12 @@
 		<c:set var="loggedUser" value="${sessionScope.Account}" />
 		<input type="hidden" id="typeFilter" name="typeFilter" value="${typeFilter}" />
 		<!-- Sticky navigation -->
+		<div id="modal-overlay">
+			<i class="fa fa-close fa-3x" id="close-modal"></i>
+			<form method="get" action="search" id="searchform">
+				<input type="text" name="keyword" placeholder="Search for bags..." class="full-width" />
+			</form>
+		</div>
 		<nav class="sticky">
 			<ul class="mainnav flex-between">
 				<li class="flex-start" id="search">

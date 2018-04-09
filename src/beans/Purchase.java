@@ -11,8 +11,8 @@ import javax.persistence.Id;
  * version 1.0.02.25.18
  */
 
-@Entity(name = "order")
-public class Order {
+@Entity(name = "purchase")
+public class Purchase {
 	@Id
 	@Column(name = "orderID")
 	private long orderID;

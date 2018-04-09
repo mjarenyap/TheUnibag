@@ -1,0 +1,30 @@
+/* modal stylesheet */
+
+#modal-overlay{
+	z-index: 1000;
+	top: 0;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	display: none;
+	background-color: rgba(0, 0, 0, 0.8);
+	box-sizing: border-box;
+	padding: 10% 15%;
+}
+
+#modal-overlay form#searchform{
+	margin: auto;
+}
+
+#close-modal{
+	position: absolute;
+	top: 60px;
+	right: 250px;
+	color: white;
+	cursor: pointer;
+}
+
+form#searchform input{
+	width: 95%;
+	height: 3em;
+}

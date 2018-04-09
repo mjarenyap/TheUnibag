@@ -14,7 +14,6 @@ import beans.Order;
  */
 
 public class OrderService {
-	
 	public static void addOrder(Order order)
 	{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
@@ -120,7 +119,7 @@ public class OrderService {
 			if(trans != null)
 				trans.rollback();
 			
-			e.printStackTrace();
+			// e.printStackTrace();
 		}finally{
 			em.close();
 		}

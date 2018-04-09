@@ -20,6 +20,7 @@ $(document).ready(function(){
 	$('#back-home').click(directHome);
 	$('#browse-products').click(directAllProducts);
 	$('#logout').click(directLogout);
+	$('#forgot-password').click(directForgotPassword);
 	$('#sortProducts').change(directSortProducts);
 
 	$('nav ul.subnav li').click(function(){
@@ -85,6 +86,11 @@ function directSignup(){
 	$('form#directSignup').submit();
 }
 
+function directForgotPassword(){
+	$('body').append('<form method="post" action="forgot" id="directForgotPassword"></form>');
+	$('form#directForgotPassword').submit();
+}
+
 function directCart(){
 	$('body').append('<form action="shoppingcart" method="post" id="directCart"></form>');
 	$('form#directCart').submit();
@@ -110,10 +116,7 @@ function directCheckout(){
 }
 
 function directSuccess(){
-	$('body').append('<form action="success" method="post" id="directSuccess">' +
-		'<input type="hidden" name="purpose" value="checkout" />' +
-		'</form>');
-	$('form#directSuccess').submit();
+	$('form#billing-form').submit();
 }
 
 function directSortProducts(){
