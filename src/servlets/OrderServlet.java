@@ -81,6 +81,7 @@ public class OrderServlet extends HttpServlet {
 			for(int i = 0; i < cartlist.size(); i++){
 				String pname = cartlist.get(i).getName().replace(' ', '+');
 				String productPath = cartlist.get(i).getBagID() + "#" + pname;
+				productNames.add(productPath);
 				subtotal += cartlist.get(i).getPrice();
 			}
 
@@ -90,7 +91,7 @@ public class OrderServlet extends HttpServlet {
 
 		request.setAttribute("empty", emptyFlag);
 		request.setAttribute("subtotal", subtotal);
-		response.setAttribute("productPaths", productNames);
+		request.setAttribute("productPaths", productNames);
 		request.getRequestDispatcher("cart.jsp").forward(request, response);
 	}
 
@@ -309,6 +310,7 @@ public class OrderServlet extends HttpServlet {
 
 	protected void removeFromCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String productPath = request.getParameter("item");
+		Encryption e = new Encryption();
 
 		// declare boolean variables
 		boolean validProductPath = true;

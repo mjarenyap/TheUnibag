@@ -97,7 +97,7 @@ function directClearCart(){
 
 function directRemoveItem(url){
 	$('body').append('<form action="removeitem" method="get" id="directRemoveItem">' +
-		'<input type="hidden" name="item" value="' + url + '" />'
+		'<input type="hidden" name="item" value="' + url + '" />' +
 		'</form>');
 	$('form#directRemoveItem').submit();
 }
