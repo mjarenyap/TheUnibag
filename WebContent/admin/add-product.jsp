@@ -164,7 +164,7 @@
                         
                         <!-- Save Changes -->
                         <div class="buttons">
-                            <button class="hallow butt">DISCARD</button>
+                            <button class="hallow butt" type="button" id="discard" data-id="allproducts">DISCARD</button>
                             <button type="submit" class="butt save">SAVE CHANGES</button>
                         </div>
                     </div>

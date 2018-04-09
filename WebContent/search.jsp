@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>My Profile</title>
+		<title>Browse Products - Unibag</title>
 		<!-- FONT EXTERNAL LINKS -->
 		<link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -19,10 +19,12 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/select.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/checkbox.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/modal.css" />
 
 		<!-- PAGE STYLESHEET -->
-		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/profile.css" />
+		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/search-results.css" />
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
@@ -32,13 +34,14 @@
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
 		<c:set var="loggedUser" value="${sessionScope.Account}" />
+		<input type="hidden" id="typeFilter" name="typeFilter" value="${typeFilter}" />
+		<!-- Sticky navigation -->
 		<div id="modal-overlay">
 			<i class="fa fa-close fa-3x" id="close-modal"></i>
 			<form method="get" action="search" id="searchform">
 				<input type="text" name="keyword" placeholder="Search for bags..." class="full-width" />
 			</form>
 		</div>
-		<!-- Sticky navigation -->
 		<nav class="sticky">
 			<ul class="mainnav flex-between">
 				<li class="flex-start" id="search">
@@ -51,6 +54,7 @@
 						<div class="flex-start" id="login">
 							<span>Login</span>
 							<img src="assets/icons/avatar.svg" class="icon" />
+							<input type="hidden" id="pRedirect" value="products" />
 						</div>
 					</c:if>
 					<c:if test="${loggedUser != null}">
@@ -69,51 +73,37 @@
 				<!-- Navigation items -->
 			</ul>
 		</nav>
-
-		<section id="account">
-			<h1 id="profile-title">Your Account Settings</h1>
-			<hr/>
-			<div class="flex-start">
-				<div id="context-wrapper">
-					<button class="profile-nav" data-id="profile-general">General Information</button>
-					<hr/>
-					<button class="active profile-nav" data-id="profile-password">Change Password</button>
-					<hr/>
-					<button class="profile-nav" data-id="profile-address">Address Information</button>
-					<br/>
-					<br/>
-					<br/>
-					<hr/>
-					<button id="logout">Logout</button>
-				</div>
-				<form action="profile" method="post" id="profile-form">
-					<c:if test="${error == true}">
-						<div class="error-banner flex-between">
-							<p>Oh no! There was an error saving your changes.</p>
-							<i class="fa fa-close"></i>
-						</div>
-						<br/>
-					</c:if>
-					<h1 id="context-title">Change Password</h1>
-					<label>
-						<span>Old Password</span>
-						<input type="password" name="oldpassword" placeholder="Type here your old password" class="full-width" />
-					</label>
-					<label>
-						<span>New Password</span>
-						<input type="password" name="newpassword" placeholder="Type here your new password" class="full-width" />
-					</label>
-					<label>
-						<span>Confirm New Password</span>
-						<input type="password" name="confirmpass" placeholder="Re-type here your new password" class="full-width" />
-					</label>
-					<div id="confirm-buttons" class="flex-end">
-						<button class="hallow" data-id="pa" id="profile-discard-changes">Cancel</button>
-						<input type="submit" value="Save Changes" id="save-changes" />
+		<section>
+			<c:choose>
+				<c:when test="${fn.length(baglist) == 0}">
+					<div id="main-controls">
+						<h1 id="main-heading">No results for "<span><c:out value="${keyword}" /></span>"</h1>
 					</div>
-					<input type="hidden" name="purpose" value="edit-pp" />
-				</form>
-			</div>
+				</c:when>
+				<c:otherwise>
+					<div id="main-controls">
+						<h1 id="main-heading">Search Results for "<span><c:out value="${keyword}" /></span>"</h1>
+					</div>
+					<div class="flex-between" id="product-list">
+						<div id="product-feed">
+							<c:forEach items="${baglist}" var="bag" varStatus="status">
+								<div class="content-wrapper ${pfilter[status.index]} ${cfilter[status.index]}">
+									<div class="featured-image"></div>
+									<div class="product-info">
+										<h1 class="product-name"><c:out value="${bag.name}"/></h1>
+										<h3 class="product-price">$<c:out value="${bag.price}"/></h3>
+										<h4 class="product-brand">Brand: <span><c:out value="${bag.brand}"/></span></h4>
+										<h4 class="product-type">Type of bag: <span><c:out value="${bag.type}"/></span></h4>
+										<h4 class="product-rating">Product rating: <span><c:out value="${bag.rating}"/> out of 5</span></h4>
+										<button class="hallow view-product" data-id="${productnames[status.index]}">View product details</button>
+									</div>
+								</div>
+								<hr/>
+							</c:forEach>
+						</div>
+					</div>
+				</c:otherwise>
+			</c:choose>
 		</section>
 
 		<footer>

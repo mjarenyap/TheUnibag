@@ -66,6 +66,20 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void editAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Encryption e = new Encryption();
+
+		User currentUser = (User)request.getSession().getAttribute("Account");
+		List<Address> addresslist = AddressService.getAllAddress();
+		Address currentAddress = null;
+		long decryptedID = e.decryptID(currentUser.getUserID());
+		for(int i = 0; i < addresslist.size(); i++){
+			if(decryptedID == addresslist.get(i).getUserID()){
+				currentAddress = addresslist.get(i);
+				break;
+			}
+		}
+
+		request.setAttribute("adminAddress", currentAddress);
 		request.getRequestDispatcher("edit-account.jsp").forward(request, response);
 	}
 

@@ -246,8 +246,9 @@ public class UserServlet extends HttpServlet {
 			List<Address> addresslist = AddressService.getAllAddress();
 			User currentUser = (User) request.getSession().getAttribute("Account");
 			Address currentAddress = null;
+			Encryption e = new Encryption();
 			for(int i = 0; i < addresslist.size(); i++)
-				if(currentUser.getUserID() == addresslist.get(i).getUserID()){
+				if(e.decryptID(currentUser.getUserID()) == addresslist.get(i).getUserID()){
 					currentAddress = addresslist.get(i);
 					break;
 				}

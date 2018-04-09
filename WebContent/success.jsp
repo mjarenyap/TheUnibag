@@ -19,6 +19,7 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/modal.css" />
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/success.css" />
@@ -31,6 +32,12 @@
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
 		<c:set var="loggedUser" value="${sessionScope.Account}" />
+		<div id="modal-overlay">
+			<i class="fa fa-close fa-3x" id="close-modal"></i>
+			<form method="get" action="search" id="searchform">
+				<input type="text" name="keyword" placeholder="Search for bags..." class="full-width" />
+			</form>
+		</div>
 		<!-- Sticky navigation -->
 		<nav class="sticky">
 			<ul class="mainnav flex-between">

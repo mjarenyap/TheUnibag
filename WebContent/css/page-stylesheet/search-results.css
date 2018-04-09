@@ -1,0 +1,149 @@
+/* search results stylesheet */
+
+section{
+	padding: 5em 15%;
+}
+
+#main-controls{
+	margin-bottom: 3em;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#main-heading{
+	font-size: 2em;
+}
+
+#main-heading span{
+	color: var(--theme-color);
+}
+
+#pagination{
+	margin-left: 2em;
+}
+
+#pagination ul{
+	margin: 0;
+	padding: 0;
+}
+
+#pagination ul li{
+	display: inline-block;
+	list-style-type: none;
+	padding: 0.5em 0.85em;
+	border-radius: 5px;
+	font-size: 0.7em;
+	font-family: 'Source Sans Pro', sans-serif;
+	background-color: #f4f4f4;
+	border: thin solid #ccc;
+	cursor: pointer;
+
+	transition: ease 0.1s all;
+	-webkit-transition: ease 0.1s all;
+	-moz-transition: ease 0.1s all;
+	-o-transition: ease 0.1s all;
+	-ms-transition: ease 0.1s all;
+}
+
+#pagination ul li.active{
+	background-color: var(--theme-color);
+	border: thin solid var(--theme-color);
+	color: white;
+}
+
+
+#product-list{
+	align-items: flex-start;
+}
+
+#filters{
+	max-width: 25%;
+	width: 100%;
+	padding: 1em 0;
+	color: var(--theme-color);
+}
+
+#filter-heading{
+	padding-bottom: 0.3em;
+	font-size: 1.3em;
+	color: var(--theme-color);
+}
+
+.criteria{
+	margin-top: 2em;
+	margin-bottom: 0.5em;
+}
+
+#filters label{
+	display: block;
+	color: var(--theme-dark-neutral);
+	cursor: pointer;
+	margin: 0.8em 1.5em;
+}
+
+#product-feed div.content-wrapper{
+	display: flex;
+	margin: 2em;
+	margin-right: 0;
+	padding: 1em;
+	width: 40em;
+	justify-content: flex-start;
+	align-items: center;
+	border-radius: 5px;
+
+	transition: all ease 0.3s;
+	-webkit-transition: all ease 0.3s;
+	-moz-transition: all ease 0.3s;
+	-o-transition: all ease 0.3s;
+	-ms-transition: all ease 0.3s;
+}
+
+.featured-image{
+	width: 10em;
+	height: 10em;
+	background-color: white;
+	border-radius: 100%;
+	background: url('../../assets/images/feature-lesportsac.jpg');
+	background-size: cover;
+	background-position: top;
+	background-repeat: no-repeat;
+}
+
+.product-info{
+	margin-left: 1.5em;
+	max-width: 25em;
+}
+
+.product-name{
+	font-size: 1.6em;
+}
+
+.product-price{
+	color: var(--theme-color);
+	font-size: 1.3em;
+	margin-bottom: 0.5em;
+}
+
+.product-type, .product-size, .product-brand,
+.product-rating, .product-color{
+	margin-bottom: 0.3em;
+}
+
+.product-type span, .product-size span, .product-brand span,
+.product-rating span, .product-color span{
+	font-weight: normal;
+}
+
+.view-product{
+	margin: 1em 0;
+	font-size: 0.5em;
+}
+
+
+/* Pseudoclasses */
+#pagination ul li:hover{
+	color: white;
+	background-color: var(--theme-color);
+	border: thin solid var(--theme-color);
+}

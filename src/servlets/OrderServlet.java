@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 import beans.Bag;
-import beans.Order;
+import beans.Purchase;
 import beans.User;
 import beans.Address;
-import services.OrderService;
+import services.PurchaseService;
 import services.UserService;
 import services.BagService;
 import services.AddressService;
@@ -115,13 +115,13 @@ public class OrderServlet extends HttpServlet {
 		
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			User currentUser = (User)request.getSession().getAttribute("Account");
-			if(UserService.getUser(e.encryptID(currentUser.getUserID())) != null)
+			if(UserService.getUser(e.decryptID(currentUser.getUserID())) != null)
 				authenticFlag = true;
 
 			// autofill the fields for logged and authentic users
 			if(authenticFlag){
 				request.setAttribute("autofill", true);
-				Address currentAddress = AddressService.getAddress(currentUser.getUserID());
+				Address currentAddress = AddressService.getAddress(e.decryptID(currentUser.getUserID()));
 				request.setAttribute("address", currentAddress);
 			}
 
@@ -161,8 +161,7 @@ public class OrderServlet extends HttpServlet {
 
 		// check for purpose
 		String purpose = request.getParameter("purpose");
-		if(purpose.equals("checkout"))
-			purposeFlag = true;
+		purposeFlag = purpose.equals("checkout");
 
 		// check for empty cartlist
 		@SuppressWarnings("unchecked")
@@ -193,15 +192,14 @@ public class OrderServlet extends HttpServlet {
 		tempUser.setLastName(lastname);
 		tempUser.setEmail(email);
 		tempUser.setPhone(phone);
-
+		
 		Address tempAddress = new Address();
 		tempAddress.setLocation(location);
 		tempAddress.setCity(city);
 		tempAddress.setPostcode(postcode);
 		tempAddress.setProvince(province);
-
-		if(fc.checkOrderFields(tempUser, tempAddress))
-			validFieldFlag = true;
+		
+		validFieldFlag = fc.checkOrderFields(tempUser, tempAddress);
 
 		if(purposeFlag && !emptyFlag && validFieldFlag){
 			long userid = -1;
@@ -222,24 +220,25 @@ public class OrderServlet extends HttpServlet {
 			}
 
 			// create orders for items in the shopping cart
-			int orderOffset = 0;
-			List<Order> orderlist = OrderService.getAllOrders();
+			long orderOffset = 1;
+			List<Purchase> orderlist = PurchaseService.getAllOrders();
 			if(orderlist != null)
-				orderOffset = orderlist.size();
+				orderOffset = orderlist.get(orderlist.size() - 1).getOrderID() + 1;
 			
 			for(int i = 0; i < cartlist.size(); i++){
-				Order newOrder = new Order();
-				newOrder.setOrderID(orderOffset + i + 1);
+				Purchase newOrder = new Purchase();
+				newOrder.setOrderID(orderOffset + (long)i);
 				newOrder.setUserID(userid);
-				newOrder.setBagID(cartlist.get(i).getBagID());
+				newOrder.setBagID(e.decryptID(cartlist.get(i).getBagID()));
 				newOrder.setCity(city);
 				newOrder.setLocation(location);
 				newOrder.setPostcode(postcode);
 				newOrder.setProvince(province);
 				LocalDateTime now = LocalDateTime.now();
-				newOrder.setOrderDate(now);
-				newOrder.setStatus(false);
-				OrderService.addOrder(newOrder);
+				newOrder.setOrderDate(now.getMonthValue() + "/" + now.getDayOfMonth() + "/" + now.getYear());
+				newOrder.setOrderTime(now.getHour() + ":" + now.getMinute() + ":" + now.getSecond());
+				newOrder.setStatus(0);
+				PurchaseService.addOrder(newOrder);
 			}
 
 			//invalidate shopping cart session

@@ -68,7 +68,7 @@
                     <span id="back-all-products">View all users</span>
                 </p>
             </div>
-            <div class="info">
+            <form method="port" action="editedaccount" class="info">
                 <div class="header">Edit Your Account</div>
                 <c:if test="${error == true}">
                     <br/>
@@ -158,11 +158,11 @@
                     </div>
                     <!-- Save Changes -->
                     <div class="buttons">
-                        <button class="hallow butt">DISCARD</button>
-                        <button class="butt save">SAVE CHANGES</button>
+                        <button class="hallow butt" id="discard" type="button" data-id="allusers">DISCARD</button>
+                        <button type="submit" class="butt save">SAVE CHANGES</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </body>
 </html>

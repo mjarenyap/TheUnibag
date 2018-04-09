@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.Order;
+import beans.Purchase;
 import beans.User;
 import beans.Bag;
-import services.OrderService;
+import services.PurchaseService;
 import services.UserService;
 import services.BagService;
 import security.Encryption;
@@ -67,11 +67,11 @@ public class OrderAdminServlet extends HttpServlet {
 			Encryption e = new Encryption();
 
 			// Store all the orders in an ArrayList
-			List<Order> orderList = OrderService.getAllOrders();
-			ArrayList<Order> filteredList = new ArrayList<>();
+			List<Purchase> orderList = PurchaseService.getAllOrders();
+			ArrayList<Purchase> filteredList = new ArrayList<>();
 			if(orderList != null){
 				for(int i = 0; i < orderList.size(); i++)
-					if(orderList.get(i).getStatus()){
+					if(orderList.get(i).getStatus() == 0){
 						filteredList.add(orderList.get(i));
 					}
 			}
@@ -118,7 +118,7 @@ public class OrderAdminServlet extends HttpServlet {
 			/*orIDecrypt = decryptor.decryptID(orID);*/
 			
 			// fetch the product via the decrypted ID using the OrderService. store it in a Order object
-			Order obj = OrderService.getOrder(orID);
+			Purchase obj = PurchaseService.getOrder(orID);
 			
 			/*Order obj = OrderService.getOrder(orIDecrypt);*/
 
@@ -146,7 +146,7 @@ public class OrderAdminServlet extends HttpServlet {
 
 			// fetch parameter values to archive orders
 			String[] toDelete = request.getParameterValues("deletelist");
-			ArrayList<Order> archivelist = new ArrayList<>();
+			ArrayList<Purchase> archivelist = new ArrayList<>();
 			if(toDelete != null){
 				for(int i = 0; i < toDelete.length; i++){
 					if(toDelete[i] != null){
@@ -167,7 +167,7 @@ public class OrderAdminServlet extends HttpServlet {
 							String productName = splitParts[1].replace('+', ' ');
 
 							// search for a matched result
-							Order selectedOrder = OrderService.getOrder(decryptedID);
+							Purchase selectedOrder = PurchaseService.getOrder(decryptedID);
 							Bag associatedBag = null;
 
 							if(selectedOrder != null){
@@ -175,8 +175,16 @@ public class OrderAdminServlet extends HttpServlet {
 
 								// check matching product name
 								if(associatedBag != null)
-									if(productName.equalsIgnoreCase(associatedBag.getName()))
+									if(productName.equalsIgnoreCase(associatedBag.getName())){
+										selectedOrder.setStatus(1);
 										archivelist.add(selectedOrder);
+									}
+
+								else{
+									validPaths = false;
+									foundFlag = false;
+									break;
+								}
 							}
 
 							else{
@@ -197,7 +205,7 @@ public class OrderAdminServlet extends HttpServlet {
 				// update selected archived orders in the database
 				if(validPaths && foundFlag)
 					for(int i = 0; i < archivelist.size(); i++)
-						OrderService.updateOrder(archivelist.get(i).getOrderID(), archivelist.get(i));
+						PurchaseService.updateOrder(archivelist.get(i).getOrderID(), archivelist.get(i));
 			}
 
 			request.setAttribute("errorPath", !validPaths);

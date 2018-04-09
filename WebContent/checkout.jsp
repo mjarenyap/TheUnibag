@@ -20,6 +20,7 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/modal.css" />
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/checkout.css" />
@@ -32,6 +33,12 @@
 	<body class="nav-sticky">
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
 		<c:set var="loggedUser" value="${sessionScope.Account}" />
+		<div id="modal-overlay">
+			<i class="fa fa-close fa-3x" id="close-modal"></i>
+			<form method="get" action="search" id="searchform">
+				<input type="text" name="keyword" placeholder="Search for bags..." class="full-width" />
+			</form>
+		</div>
 		<!-- Sticky navigation -->
 		<nav class="sticky">
 			<ul class="mainnav flex-between">
@@ -116,10 +123,10 @@
 						<span>Phone number</span>
 						<c:choose>
 							<c:when test="${loggedUser != null && loggedUser.phone != null}">
-								<input type="number" name="phone" value="${loggedUser.phone}" placeholder="(Optional) Type here you phone number" class="full-width" />
+								<input type="text" name="phone" value="${loggedUser.phone}" placeholder="(Optional) Type here you phone number" class="full-width" />
 							</c:when>
 							<c:otherwise>
-								<input type="number" name="phone" value="" placeholder="(Optional) Type here you phone number" class="full-width" />
+								<input type="text" name="phone" value="" placeholder="(Optional) Type here you phone number" class="full-width" />
 							</c:otherwise>
 						</c:choose>
 					</label>
@@ -167,6 +174,7 @@
 							</c:otherwise>
 						</c:choose>
 					</label>
+					<input type="hidden" name="purpose" value="checkout" />
 				</form>
 				<div id="confirm-pane">
 					<h1 id="confirm-title"><b class="important">Step 2:</b> Confirm Your Order</h1>

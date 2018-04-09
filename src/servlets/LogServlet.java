@@ -19,11 +19,12 @@ import security.FieldChecker;
 import security.PurposeChecker;
 import security.DuplicateChecker;
 import security.Encryption;
+import security.Attempt;
 
 /**
  * Servlet implementation class LogServlet
  */
-@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset", "/logout"})
+@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset", "/logout", "/forgot", "/recover"})
 public class LogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -61,6 +62,12 @@ public class LogServlet extends HttpServlet {
 			case "/logout": logout(request, response);
 			break;
 
+			case "/forgot": forgotPage(request, response);
+			break;
+
+			case "/recover": recover(request, response);
+			break;
+
 			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
 			break;
 		}
@@ -71,6 +78,11 @@ public class LogServlet extends HttpServlet {
 		if(request.getSession().getAttribute("ShoppingCart") == null){
 			ArrayList<Bag> shoppingcart = new ArrayList<>();
 			request.getSession().setAttribute("ShoppingCart", shoppingcart);
+		}
+
+		if(request.getSession().getAttribute("Blacklist") == null){
+			ArrayList<Attempt> blacklist = new ArrayList<>();
+			request.getSession().setAttribute("Blacklist", blacklist);
 		}
 
 		// IMPORTANT: GET ALL PROMOTIONS
@@ -103,12 +115,13 @@ public class LogServlet extends HttpServlet {
 		boolean loggedFlag = false;
 
 		// check for logged user
-		if(request.getSession().getAttribute("Account") != null)
+		if(request.getSession().getAttribute("Account") != null || request.getSession().getAttribute("adminAccount") != null)
 			loggedFlag = true;
 
 		// invalidate the session
 		if(loggedFlag){
 			request.getSession().setAttribute("Account", null);
+			request.getSession().setAttribute("adminAccount", null);
 
 			// remove the Account cookies
 			Cookie[] cookies = request.getCookies();
@@ -116,7 +129,7 @@ public class LogServlet extends HttpServlet {
 				for(int i = 0; i < cookies.length; i++)
 				{	
 					Cookie currentCookie = cookies[i];
-					if(currentCookie.getName().equals("Username"))
+					if(currentCookie.getName().equals("Username") || currentCookie.getName().equals("adminUsername"))
 					{
 						currentCookie.setMaxAge(0);
 						response.addCookie(currentCookie);
@@ -203,6 +216,16 @@ public class LogServlet extends HttpServlet {
 
 				// set a session attribute "Account"
 				if(correctUser != null){
+					// remove from blacklist
+					@SuppressWarnings("unchecked")
+					ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+					for(int i = 0; i < blacklist.size(); i++)
+						if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+							blacklist.remove(i);
+							break;
+						}
+
+					request.getSession().setAttribute("Blacklist", blacklist);
 					request.getSession().setAttribute("Account", correctUser);
 					
 					// create a cookie for the logged user
@@ -233,10 +256,34 @@ public class LogServlet extends HttpServlet {
 				}
 
 				else{
+					// initiate blacklisting
+					int bindex = -1;
+					boolean blacklisted = false;
+					@SuppressWarnings("unchecked")
+					ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+					for(int i = 0; i < blacklist.size(); i++)
+						if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+							blacklist.get(i).setCount(blacklist.get(i).getCount() + 1);
+							blacklisted = true;
+							bindex = i;
+							break;
+						}
+
+					if(!blacklisted){
+						blacklist.add(new Attempt(email, 1));
+						bindex = blacklist.size() - 1;
+					}
+
+					request.getSession().setAttribute("Blacklist", blacklist);
+
 					errorFlag = true;
 					request.setAttribute("error", errorFlag);
 					request.setAttribute("purpose", redirect);
-					request.getRequestDispatcher("login.jsp").forward(request, response);
+
+					if(blacklist.get(bindex).getCount() >= 3)
+						request.getRequestDispatcher("page-403.jsp").forward(request, response);
+
+					else request.getRequestDispatcher("login.jsp").forward(request, response);
 				}
 			}
 
@@ -244,10 +291,34 @@ public class LogServlet extends HttpServlet {
 				home(request, response);
 
 			else if(!validCredentialFlag && validRedirectFlag){
+				// initiate blacklisting
+				int bindex = -1;
+				boolean blacklisted = false;
+				@SuppressWarnings("unchecked")
+				ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+				for(int i = 0; i < blacklist.size(); i++)
+					if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+						blacklist.get(i).setCount(blacklist.get(i).getCount() + 1);
+						bindex = i;
+						blacklisted = true;
+						break;
+					}
+
+				if(!blacklisted){
+					blacklist.add(new Attempt(email, 1));
+					bindex = blacklist.size() - 1;
+				}
+
+				request.getSession().setAttribute("Blacklist", blacklist);
+
 				errorFlag = true;
 				request.setAttribute("error", errorFlag);
 				request.setAttribute("purpose", redirect);
-				request.getRequestDispatcher("login.jsp").forward(request, response);
+
+				if(blacklist.get(bindex).getCount() >= 3)
+					request.getRequestDispatcher("page-403.jsp").forward(request, response);
+
+				else request.getRequestDispatcher("login.jsp").forward(request, response);
 			}
 
 			else home(request, response);
@@ -366,11 +437,56 @@ public class LogServlet extends HttpServlet {
 		else home(request, response);
 	}
 
+	protected void forgotPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null)
+			request.getRequestDispatcher("forgot.jsp").forward(request, response);
+
+		else home(request, response);
+	}
+
+	protected void recover(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
+			String email = request.getParameter("email");
+			String phone = request.getParameter("phone");
+
+			// declare boolean variables
+			boolean foundFlag = false;
+			List<User> userlist = UserService.getAllUsers();
+			for(int i = 0; i < userlist.size(); i++){
+				if(userlist.get(i).getPhone().length() > 0 || userlist.get(i).getPhone() != null){
+					if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && phone.equals(userlist.get(i).getPhone())){
+						foundFlag = true;
+						break;
+					}
+				}
+
+				else{
+					if(email.equalsIgnoreCase(userlist.get(i).getEmail())){
+						foundFlag = true;
+						break;
+					}
+				}
+			}
+
+			if(foundFlag){
+				// do some email algorithms
+				//Mailer mail;
+				request.getRequestDispatcher("recover.jsp").forward(request, response);
+			}
+
+			else{
+				request.setAttribute("error", !foundFlag);
+				request.getRequestDispatcher("forgot.jsp").forward(request, response);
+			}
+		}
+
+		else home(request, response);
+	}
+
 	protected void resetAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getSession().setAttribute("Account", null);
 		request.getSession().setAttribute("adminAccount", null);
-		request.getSession().setAttribute("ShoppingCart", null);
-		request.getSession().invalidate();
+		request.getSession().setAttribute("ShoppingCart", new ArrayList<Bag>());
 
 		// remove the Account cookies
 		Cookie[] cookies = request.getCookies();
