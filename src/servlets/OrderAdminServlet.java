@@ -136,7 +136,6 @@ public class OrderAdminServlet extends HttpServlet {
 	}
 
 	protected void archiveOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			// declare flag variables
 			boolean validPaths = true;
@@ -210,63 +209,68 @@ public class OrderAdminServlet extends HttpServlet {
 	}
 
 	protected void adminLoginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null)
-			allOrders(request, response);
+		if(request.getSession().getAttribute("adminAccount") == null && request.getSession().getAttribute("Account") == null)
+			request.getRequestDispatcher("/admin/admin-login.jsp").forward(request, response);
 
-		else request.getRequestDispatcher("/admin/admin-login.jsp").forward(request, response);
+		else if(request.getSession().getAttribute("adminAccount") == null && request.getSession().getAttribute("Account") != null)
+			request.getRequestDispatcher("page-403.jsp").forward(request, response);
+
+		else allOrders(request, response);
 	}
 
 	protected void adminLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		// fetch input from jsp
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
+		if(request.getSession().getAttribute("adminAccount") == null && request.getSession().getAttribute("Account") == null){
+			// fetch input from jsp
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
 
-		// declare security variables
-		FieldChecker fc= new FieldChecker();
-		Encryption e = new Encryption();
+			// declare security variables
+			FieldChecker fc= new FieldChecker();
+			Encryption e = new Encryption();
 
-		// declare flag variables
-		boolean validFlag = false;
+			// declare flag variables
+			boolean validFlag = false;
 
-		// check for empty fields
-		if(fc.checkLogin(email, password))
-			validFlag = true;
+			// check for empty fields
+			if(fc.checkLogin(email, password))
+				validFlag = true;
 
-		if(validFlag){
-			List<User> userlist = UserService.getAllUsers();
-			User correctUser = null;
-			for(int i = 0; i < userlist.size(); i++){
-				String decryptedPassword = e.decryptPassword(userlist.get(i).getPassword());
-				String userType = userlist.get(i).getUserType();
-				if(email.equals(userlist.get(i).getEmail()) && decryptedPassword.equals(password) &&
-					userType.equalsIgnoreCase("admin")){
-					correctUser = userlist.get(i);
-					correctUser.setPassword("");
-					break;
+			if(validFlag){
+				List<User> userlist = UserService.getAllUsers();
+				User correctUser = null;
+				for(int i = 0; i < userlist.size(); i++){
+					String decryptedPassword = e.decryptPassword(userlist.get(i).getPassword());
+					String userType = userlist.get(i).getUserType();
+					if(email.equals(userlist.get(i).getEmail()) && decryptedPassword.equals(password) &&
+						userType.equalsIgnoreCase("admin")){
+						correctUser = userlist.get(i);
+						correctUser.setPassword("");
+						break;
+					}
+				}
+
+				// set a session attribute "adminAccount"
+				if(correctUser != null){
+					request.getSession().setAttribute("adminAccount", correctUser);
+					
+					// create a cookie for the logged user
+					Cookie userCookie = new Cookie("adminUsername", correctUser.getEmail());
+					response.addCookie(userCookie);
+					allOrders(request, response);
+				}
+
+				else{
+					validFlag = false;
+					request.setAttribute("error", !validFlag);
+					request.getRequestDispatcher("admin-login.jsp").forward(request, response);
 				}
 			}
 
-			// set a session attribute "adminAccount"
-			if(correctUser != null){
-				request.getSession().setAttribute("adminAccount", correctUser);
-				
-				// create a cookie for the logged user
-				Cookie userCookie = new Cookie("adminUsername", correctUser.getEmail());
-				response.addCookie(userCookie);
-				allOrders(request, response);
-			}
-
-			else{
-				validFlag = false;
+			else {
+				// set validFlag as attribute
 				request.setAttribute("error", !validFlag);
 				request.getRequestDispatcher("admin-login.jsp").forward(request, response);
 			}
-		}
-
-		else {
-			// set validFlag as attribute
-			request.setAttribute("error", !validFlag);
-			request.getRequestDispatcher("admin-login.jsp").forward(request, response);
 		}
 	}
 

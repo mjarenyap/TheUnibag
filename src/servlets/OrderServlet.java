@@ -25,7 +25,7 @@ import security.Encryption;
 /**
  * Servlet implementation class OrderServlet
  */
-@WebServlet(urlPatterns = {"/shoppingcart", "/checkout", "/success", "/addtocart"})
+@WebServlet(urlPatterns = {"/shoppingcart", "/checkout", "/success", "/addtocart", "/clear", "/removeitem"})
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -56,6 +56,11 @@ public class OrderServlet extends HttpServlet {
 
 			case "/addtocart": addToCart(request, response);
 			break;
+
+			case "/clear": clearCart(request, response);
+			break;
+
+			case "/removeitem": removeFromCart(request, response);
 		}
 	}
 
@@ -66,14 +71,19 @@ public class OrderServlet extends HttpServlet {
 		// check cart session for items
 		@SuppressWarnings("unchecked")
 		ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+		ArrayList<String> productNames = new ArrayList<>();
 		float subtotal = 0;
 		// check if there are items in the shopping cart
 		if(cartlist.size() > 0 && cartlist != null){
 			emptyFlag = false;
 
 			// compute for subtotal
-			for(int i = 0; i < cartlist.size(); i++)
+			for(int i = 0; i < cartlist.size(); i++){
+				String pname = cartlist.get(i).getName().replace(' ', '+');
+				String productPath = cartlist.get(i).getBagID() + "#" + pname;
+				productNames.add(productPath);
 				subtotal += cartlist.get(i).getPrice();
+			}
 
 			// set computed total as request attribute "subtotal"
 			request.setAttribute("subtotal", subtotal);
@@ -81,6 +91,7 @@ public class OrderServlet extends HttpServlet {
 
 		request.setAttribute("empty", emptyFlag);
 		request.setAttribute("subtotal", subtotal);
+		request.setAttribute("productPaths", productNames);
 		request.getRequestDispatcher("cart.jsp").forward(request, response);
 	}
 
@@ -89,6 +100,8 @@ public class OrderServlet extends HttpServlet {
 		boolean purposeFlag = false;
 		boolean emptyFlag = true;
 		boolean authenticFlag = false;
+
+		Encryption e = new Encryption();
 
 		// check purpose if it contains "cart"
 		String purpose = request.getParameter("purpose");
@@ -102,7 +115,7 @@ public class OrderServlet extends HttpServlet {
 		
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			User currentUser = (User)request.getSession().getAttribute("Account");
-			if(UserService.getUser(currentUser.getUserID()) != null)
+			if(UserService.getUser(e.encryptID(currentUser.getUserID())) != null)
 				authenticFlag = true;
 
 			// autofill the fields for logged and authentic users
@@ -143,6 +156,8 @@ public class OrderServlet extends HttpServlet {
 		boolean purposeFlag = false;
 		boolean emptyFlag = true;
 		boolean validFieldFlag = false;
+
+		Encryption e = new Encryption();
 
 		// check for purpose
 		String purpose = request.getParameter("purpose");
@@ -193,12 +208,12 @@ public class OrderServlet extends HttpServlet {
 
 			// check the type of user ordering
 			if(currentUser != null)
-				userid = currentUser.getUserID();
+				userid = e.decryptID(currentUser.getUserID());
 
 			else{
 				// create new temporary user
-				userid = (long)UserService.getAllUsers().size();
-				userid++;
+				List<User> userlist = UserService.getAllUsers();
+				userid = userlist.get(userlist.size() - 1).getUserID() + 1;
 
 				tempUser.setUserID(userid);
 				tempUser.setPassword("");
@@ -223,6 +238,7 @@ public class OrderServlet extends HttpServlet {
 				newOrder.setProvince(province);
 				LocalDateTime now = LocalDateTime.now();
 				newOrder.setOrderDate(now);
+				newOrder.setStatus(false);
 				OrderService.addOrder(newOrder);
 			}
 
@@ -236,7 +252,7 @@ public class OrderServlet extends HttpServlet {
 		}
 
 		else if(purposeFlag && !emptyFlag && !validFieldFlag){
-			request.setAttribute("error", validFieldFlag);
+			request.setAttribute("error", !validFieldFlag);
 			request.getRequestDispatcher("checkout.jsp").forward(request, response);
 		}
 
@@ -283,11 +299,70 @@ public class OrderServlet extends HttpServlet {
 			request.setAttribute("error", foundFlag);
 
 			if(foundFlag){
+				selectedBag.setBagID(e.encryptID(selectedBag.getBagID()));
 				cartlist.add(selectedBag);
 				request.getSession().setAttribute("ShoppingCart", cartlist);
 			}
 		}
 
+		shoppingCart(request, response);
+	}
+
+	protected void removeFromCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String productPath = request.getParameter("item");
+		Encryption e = new Encryption();
+
+		// declare boolean variables
+		boolean validProductPath = true;
+
+		@SuppressWarnings("unchecked")
+		ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+		if(cartlist.size() > 0 && cartlist != null){
+			String[] splitParts = productPath.split("#");
+			long encryptedID = -1;
+
+			try{
+				encryptedID = Long.parseLong(splitParts[0]);
+			} catch(Exception er){
+				validProductPath = false;
+			}
+
+			if(splitParts.length != 2)
+				validProductPath = false;
+
+			if(validProductPath){
+				// declare second layer flag variables
+				boolean foundFlag = false;
+
+				long decryptedID = e.decryptID(encryptedID);
+				String productName = splitParts[1].replace('+', ' ');
+
+				Bag selectedBag = BagService.getBag(decryptedID);
+				if(selectedBag != null && productName.equalsIgnoreCase(selectedBag.getName()))
+					foundFlag = true;
+
+				request.setAttribute("error", foundFlag);
+
+				if(foundFlag){
+					for(int i = 0; i < cartlist.size(); i++)
+						if(encryptedID == cartlist.get(i).getBagID()){
+							cartlist.remove(i);
+							break;
+						}
+
+					request.getSession().setAttribute("ShoppingCart", cartlist);
+				}
+			}
+
+			shoppingCart(request, response);
+		}
+
+		else shoppingCart(request, response);
+	}
+
+	protected void clearCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ArrayList<Bag> emptylist = new ArrayList<>();
+		request.getSession().setAttribute("ShoppingCart", emptylist);
 		shoppingCart(request, response);
 	}
 

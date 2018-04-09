@@ -68,13 +68,25 @@
 			<hr/>
 			<div class="flex-start">
 				<div id="context-wrapper">
-					<button>General Information</button>
+					<button class="profile-nav" data-id="profile-general">General Information</button>
 					<hr/>
-					<button>Change Password</button>
+					<button class="profile-nav" data-id="profile-password">Change Password</button>
 					<hr/>
-					<button class="active">Address Information</button>
+					<button class="active profile-nav" data-id="profile-address">Address Information</button>
+					<br/>
+					<br/>
+					<br/>
+					<hr/>
+					<button id="logout">Logout</button>
 				</div>
 				<form action="profile" method="post" id="profile-form">
+					<c:if test="${error == true}">
+						<div class="error-banner flex-between">
+							<p>Oh no! There was an error saving your changes.</p>
+							<i class="fa fa-close"></i>
+						</div>
+						<br/>
+					</c:if>
 					<h1 id="context-title">Address Information</h1>
 					<label>
 						<span>Location</span>
@@ -119,6 +131,11 @@
 								<input type="text" name="province" value="" placeholder="Edit your province" class="full-width" />
 							</c:otherwise>
 						</c:choose>
+					</label>
+					<br/><br/>
+					<label>
+						<span>Confirm Password</span>
+						<input type="password" name="securityPassword" placeholder="Type your password to continue" class="full-width" />
 					</label>
 					<div id="confirm-buttons" class="flex-end">
 						<button class="hallow" data-id="pa" id="profile-discard-changes">Cancel</button>

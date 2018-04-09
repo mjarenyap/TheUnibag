@@ -19,7 +19,7 @@ import security.FieldChecker;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(urlPatterns = {"/profile/general", "/profile/address", "/password/password", "/profile"})
+@WebServlet(urlPatterns = {"/profile-general", "/profile-address", "/profile-password", "/profile"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -41,16 +41,13 @@ public class UserServlet extends HttpServlet {
 			case "/profile": profileRequest(request, response);
 			break;
 
-			case "/profile/general": profileGeneral(request, response);
+			case "/profile-general": profileGeneral(request, response);
 			break;
 
-			case "/profile/address": profileAddress(request, response);
+			case "/profile-address": profileAddress(request, response);
 			break;
 
-			case "/profile/password": profilePassword(request, response);
-			break;
-
-			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
+			case "/profile-password": profilePassword(request, response);
 			break;
 		}
 	}
@@ -59,14 +56,18 @@ public class UserServlet extends HttpServlet {
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			String purpose = request.getParameter("purpose");
 
-			if(purpose.equals("edit-pa"))
-				editAddress(request, response);
+			if(purpose != null){
+				if(purpose.equals("edit-pa"))
+					editAddress(request, response);
 
-			else if(purpose.equals("edit-pg"))
-				editGeneral(request, response);
+				else if(purpose.equals("edit-pg"))
+					editGeneral(request, response);
 
-			else if (purpose.equals("edit-pp"))
-				editPassword(request, response);
+				else if (purpose.equals("edit-pp"))
+					editPassword(request, response);
+
+				else profileGeneral(request, response);
+			}
 
 			else profileGeneral(request, response);
 		}
@@ -98,7 +99,7 @@ public class UserServlet extends HttpServlet {
 			User currentUser = (User)request.getSession().getAttribute("Account");
 			long decryptedID = e.decryptID(currentUser.getUserID());
 			if(UserService.getUser(decryptedID) != null){
-
+				currentUser = UserService.getUser(decryptedID);
 				// decrypt the current user's password
 				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
 
@@ -122,7 +123,8 @@ public class UserServlet extends HttpServlet {
 					currentUser.setEmail(email);
 					currentUser.setPhone(phone);
 
-					UserService.updateUser(currentUser.getUserID(), currentUser);
+					UserService.updateUser(decryptedID, currentUser);
+					request.getSession().setAttribute("Account", currentUser);
 
 					successFlag = true;
 					errorFlag = false;
@@ -177,7 +179,8 @@ public class UserServlet extends HttpServlet {
 			User currentUser = (User)request.getSession().getAttribute("Account");
 			long decryptedID = e.decryptID(currentUser.getUserID());
 			if(UserService.getUser(decryptedID) != null){
-
+				currentUser = UserService.getUser(decryptedID);
+				
 				// decrypt the current user's password
 				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
 
@@ -199,7 +202,7 @@ public class UserServlet extends HttpServlet {
 					Address currentAddress = AddressService.getAddress(currentUser.getUserID());
 					if(currentAddress == null){
 						currentAddress = new Address();
-						currentAddress.setUserID(currentUser.getUserID());
+						currentAddress.setUserID(decryptedID);
 						currentAddress.setLocation(location);
 						currentAddress.setCity(city);
 						currentAddress.setPostcode(postcode);
@@ -208,7 +211,7 @@ public class UserServlet extends HttpServlet {
 					}
 
 					else{
-						currentAddress.setUserID(currentUser.getUserID());
+						currentAddress.setUserID(decryptedID);
 						currentAddress.setLocation(location);
 						currentAddress.setCity(city);
 						currentAddress.setPostcode(postcode);
@@ -232,7 +235,7 @@ public class UserServlet extends HttpServlet {
 				request.getRequestDispatcher("profile-address.jsp").forward(request, response);
 			}
 
-			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+			else request.getRequestDispatcher("page-404.jsp").forward(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
@@ -277,7 +280,7 @@ public class UserServlet extends HttpServlet {
 			User currentUser = (User)request.getSession().getAttribute("Account");
 			long decryptedID = e.decryptID(currentUser.getUserID());
 			if(UserService.getUser(decryptedID) != null){
-
+				currentUser = UserService.getUser(decryptedID);
 				// decrypt the current user's password
 				String decryptedPassword = e.decryptPassword(currentUser.getPassword());
 
@@ -292,7 +295,7 @@ public class UserServlet extends HttpServlet {
 				// modify the currentUser's credentials
 				if(validCredentialsFlag && validPasswordFlag && !errorFlag){
 					currentUser.setPassword(newPassword);
-					UserService.updateUser(currentUser.getUserID(), currentUser);
+					UserService.updateUser(decryptedID, currentUser);
 
 					successFlag = true;
 					errorFlag = false;
@@ -310,7 +313,7 @@ public class UserServlet extends HttpServlet {
 				request.getRequestDispatcher("profile-password.jsp").forward(request, response);
 			}
 
-			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+			else request.getRequestDispatcher("page-404.jsp").forward(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);

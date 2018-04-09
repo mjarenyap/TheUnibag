@@ -28,7 +28,15 @@ $(document).ready(function(){
 		var url = $(this).attr("data-id");
 		directViewUserPage(url);
 	});
+
+	$('#logout').click(directLogout);
+	$('#edit-account').click(directEditAccount);
 });
+
+function directEditAccount(){
+	$('body').append('<form method="post" id="directEditAccount" action="editaccount"></form>');
+	$('form#directEditAccount').submit();
+}
 
 function directAdminControlPage(url){
 	$('body').append('<form method="post" id="directAdminControlPage" action="' + url + '"></form>');
@@ -70,4 +78,9 @@ function directDelete(target){
 	else $('form#directDelete').append('<input type="checkbox" class="delete-status" name="deletelist" />');
 
 	$('form#directDelete').submit();
+}
+
+function directLogout(){
+	$('body').append('<form action="/TheUnibag/logout" method="post" id="directLogout"></form>');
+	$('#directLogout').submit();
 }

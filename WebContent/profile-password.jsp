@@ -68,13 +68,25 @@
 			<hr/>
 			<div class="flex-start">
 				<div id="context-wrapper">
-					<button>General Information</button>
+					<button class="profile-nav" data-id="profile-general">General Information</button>
 					<hr/>
-					<button class="active">Change Password</button>
+					<button class="active profile-nav" data-id="profile-password">Change Password</button>
 					<hr/>
-					<button>Address Information</button>
+					<button class="profile-nav" data-id="profile-address">Address Information</button>
+					<br/>
+					<br/>
+					<br/>
+					<hr/>
+					<button id="logout">Logout</button>
 				</div>
 				<form action="profile" method="post" id="profile-form">
+					<c:if test="${error == true}">
+						<div class="error-banner flex-between">
+							<p>Oh no! There was an error saving your changes.</p>
+							<i class="fa fa-close"></i>
+						</div>
+						<br/>
+					</c:if>
 					<h1 id="context-title">Change Password</h1>
 					<label>
 						<span>Old Password</span>

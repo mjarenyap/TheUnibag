@@ -87,7 +87,7 @@
 										<td><div class="featured-image"></div></td>
 										<td><c:out value="${bag.name}" /></td>
 										<td><c:out value="${bag.price}" /></td>
-										<td><img src="assets/icons/garbage.svg" class="remove" data-id="${status}" /></td>
+										<td><img src="assets/icons/garbage.svg" class="remove" data-id="${productPaths[status.index]}" /></td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -102,7 +102,7 @@
 						</div>
 					</div>
 					<button class="hallow" id="continue-shopping">Continue Shopping</button>
-					<button class="hallow">Clear my cart</button>
+					<button class="hallow" id="clear-cart">Clear my cart</button>
 				</c:otherwise>
 			</c:choose>
 		</section>

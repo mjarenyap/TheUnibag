@@ -68,13 +68,25 @@
 			<hr/>
 			<div class="flex-start">
 				<div id="context-wrapper">
-					<button class="active">General Information</button>
+					<button class="active profile-nav" data-id="profile-general">General Information</button>
 					<hr/>
-					<button>Change Password</button>
+					<button class="profile-nav" data-id="profile-password">Change Password</button>
 					<hr/>
-					<button>Address Information</button>
+					<button class="profile-nav" data-id="profile-address">Address Information</button>
+					<br/>
+					<br/>
+					<br/>
+					<hr/>
+					<button id="logout">Logout</button>
 				</div>
 				<form action="profile" method="post" id="profile-form">
+					<c:if test="${error == true}">
+						<div class="error-banner flex-between">
+							<p>Oh no! There was an error saving your changes.</p>
+							<i class="fa fa-close"></i>
+						</div>
+						<br/>
+					</c:if>
 					<h1 id="context-title">General Information</h1>
 					<label>
 						<span>First name</span>
@@ -90,7 +102,6 @@
 					</label>
 					<label>
 						<span>Phone number</span>
-						<input type="number" name="phone" value="091234567" class="full-width" />
 						<c:choose>
 							<c:when test="${loggedUser.phone != null}">
 								<input type="number" name="phone" value="${loggedUser.phone}" placeholder="Edit your phone number" class="full-width" />
@@ -100,11 +111,16 @@
 							</c:otherwise>
 						</c:choose>
 					</label>
+					<br/><br/>
+					<label>
+						<span>Confirm Password to Continue</span>
+						<input type="password" name="securityPassword" placeholder="Type your password to continue" class="full-width" />
+					</label>
+					<input type="hidden" name="purpose" value="edit-pg" />
 					<div id="confirm-buttons" class="flex-end">
 						<button class="hallow" data-id="pg" id="profile-discard-changes">Cancel</button>
 						<input type="submit" value="Save Changes" id="save-changes" />
 					</div>
-					<input type="hidden" name="purpose" value="edit-pg" />
 				</form>
 			</div>
 		</section>

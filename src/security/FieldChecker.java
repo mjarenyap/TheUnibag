@@ -79,7 +79,7 @@ public class FieldChecker {
 		if(user.getEmail() == null || user.getEmail().length() == 0 || !user.getEmail().contains("@"))
 			return false;
 
-		String phone = user.getPhone();
+		String phone = String.valueOf(user.getPhone());
 		for(int i = 0; i < phone.length(); i++)
 			if(phone.charAt(i) < '0' || phone.charAt(i) > '9')
 				return false;
