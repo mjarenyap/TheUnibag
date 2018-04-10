@@ -8,6 +8,14 @@ $(document).ready(function(){
 	$('div.error-banner .fa-close').click(function(){
 		$('div.error-banner').hide();
 	});
+
+	$('#search').click(function(){
+		$('#modal-overlay').show();
+	});
+
+	$('#close-modal').click(function(){
+		$('#modal-overlay').hide();
+	});
 });
 
 function initSubNavigation(){

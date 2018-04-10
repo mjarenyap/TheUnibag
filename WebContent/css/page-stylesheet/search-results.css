@@ -1,4 +1,4 @@
-/* product list page stylesheet */
+/* search results stylesheet */
 
 section{
 	padding: 5em 15%;
@@ -13,6 +13,10 @@ section{
 
 #main-heading{
 	font-size: 2em;
+}
+
+#main-heading span{
+	color: var(--theme-color);
 }
 
 #pagination{
@@ -78,15 +82,14 @@ section{
 	margin: 0.8em 1.5em;
 }
 
-#product-feed{
-	max-width: 65%;
-}
-
 #product-feed div.content-wrapper{
+	display: flex;
 	margin: 2em;
 	margin-right: 0;
 	padding: 1em;
 	width: 40em;
+	justify-content: flex-start;
+	align-items: center;
 	border-radius: 5px;
 
 	transition: all ease 0.3s;
@@ -94,12 +97,6 @@ section{
 	-moz-transition: all ease 0.3s;
 	-o-transition: all ease 0.3s;
 	-ms-transition: all ease 0.3s;
-}
-
-#product-feed div.content-wrapper > div.details{
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
 }
 
 .featured-image{

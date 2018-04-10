@@ -48,7 +48,7 @@ td:nth-child(1), td:last-of-type{
     height: 10px;
     width: 90%;
     display: block;
-    background-image: url('../../assets/images/search.png');
+    background-image: url('../../assets/icons/magnifying-glass.svg');
     background-color: white;
     background-repeat: no-repeat;
     background-position: center left 5px;

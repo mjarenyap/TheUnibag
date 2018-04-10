@@ -63,7 +63,7 @@
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <a href="admin-user.html"><span>View all users</span></a>
+                    <span id="back-all-users">View all users</span>
                 </p>
             </div>
             <form method="post" action="addeduser" class="info">
@@ -112,7 +112,7 @@
                         <div class="type flex-between">
                             <div>
                                 <div>Phone number</div>
-                                <input type="number" name="phone" placeholder="Type the phone number" />
+                                <input type="text" name="phone" placeholder="Type the phone number" />
                             </div>
                             <div>
                                 <div>Province<span>*</span></div>
@@ -148,7 +148,7 @@
                     
                     <!-- Save Changes -->
                     <div class="buttons">
-                        <button class="hallow butt">DISCARD</button>
+                        <button class="hallow butt" type="button" id="discard" data-id="allusers">DISCARD</button>
                         <button type="submit" class="butt save">SAVE CHANGES</button>
                     </div>
                 </div>

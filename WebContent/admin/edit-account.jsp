@@ -37,21 +37,21 @@
             <div class="items">
                 <div class="headline">Orders</div>
                 <hr>
-                <a href="admin-index.html"><div class="option">View all orders</div></a>
+                <div class="option" data-id="allorders">View all orders</div>
             </div>
             
             <div class="items">
                 <div class="headline">Products</div>
                 <hr>
-                <a href="admin-bag.html"><div class="option">View all products</div></a>
-                <a href="add-product.html"><div class="option">Add new product</div></a>
+                <div class="option" data-id="allproducts">View all products</div>
+                <div class="option" data-id="addproduct">Add new product</div>
             </div>
             
             <div class="items">
                 <div class="headline">Users</div>
                 <hr>
-                <a href="admin-user.html"><div class="option">View all users</div></a>
-                <a href="add-user.html"><div class="option">Add new user</div></a>
+                <div class="option" data-id="allusers">View all users</div>
+                <div class="option" data-id="adduser">Add new user</div>
             </div>
             
             <div class="items admin">
@@ -68,7 +68,7 @@
                     <span id="back-all-products">View all users</span>
                 </p>
             </div>
-            <div class="info">
+            <form method="port" action="editedaccount" class="info">
                 <div class="header">Edit Your Account</div>
                 <c:if test="${error == true}">
                     <br/>
@@ -116,10 +116,10 @@
                                 <div>Phone number</div>
                                 <c:choose>
                                     <c:when test="${loggedUser.phone == null}">
-                                        <input type="number" name="phone" placeholder="Type your phone number" value="" />
+                                        <input type="text" name="phone" placeholder="Type your phone number" value="" />
                                     </c:when>
                                     <c:otherwise>
-                                        <input type="number" name="phone" placeholder="Type your phone number" value="${loggedUser.phone}" />
+                                        <input type="text" name="phone" placeholder="Type your phone number" value="${loggedUser.phone}" />
                                     </c:otherwise>
                                 </c:choose>
                             </div>
@@ -158,11 +158,11 @@
                     </div>
                     <!-- Save Changes -->
                     <div class="buttons">
-                        <button class="hallow butt">DISCARD</button>
-                        <button class="butt save">SAVE CHANGES</button>
+                        <button class="hallow butt" id="discard" type="button" data-id="allusers">DISCARD</button>
+                        <button type="submit" class="butt save">SAVE CHANGES</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </body>
 </html>

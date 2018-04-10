@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>My Profile</title>
+		<title>Password reset successfully</title>
 		<!-- FONT EXTERNAL LINKS -->
 		<link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -22,7 +22,7 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/modal.css" />
 
 		<!-- PAGE STYLESHEET -->
-		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/profile.css" />
+		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/success.css" />
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
@@ -70,49 +70,16 @@
 			</ul>
 		</nav>
 
-		<section id="account">
-			<h1 id="profile-title">Your Account Settings</h1>
-			<hr/>
-			<div class="flex-start">
-				<div id="context-wrapper">
-					<button class="profile-nav" data-id="profile-general">General Information</button>
-					<hr/>
-					<button class="active profile-nav" data-id="profile-password">Change Password</button>
-					<hr/>
-					<button class="profile-nav" data-id="profile-address">Address Information</button>
-					<br/>
-					<br/>
-					<br/>
-					<hr/>
-					<button id="logout">Logout</button>
-				</div>
-				<form action="profile" method="post" id="profile-form">
-					<c:if test="${error == true}">
-						<div class="error-banner flex-between">
-							<p>Oh no! There was an error saving your changes.</p>
-							<i class="fa fa-close"></i>
-						</div>
-						<br/>
-					</c:if>
-					<h1 id="context-title">Change Password</h1>
-					<label>
-						<span>Old Password</span>
-						<input type="password" name="oldpassword" placeholder="Type here your old password" class="full-width" />
-					</label>
-					<label>
-						<span>New Password</span>
-						<input type="password" name="newpassword" placeholder="Type here your new password" class="full-width" />
-					</label>
-					<label>
-						<span>Confirm New Password</span>
-						<input type="password" name="confirmpass" placeholder="Re-type here your new password" class="full-width" />
-					</label>
-					<div id="confirm-buttons" class="flex-end">
-						<button class="hallow" data-id="pa" id="profile-discard-changes">Cancel</button>
-						<input type="submit" value="Save Changes" id="save-changes" />
-					</div>
-					<input type="hidden" name="purpose" value="edit-pp" />
-				</form>
+		<section>
+			<img src="assets/icons/success.svg" id="success-icon" />
+			<h1 id="title-banner">Check your Desktop!</h1>
+			<h3 id="order-confirmation">
+				We've already sent your new password onto your desktop. Check it out!
+			</h3>
+			<h4 id="meantime">After that, you can also:</h4>
+			<div id="links" class="flex-center">
+				<button id="back-home">Go back home</button>
+				<button class="hallow" id="browse-products">Browse more bags</button>
 			</div>
 		</section>
 

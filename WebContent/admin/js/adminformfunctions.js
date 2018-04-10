@@ -29,6 +29,11 @@ $(document).ready(function(){
 		directViewUserPage(url);
 	});
 
+	$('#discard').click(function(){
+		var back = $(this).attr("data-id");
+		directDiscard(back);
+	});
+
 	$('#logout').click(directLogout);
 	$('#edit-account').click(directEditAccount);
 });
@@ -78,6 +83,11 @@ function directDelete(target){
 	else $('form#directDelete').append('<input type="checkbox" class="delete-status" name="deletelist" />');
 
 	$('form#directDelete').submit();
+}
+
+function directDiscard(back){
+	$('body').append('<form method="post" id="directDiscard" action="' + back + '"></form>');
+	$('form#directDiscard').submit();
 }
 
 function directLogout(){

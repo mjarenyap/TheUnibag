@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import beans.User;
 import beans.Bag;
@@ -19,11 +20,14 @@ import security.FieldChecker;
 import security.PurposeChecker;
 import security.DuplicateChecker;
 import security.Encryption;
+import security.Attempt;
+import security.Expiration;
+import security.PasswordGenerator;
 
 /**
  * Servlet implementation class LogServlet
  */
-@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset", "/logout"})
+@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset", "/logout", "/forgot", "/recover"})
 public class LogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -61,41 +65,58 @@ public class LogServlet extends HttpServlet {
 			case "/logout": logout(request, response);
 			break;
 
+			case "/forgot": forgotPage(request, response);
+			break;
+
+			case "/recover": recover(request, response);
+			break;
+
 			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
 			break;
 		}
 	}
 
 	protected void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// check if there is no existing cart session
-		if(request.getSession().getAttribute("ShoppingCart") == null){
-			ArrayList<Bag> shoppingcart = new ArrayList<>();
-			request.getSession().setAttribute("ShoppingCart", shoppingcart);
-		}
-
-		// IMPORTANT: GET ALL PROMOTIONS
-		List<Bag> bags = BagService.getAllBags();
-		ArrayList<Bag> baglist = new ArrayList<>();
-		ArrayList<String> productNames = new ArrayList<>();
-		Encryption e = new Encryption();
-
-		// IMPORTANT: SET THEM TO REQUEST ATTRIBUTES
-		if(bags.size() > 0)
-			for(int i = 0; i < 3; i++){
-				long encryptedID = e.encryptID(bags.get(i).getBagID());
-				bags.get(i).setBagID(encryptedID);
-
-				String pname = bags.get(i).getName().replace(' ', '+');
-				pname = encryptedID + "#" + pname;
-				productNames.add(pname);
-				baglist.add(bags.get(i));
+		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			if(request.getSession().getAttribute("lastLogged") != null)
+				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
+			// check if there is no existing cart session
+			if(request.getSession().getAttribute("ShoppingCart") == null){
+				ArrayList<Bag> shoppingcart = new ArrayList<>();
+				request.getSession().setAttribute("ShoppingCart", shoppingcart);
 			}
 
-		request.setAttribute("baglist", baglist);
-		request.setAttribute("productnames", productNames);
+			if(request.getSession().getAttribute("Blacklist") == null){
+				ArrayList<Attempt> blacklist = new ArrayList<>();
+				request.getSession().setAttribute("Blacklist", blacklist);
+			}
 
-		// dispatch to the homepage
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+			// IMPORTANT: GET ALL PROMOTIONS
+			List<Bag> bags = BagService.getAllBags();
+			ArrayList<Bag> baglist = new ArrayList<>();
+			ArrayList<String> productNames = new ArrayList<>();
+			Encryption e = new Encryption();
+
+			// IMPORTANT: SET THEM TO REQUEST ATTRIBUTES
+			if(bags.size() > 0)
+				for(int i = 0; i < 3; i++){
+					long encryptedID = e.encryptID(bags.get(i).getBagID());
+					bags.get(i).setBagID(encryptedID);
+
+					String pname = bags.get(i).getName().replace(' ', '+');
+					pname = encryptedID + "#" + pname;
+					productNames.add(pname);
+					baglist.add(bags.get(i));
+				}
+
+			request.setAttribute("baglist", baglist);
+			request.setAttribute("productnames", productNames);
+
+			// dispatch to the homepage
+			request.getRequestDispatcher("index.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 	}
 
 	protected void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -103,12 +124,14 @@ public class LogServlet extends HttpServlet {
 		boolean loggedFlag = false;
 
 		// check for logged user
-		if(request.getSession().getAttribute("Account") != null)
+		if(request.getSession().getAttribute("Account") != null || request.getSession().getAttribute("adminAccount") != null)
 			loggedFlag = true;
 
 		// invalidate the session
 		if(loggedFlag){
 			request.getSession().setAttribute("Account", null);
+			request.getSession().setAttribute("adminAccount", null);
+			request.getSession().setAttribute("lastLogged", null);
 
 			// remove the Account cookies
 			Cookie[] cookies = request.getCookies();
@@ -116,7 +139,7 @@ public class LogServlet extends HttpServlet {
 				for(int i = 0; i < cookies.length; i++)
 				{	
 					Cookie currentCookie = cookies[i];
-					if(currentCookie.getName().equals("Username"))
+					if(currentCookie.getName().equals("Username") || currentCookie.getName().equals("adminUsername"))
 					{
 						currentCookie.setMaxAge(0);
 						response.addCookie(currentCookie);
@@ -203,7 +226,19 @@ public class LogServlet extends HttpServlet {
 
 				// set a session attribute "Account"
 				if(correctUser != null){
+					// remove from blacklist
+					@SuppressWarnings("unchecked")
+					ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+					for(int i = 0; i < blacklist.size(); i++)
+						if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+							blacklist.remove(i);
+							break;
+						}
+
+					request.getSession().setAttribute("Blacklist", blacklist);
 					request.getSession().setAttribute("Account", correctUser);
+					LocalDateTime now = LocalDateTime.now();
+					request.getSession().setAttribute("lastLogged", now);
 					
 					// create a cookie for the logged user
 					Cookie userCookie = new Cookie("Username", correctUser.getEmail());
@@ -233,10 +268,34 @@ public class LogServlet extends HttpServlet {
 				}
 
 				else{
+					// initiate blacklisting
+					int bindex = -1;
+					boolean blacklisted = false;
+					@SuppressWarnings("unchecked")
+					ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+					for(int i = 0; i < blacklist.size(); i++)
+						if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+							blacklist.get(i).setCount(blacklist.get(i).getCount() + 1);
+							blacklisted = true;
+							bindex = i;
+							break;
+						}
+
+					if(!blacklisted){
+						blacklist.add(new Attempt(email, 1));
+						bindex = blacklist.size() - 1;
+					}
+
+					request.getSession().setAttribute("Blacklist", blacklist);
+
 					errorFlag = true;
 					request.setAttribute("error", errorFlag);
 					request.setAttribute("purpose", redirect);
-					request.getRequestDispatcher("login.jsp").forward(request, response);
+
+					if(blacklist.get(bindex).getCount() >= 3)
+						request.getRequestDispatcher("page-403.jsp").forward(request, response);
+
+					else request.getRequestDispatcher("login.jsp").forward(request, response);
 				}
 			}
 
@@ -244,10 +303,34 @@ public class LogServlet extends HttpServlet {
 				home(request, response);
 
 			else if(!validCredentialFlag && validRedirectFlag){
+				// initiate blacklisting
+				int bindex = -1;
+				boolean blacklisted = false;
+				@SuppressWarnings("unchecked")
+				ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+				for(int i = 0; i < blacklist.size(); i++)
+					if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+						blacklist.get(i).setCount(blacklist.get(i).getCount() + 1);
+						bindex = i;
+						blacklisted = true;
+						break;
+					}
+
+				if(!blacklisted){
+					blacklist.add(new Attempt(email, 1));
+					bindex = blacklist.size() - 1;
+				}
+
+				request.getSession().setAttribute("Blacklist", blacklist);
+
 				errorFlag = true;
 				request.setAttribute("error", errorFlag);
 				request.setAttribute("purpose", redirect);
-				request.getRequestDispatcher("login.jsp").forward(request, response);
+
+				if(blacklist.get(bindex).getCount() >= 3)
+					request.getRequestDispatcher("page-403.jsp").forward(request, response);
+
+				else request.getRequestDispatcher("login.jsp").forward(request, response);
 			}
 
 			else home(request, response);
@@ -331,6 +414,8 @@ public class LogServlet extends HttpServlet {
 
 					// set a session attribute "Account"
 					request.getSession().setAttribute("Account", newUser);
+					LocalDateTime now = LocalDateTime.now();
+					request.getSession().setAttribute("lastLogged", now);
 						
 					// create a cookie for the logged user
 					Cookie userCookie = new Cookie("Username", newUser.getEmail());
@@ -366,11 +451,68 @@ public class LogServlet extends HttpServlet {
 		else home(request, response);
 	}
 
+	protected void forgotPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null)
+			request.getRequestDispatcher("forgot.jsp").forward(request, response);
+
+		else home(request, response);
+	}
+
+	protected void recover(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
+			String email = request.getParameter("email");
+			String phone = request.getParameter("phone");
+
+			Encryption e = new Encryption();
+
+			// declare boolean variables
+			boolean foundFlag = false;
+			List<User> userlist = UserService.getAllUsers();
+			User correctUser = null;
+			for(int i = 0; i < userlist.size(); i++){
+				if(userlist.get(i).getPhone().length() > 0 || userlist.get(i).getPhone() != null){
+					if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && phone.equals(userlist.get(i).getPhone())){
+						correctUser = userlist.get(i);
+						foundFlag = true;
+						break;
+					}
+				}
+
+				else{
+					if(email.equalsIgnoreCase(userlist.get(i).getEmail())){
+						foundFlag = true;
+						break;
+					}
+				}
+			}
+
+			if(foundFlag){
+				// do some email algorithms
+				String passwordReset = PasswordGenerator.generate();
+				if(passwordReset != null){
+					passwordReset = e.encryptPassword(passwordReset);
+					correctUser.setPassword(passwordReset);
+					UserService.updateUser(correctUser.getUserID(), correctUser);
+					request.getRequestDispatcher("recover.jsp").forward(request, response);
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			}
+
+			else{
+				request.setAttribute("error", !foundFlag);
+				request.getRequestDispatcher("forgot.jsp").forward(request, response);
+			}
+		}
+
+		else home(request, response);
+	}
+
 	protected void resetAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getSession().setAttribute("Account", null);
 		request.getSession().setAttribute("adminAccount", null);
-		request.getSession().setAttribute("ShoppingCart", null);
-		request.getSession().invalidate();
+		request.getSession().setAttribute("ShoppingCart", new ArrayList<Bag>());
+		request.getSession().setAttribute("lastLogged", null);
 
 		// remove the Account cookies
 		Cookie[] cookies = request.getCookies();

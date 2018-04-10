@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>403 Page - Forbidden</title>
+		<title>401 Page - Session Timeout</title>
         <!-- FONT EXTERNAL LINKS -->
         <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
@@ -27,10 +27,10 @@
         <div id="center">
             <div class="flex-between">
                 <div><img src="assets/images/cat2.png" draggable="false"></div>
-                <form method="post" action="reset" class="error-msg" id="redirectForm">
-                    <div id="error-number">403</div>
-                    <div id="error-name" class="msg">Forbidden</div>
-                    <div id="msg" class="msg">No No No! You have no permission to go here</div>
+                <form method="post" action="../logout" class="error-msg" id="redirectForm">
+                    <div id="error-number">401</div>
+                    <div id="error-name" class="msg">Session Timeout</div>
+                    <div id="msg" class="msg">Oops! It seems you've been gone a while. We logged you out just to be safe.</div>
                     <a href="#" onclick="document.getElementById('redirectForm').submit()"><span>Go Back to Home</span></a>
                 </form>
             </div>
