@@ -86,8 +86,8 @@
 					<input type="password" name="phone" placeholder="Type here your phone number (if there is)" class="full-width" />
 				</label>
 				<div class="flex-end">
-					<span class="help">Don't have an account? <a href="#">Get started</a> here.</span>
-					<input type="submit" value="Email my password" />
+					<span class="help">Don't have an account? <a href="#" id="go-signup">Get started</a> here.</span>
+					<input type="submit" value="Confirm" />
 				</div>
 			</form>
 		</section>

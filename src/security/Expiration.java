@@ -1,3 +1,4 @@
+package security;
 import java.time.LocalDateTime;
 
 public class Expiration{
@@ -5,7 +6,7 @@ public class Expiration{
 
 	public static boolean isExpired(LocalDateTime lastLogged){
 		if(lastLogged != null){
-			expireQuota = 1; // in minutes
+			int expireQuota = 30; // in minutes
 			LocalDateTime now = LocalDateTime.now();
 
 			int hours = now.getHour() - lastLogged.getHour();
@@ -15,7 +16,7 @@ public class Expiration{
 			if(seconds < 0)
 				seconds += 60;
 
-			else if(seconds >= 0)
+			else if(seconds >= 0 && minutes > 0)
 				minutes++;
 
 

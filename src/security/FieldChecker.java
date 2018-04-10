@@ -48,7 +48,7 @@ public class FieldChecker {
 		// atleast 1 symbol
 		boolean symbolFlag = false;
 		for(int i = 0; i < password.length(); i++){
-			if(password.charAt(i) < 'A' || password.charAt(i) > 'z'){
+			if((password.charAt(i) < 'A' || password.charAt(i) > 'z') && (password.charAt(i) < '0' || password.charAt(i) > '9')){
 				symbolFlag = true;
 				break;
 			}

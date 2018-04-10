@@ -137,53 +137,31 @@ function directFilteredProducts(){
 	var prange4 = $("#price-range-4");
 	var prange5 = $("#price-range-5");
 
-	var collect1 = $("collection-1");
-	var collect2 = $("collection-2");
-	var collect3 = $("collection-3");
-
 	// 1st wave
-	if(prange1.is(":checked"))
+	if(prange1.is(":checked")){
 		$("#product-feed .prange1").show();
+		$("hr.prange1")
+	}
 
-	if(prange2.is(":checked"))
+	if(prange2.is(":checked")){
 		$("#product-feed .prange2").show();
+		$("hr.prange2")
+	}
 
-	if(prange3.is(":checked"))
+	if(prange3.is(":checked")){
 		$("#product-feed .prange3").show();
+		$("hr.prange3")
+	}
 
-	if(prange4.is(":checked"))
+	if(prange4.is(":checked")){
 		$("#product-feed .prange4").show();
+		$("hr.prange4")
+	}
 
-	if(prange5.is(":checked"))
+	if(prange5.is(":checked")){
 		$("#product-feed .prange5").show();
-
-	// 2nd wave
-	if(collect1.is(":checked"))
-		$("#product-feed .collect1").show();
-
-	if(collect2.is(":checked"))
-		$("#product-feed .collect2").show();
-
-	if(collect3.is(":checked"))
-		$("#product-feed .collect3").show();
-
-	// 3rd wave
-	if(prange1.is(":checked"))
-		$("#product-feed .prange1").show();
-
-	if(prange2.is(":checked"))
-		$("#product-feed .prange2").show();
-
-	if(prange3.is(":checked"))
-		$("#product-feed .prange3").show();
-
-	if(prange4.is(":checked"))
-		$("#product-feed .prange4").show();
-
-	if(prange5.is(":checked"))
-		$("#product-feed .prange5").show();
-
-
+		$("hr.prange5")
+	}
 }
 
 function directAllProducts(){

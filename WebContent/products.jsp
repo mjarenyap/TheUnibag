@@ -112,14 +112,14 @@
 					<label>
 						<input type="checkbox" id="price-range-4" name="price-range-4" class="side-filter" checked />
 						<span></span>
-						$150.00 - $200.00
+						$150.00 - $199.99
 					</label>
 					<label>
 						<input type="checkbox" id="price-range-5" name="price-range-5" class="side-filter" checked />
 						<span></span>
 						more than $200.00
 					</label>
-
+					<!--
 					<h4 class="criteria">Collections</h4>
 					<label>
 						<input type="checkbox" id="collection-1" name="collection-1" class="side-filter" checked />
@@ -136,21 +136,25 @@
 						<span></span>
 						Travel System Collection
 					</label>
+					-->
 				</div>
 				<div id="product-feed">
 					<c:forEach items="${baglist}" var="bag" varStatus="status">
-						<div class="content-wrapper ${pfilter[status.index]} ${cfilter[status.index]}">
-							<div class="featured-image"></div>
-							<div class="product-info">
-								<h1 class="product-name"><c:out value="${bag.name}"/></h1>
-								<h3 class="product-price">$<c:out value="${bag.price}"/></h3>
-								<h4 class="product-brand">Brand: <span><c:out value="${bag.brand}"/></span></h4>
-								<h4 class="product-type">Type of bag: <span><c:out value="${bag.type}"/></span></h4>
-								<h4 class="product-rating">Product rating: <span><c:out value="${bag.rating}"/> out of 5</span></h4>
-								<button class="hallow view-product" data-id="${productnames[status.index]}">View product details</button>
+						<div class="content-wrapper ${pfilter[status.index]}">
+							<div class="details">
+								<div class="featured-image"></div>
+								<div class="product-info">
+									<h1 class="product-name"><c:out value="${bag.name}"/></h1>
+									<h3 class="product-price">$<c:out value="${bag.price}"/></h3>
+									<h4 class="product-brand">Brand: <span><c:out value="${bag.brand}"/></span></h4>
+									<h4 class="product-type">Type of bag: <span><c:out value="${bag.type}"/></span></h4>
+									<h4 class="product-rating">Product rating: <span><c:out value="${bag.rating}"/> out of 5</span></h4>
+									<button class="hallow view-product" data-id="${productnames[status.index]}">View product details</button>
+								</div>
 							</div>
+							<br/>
+							<hr/>
 						</div>
-						<hr class="${pfilter[status.index]} ${cfilter[status.index]}" />
 					</c:forEach>
 				</div>
 			</div>

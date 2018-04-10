@@ -21,6 +21,7 @@ import services.BagService;
 import services.AddressService;
 import security.FieldChecker;
 import security.Encryption;
+import security.Expiration;
 
 /**
  * Servlet implementation class OrderServlet
@@ -66,6 +67,8 @@ public class OrderServlet extends HttpServlet {
 
 	protected void shoppingCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+        	if(request.getSession().getAttribute("lastLogged") != null)
+				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
         	// declare flag variables
 			boolean emptyFlag = true;
 
@@ -101,6 +104,8 @@ public class OrderServlet extends HttpServlet {
 
 	protected void checkout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			if(request.getSession().getAttribute("lastLogged") != null)
+				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 			// declare flag variables
 			boolean purposeFlag = false;
 			boolean emptyFlag = true;

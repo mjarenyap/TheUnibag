@@ -97,6 +97,10 @@ section#services img{
 	margin: 1.5em auto;
 	border-radius: 100%;
 	background-color: #ddd;
+	background: url('../../assets/images/feature-lesportsac.jpg');
+	background-size: cover;
+	background-position: top;
+	background-repeat: no-repeat;
 }
 
 #collections div.content-wrapper .product-name{

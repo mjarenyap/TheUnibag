@@ -118,7 +118,7 @@
 				</label>
 				<label>
 					<span>Phone number</span>
-					<input type="number" name="phone" placeholder="(Optional) Type here you phone number" class="full-width" />
+					<input type="text" name="phone" placeholder="(Optional) Type here you phone number" class="full-width" />
 				</label>
 				<div class="flex-end">
 					<span class="help">Already have an account? <a href="#" id="go-login">Login</a> here.</span>

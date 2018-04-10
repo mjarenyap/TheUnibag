@@ -116,10 +116,10 @@
                                 <div>Phone number</div>
                                 <c:choose>
                                     <c:when test="${loggedUser.phone == null}">
-                                        <input type="number" name="phone" placeholder="Type your phone number" value="" />
+                                        <input type="text" name="phone" placeholder="Type your phone number" value="" />
                                     </c:when>
                                     <c:otherwise>
-                                        <input type="number" name="phone" placeholder="Type your phone number" value="${loggedUser.phone}" />
+                                        <input type="text" name="phone" placeholder="Type your phone number" value="${loggedUser.phone}" />
                                     </c:otherwise>
                                 </c:choose>
                             </div>
