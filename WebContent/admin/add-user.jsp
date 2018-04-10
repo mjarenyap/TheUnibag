@@ -63,7 +63,7 @@
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <a href="admin-user.html"><span>View all users</span></a>
+                    <span id="back-all-users">View all users</span>
                 </p>
             </div>
             <form method="post" action="addeduser" class="info">

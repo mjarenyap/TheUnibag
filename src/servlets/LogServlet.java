@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import beans.User;
 import beans.Bag;
@@ -20,6 +21,7 @@ import security.PurposeChecker;
 import security.DuplicateChecker;
 import security.Encryption;
 import security.Attempt;
+import security.Expiration;
 
 /**
  * Servlet implementation class LogServlet
@@ -74,40 +76,44 @@ public class LogServlet extends HttpServlet {
 	}
 
 	protected void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// check if there is no existing cart session
-		if(request.getSession().getAttribute("ShoppingCart") == null){
-			ArrayList<Bag> shoppingcart = new ArrayList<>();
-			request.getSession().setAttribute("ShoppingCart", shoppingcart);
-		}
-
-		if(request.getSession().getAttribute("Blacklist") == null){
-			ArrayList<Attempt> blacklist = new ArrayList<>();
-			request.getSession().setAttribute("Blacklist", blacklist);
-		}
-
-		// IMPORTANT: GET ALL PROMOTIONS
-		List<Bag> bags = BagService.getAllBags();
-		ArrayList<Bag> baglist = new ArrayList<>();
-		ArrayList<String> productNames = new ArrayList<>();
-		Encryption e = new Encryption();
-
-		// IMPORTANT: SET THEM TO REQUEST ATTRIBUTES
-		if(bags.size() > 0)
-			for(int i = 0; i < 3; i++){
-				long encryptedID = e.encryptID(bags.get(i).getBagID());
-				bags.get(i).setBagID(encryptedID);
-
-				String pname = bags.get(i).getName().replace(' ', '+');
-				pname = encryptedID + "#" + pname;
-				productNames.add(pname);
-				baglist.add(bags.get(i));
+		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			// check if there is no existing cart session
+			if(request.getSession().getAttribute("ShoppingCart") == null){
+				ArrayList<Bag> shoppingcart = new ArrayList<>();
+				request.getSession().setAttribute("ShoppingCart", shoppingcart);
 			}
 
-		request.setAttribute("baglist", baglist);
-		request.setAttribute("productnames", productNames);
+			if(request.getSession().getAttribute("Blacklist") == null){
+				ArrayList<Attempt> blacklist = new ArrayList<>();
+				request.getSession().setAttribute("Blacklist", blacklist);
+			}
 
-		// dispatch to the homepage
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+			// IMPORTANT: GET ALL PROMOTIONS
+			List<Bag> bags = BagService.getAllBags();
+			ArrayList<Bag> baglist = new ArrayList<>();
+			ArrayList<String> productNames = new ArrayList<>();
+			Encryption e = new Encryption();
+
+			// IMPORTANT: SET THEM TO REQUEST ATTRIBUTES
+			if(bags.size() > 0)
+				for(int i = 0; i < 3; i++){
+					long encryptedID = e.encryptID(bags.get(i).getBagID());
+					bags.get(i).setBagID(encryptedID);
+
+					String pname = bags.get(i).getName().replace(' ', '+');
+					pname = encryptedID + "#" + pname;
+					productNames.add(pname);
+					baglist.add(bags.get(i));
+				}
+
+			request.setAttribute("baglist", baglist);
+			request.setAttribute("productnames", productNames);
+
+			// dispatch to the homepage
+			request.getRequestDispatcher("index.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 	}
 
 	protected void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -122,6 +128,7 @@ public class LogServlet extends HttpServlet {
 		if(loggedFlag){
 			request.getSession().setAttribute("Account", null);
 			request.getSession().setAttribute("adminAccount", null);
+			request.getSession().setAttribute("lastLogged", null);
 
 			// remove the Account cookies
 			Cookie[] cookies = request.getCookies();
@@ -227,6 +234,8 @@ public class LogServlet extends HttpServlet {
 
 					request.getSession().setAttribute("Blacklist", blacklist);
 					request.getSession().setAttribute("Account", correctUser);
+					LocalDateTime now = LocalDateTime.now();
+					request.getSession().setAttribute("lastLogged", now);
 					
 					// create a cookie for the logged user
 					Cookie userCookie = new Cookie("Username", correctUser.getEmail());
@@ -402,6 +411,8 @@ public class LogServlet extends HttpServlet {
 
 					// set a session attribute "Account"
 					request.getSession().setAttribute("Account", newUser);
+					LocalDateTime now = LocalDateTime.now();
+					request.getSession().setAttribute("lastLogged", now);
 						
 					// create a cookie for the logged user
 					Cookie userCookie = new Cookie("Username", newUser.getEmail());
@@ -487,6 +498,7 @@ public class LogServlet extends HttpServlet {
 		request.getSession().setAttribute("Account", null);
 		request.getSession().setAttribute("adminAccount", null);
 		request.getSession().setAttribute("ShoppingCart", new ArrayList<Bag>());
+		request.getSession().setAttribute("lastLogged", null);
 
 		// remove the Account cookies
 		Cookie[] cookies = request.getCookies();

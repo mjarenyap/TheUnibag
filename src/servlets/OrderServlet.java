@@ -65,90 +65,98 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	protected void shoppingCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // declare flag variables
-		boolean emptyFlag = true;
+        if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+        	// declare flag variables
+			boolean emptyFlag = true;
 
-		// check cart session for items
-		@SuppressWarnings("unchecked")
-		ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
-		ArrayList<String> productNames = new ArrayList<>();
-		float subtotal = 0;
-		// check if there are items in the shopping cart
-		if(cartlist.size() > 0 && cartlist != null){
-			emptyFlag = false;
+			// check cart session for items
+			@SuppressWarnings("unchecked")
+			ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+			ArrayList<String> productNames = new ArrayList<>();
+			float subtotal = 0;
+			// check if there are items in the shopping cart
+			if(cartlist.size() > 0 && cartlist != null){
+				emptyFlag = false;
 
-			// compute for subtotal
-			for(int i = 0; i < cartlist.size(); i++){
-				String pname = cartlist.get(i).getName().replace(' ', '+');
-				String productPath = cartlist.get(i).getBagID() + "#" + pname;
-				productNames.add(productPath);
-				subtotal += cartlist.get(i).getPrice();
+				// compute for subtotal
+				for(int i = 0; i < cartlist.size(); i++){
+					String pname = cartlist.get(i).getName().replace(' ', '+');
+					String productPath = cartlist.get(i).getBagID() + "#" + pname;
+					productNames.add(productPath);
+					subtotal += cartlist.get(i).getPrice();
+				}
+
+				// set computed total as request attribute "subtotal"
+				request.setAttribute("subtotal", subtotal);
 			}
 
-			// set computed total as request attribute "subtotal"
+			request.setAttribute("empty", emptyFlag);
 			request.setAttribute("subtotal", subtotal);
-		}
+			request.setAttribute("productPaths", productNames);
+			request.getRequestDispatcher("cart.jsp").forward(request, response);
+        }
 
-		request.setAttribute("empty", emptyFlag);
-		request.setAttribute("subtotal", subtotal);
-		request.setAttribute("productPaths", productNames);
-		request.getRequestDispatcher("cart.jsp").forward(request, response);
+        else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 	}
 
 	protected void checkout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// declare flag variables
-		boolean purposeFlag = false;
-		boolean emptyFlag = true;
-		boolean authenticFlag = false;
+		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			// declare flag variables
+			boolean purposeFlag = false;
+			boolean emptyFlag = true;
+			boolean authenticFlag = false;
 
-		Encryption e = new Encryption();
+			Encryption e = new Encryption();
 
-		// check purpose if it contains "cart"
-		String purpose = request.getParameter("purpose");
-		if(purpose.equals("cart"))
-			purposeFlag = true;
+			// check purpose if it contains "cart"
+			String purpose = request.getParameter("purpose");
+			if(purpose.equals("cart"))
+				purposeFlag = true;
 
-		@SuppressWarnings("unchecked")
-		ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
-		if(cartlist.size() > 0 && cartlist != null)
-			emptyFlag = false;
-		
-		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
-			User currentUser = (User)request.getSession().getAttribute("Account");
-			if(UserService.getUser(e.decryptID(currentUser.getUserID())) != null)
-				authenticFlag = true;
+			@SuppressWarnings("unchecked")
+			ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+			if(cartlist.size() > 0 && cartlist != null)
+				emptyFlag = false;
+			
+			if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
+				User currentUser = (User)request.getSession().getAttribute("Account");
+				if(UserService.getUser(e.decryptID(currentUser.getUserID())) != null)
+					authenticFlag = true;
 
-			// autofill the fields for logged and authentic users
-			if(authenticFlag){
-				request.setAttribute("autofill", true);
-				Address currentAddress = AddressService.getAddress(e.decryptID(currentUser.getUserID()));
-				request.setAttribute("address", currentAddress);
+				// autofill the fields for logged and authentic users
+				if(authenticFlag){
+					request.setAttribute("autofill", true);
+					Address currentAddress = AddressService.getAddress(e.decryptID(currentUser.getUserID()));
+					request.setAttribute("address", currentAddress);
+				}
+
+				else{
+					request.setAttribute("address", null);
+					request.setAttribute("autofill", false);
+				}
 			}
 
-			else{
-				request.setAttribute("address", null);
-				request.setAttribute("autofill", false);
+			// check to validate the visiting of the checkout page
+			if(purposeFlag && !emptyFlag){
+				// compute for subtotal
+				float subtotal = 0;
+				for(int i = 0; i < cartlist.size(); i++)
+					subtotal += cartlist.get(i).getPrice();
+
+				// set the subtotal as attribute
+				request.setAttribute("subtotal", subtotal);
+
+				// set error message as FALSE by default
+				request.setAttribute("error", false);
+
+				// dispatch to the checkout page
+				request.getRequestDispatcher("checkout.jsp").forward(request, response);
 			}
+
+			else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 		}
 
-		// check to validate the visiting of the checkout page
-		if(purposeFlag && !emptyFlag){
-			// compute for subtotal
-			float subtotal = 0;
-			for(int i = 0; i < cartlist.size(); i++)
-				subtotal += cartlist.get(i).getPrice();
-
-			// set the subtotal as attribute
-			request.setAttribute("subtotal", subtotal);
-
-			// set error message as FALSE by default
-			request.setAttribute("error", false);
-
-			// dispatch to the checkout page
-			request.getRequestDispatcher("checkout.jsp").forward(request, response);
-		}
-
-		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+		else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 	}
 
 	protected void success(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
