@@ -14,7 +14,7 @@ import beans.Address;
  */
 
 public class AddressService {
-	public static void addAdress(Address address)
+	public static void addAddress(Address address)
 	{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -34,7 +34,7 @@ public class AddressService {
 		em.close();
 	}
 	
-	public static Address getAddress(int id)
+	public static Address getAddress(long id)
 	{
 		Address address = null;
 		
@@ -52,7 +52,7 @@ public class AddressService {
 		
 	}
 	
-	public static void deleteAddress(int id)
+	public static void deleteAddress(long id)
 	{	
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -71,7 +71,7 @@ public class AddressService {
 		}
 	}
 	
-	public static boolean updateAddress(int id, Address newinfo)
+	public static boolean updateAddress(long id, Address newinfo)
 	{
 		boolean success = false;
 		
@@ -131,6 +131,5 @@ public class AddressService {
 		return address;
 		
 	}
-	
 
 }

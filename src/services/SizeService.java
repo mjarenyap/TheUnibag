@@ -34,7 +34,7 @@ public class SizeService {
 		em.close();
 	}
 	
-	public static Size getSize(int id)
+	public static Size getSize(long id)
 	{
 		Size sizes = null;
 		
@@ -52,7 +52,7 @@ public class SizeService {
 		
 	}
 	
-	public static void deleteSize(int id)
+	public static void deleteSize(long id)
 	{	
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -71,7 +71,7 @@ public class SizeService {
 		}
 	}
 	
-	public static boolean updateSize(int id, Size newinfo)
+	public static boolean updateSize(long id, Size newinfo)
 	{
 		boolean success = false;
 		

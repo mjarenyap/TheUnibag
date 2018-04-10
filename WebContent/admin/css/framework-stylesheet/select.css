@@ -1,0 +1,40 @@
+/*
+    stylesheet framework for select tags
+*/
+
+select{
+    /*
+    width: 10em;
+    padding: 1em;
+    background-color: transparent;
+    border: thin solid white;
+    border-radius: 3px;
+    */
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 8px 0;
+    padding-right: 45px;
+    padding-left: 0px;
+    font-family: 'Source Serif Pro', sans-serif;
+    font-size: 1em;
+    background-color: transparent;
+    border-radius: 0;
+    border: none;
+    text-align: right;
+    /*border:  thin solid var(--theme-purple);*/
+    outline: none;
+    font-weight: normal;
+    color: var(--theme-dark-neutral);
+    cursor: pointer;
+
+    background-image: url("../../assets/icons/sorting-arrows.svg");
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: calc(100% - 15%);
+}
+
+option{
+    background-color: black;
+    text-align: right;
+}

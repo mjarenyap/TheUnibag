@@ -14,7 +14,6 @@ import beans.Order;
  */
 
 public class OrderService {
-	
 	public static void addOrder(Order order)
 	{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
@@ -35,7 +34,7 @@ public class OrderService {
 		em.close();
 	}
 	
-	public static Order getOrder(int id)
+	public static Order getOrder(long id)
 	{
 		Order orders = null;
 		
@@ -52,8 +51,37 @@ public class OrderService {
 		return orders;
 		
 	}
+
+	public static boolean updateOrder(long id, Order newinfo)
+	{
+		boolean success = false;
+		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		
+		try{
+			trans.begin();
+			//find a bag
+			Order a = em.find(Order.class, id);
+			
+			a.setStatus(newinfo.getStatus());
+			trans.commit();
+			
+		}catch(Exception e){
+			if(trans != null)
+				trans.rollback();
+			
+			e.printStackTrace();
+		}finally{
+			em.close();
+		}
+		
+		return success;
+		
+	}
 	
-	public static void deleteOrder(int id)
+	public static void deleteOrder(long id)
 	{	
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -91,7 +119,7 @@ public class OrderService {
 			if(trans != null)
 				trans.rollback();
 			
-			e.printStackTrace();
+			// e.printStackTrace();
 		}finally{
 			em.close();
 		}
