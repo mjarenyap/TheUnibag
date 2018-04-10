@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import beans.Bag;
 import beans.Size;
 import services.BagService;
 import services.SizeService;
 import security.Encryption;
+import security.Expiration;
 
 /**
  * Servlet implementation class ProductServlet
@@ -52,6 +54,8 @@ public class ProductServlet extends HttpServlet {
 
 	protected void products(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			if(request.getSession().getAttribute("lastLogged") != null)
+				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 			// declare filter variables // retrieve from filter controls
 			String typeFilter = request.getParameter("typeFilter");
 			String[] sortNames = {"Names A-Z", "Names Z-A", "Price Ascending", "Price Descending", "Type of bag", "Brand"};
@@ -109,7 +113,6 @@ public class ProductServlet extends HttpServlet {
 			// apply filtration algorithm for the fetched bags
 			ArrayList<Bag> filteredBags = new ArrayList<>();
 			ArrayList<String> productNames = new ArrayList<>();
-			ArrayList<String> collectionFilter = new ArrayList<>();
 			ArrayList<String> priceFilter = new ArrayList<>();
 			for(int i = 0; i < baglist.size(); i++){
 				boolean typeFlag = false;
@@ -127,36 +130,20 @@ public class ProductServlet extends HttpServlet {
 					productNames.add(e.encryptID(baglist.get(i).getBagID()) + "#" + baglist.get(i).getName().replace(' ', '+'));
 
 					// for price range filters
-					if(filteredBags.get(filteredBags.size() - 1).getPrice() < 40.00)
+					if(filteredBags.get(filteredBags.size() - 1).getPrice() < (float)40.00)
 						priceFilter.add("prange1");
 
-					else if(filteredBags.get(filteredBags.size() - 1).getPrice() >= 40.00 && filteredBags.get(filteredBags.size() - 1).getPrice() <= 99.99)
+					else if(filteredBags.get(filteredBags.size() - 1).getPrice() >= (float)40.00 && filteredBags.get(filteredBags.size() - 1).getPrice() <= (float)99.99)
 						priceFilter.add("prange2");
 
-					else if(filteredBags.get(filteredBags.size() - 1).getPrice() >= 100.00 && filteredBags.get(filteredBags.size() - 1).getPrice() <= 149.99)
+					else if(filteredBags.get(filteredBags.size() - 1).getPrice() >= (float)100.00 && filteredBags.get(filteredBags.size() - 1).getPrice() <= (float)149.99)
 						priceFilter.add("prange3");
 
-					else if(filteredBags.get(filteredBags.size() - 1).getPrice() >= 150.00 && filteredBags.get(filteredBags.size() - 1).getPrice() <= 199.99)
+					else if(filteredBags.get(filteredBags.size() - 1).getPrice() >= (float)150.00 && filteredBags.get(filteredBags.size() - 1).getPrice() <= (float)199.99)
 						priceFilter.add("prange4");
 
-					else if(filteredBags.get(filteredBags.size() - 1).getPrice() >= 200.00)
+					else if(filteredBags.get(filteredBags.size() - 1).getPrice() > (float)199.99)
 						priceFilter.add("prange5");
-
-					// for collection filters
-					if(filteredBags.get(filteredBags.size() - 1).getCollection() != null){
-						switch(filteredBags.get(filteredBags.size() - 1).getCollection()){
-							case "Classic Collection": collectionFilter.add("collect1");
-							break;
-
-							case "Essential Collection": collectionFilter.add("collect2");
-							break;
-
-							case "Travel System Collection": collectionFilter.add("collect3");
-							break;
-
-							default: collectionFilter.add("collect1");
-						}
-					} else collectionFilter.add("");
 				}
 			}
 			
@@ -165,7 +152,6 @@ public class ProductServlet extends HttpServlet {
 			request.setAttribute("baglist", filteredBags);
 			request.setAttribute("productnames", productNames);
 			request.setAttribute("pfilter", priceFilter);
-			request.setAttribute("cfilter", collectionFilter);
 			request.setAttribute("sortingMode", sortingMode);
 			request.setAttribute("sortName", sortNames[sortingMode]);
 			request.getRequestDispatcher("products.jsp").forward(request, response);
@@ -180,6 +166,8 @@ public class ProductServlet extends HttpServlet {
 
 	protected void product(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			if(request.getSession().getAttribute("lastLogged") != null)
+				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 			// declare flag variables
 			boolean validProductPath = true;
 			
@@ -241,6 +229,8 @@ public class ProductServlet extends HttpServlet {
 	protected void search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			if(request.getSession().getAttribute("lastLogged") != null)
+				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 			// get search keyword
 			String keyword = request.getParameter("keyword");
 			ArrayList<Bag> searchlist = new ArrayList<>();

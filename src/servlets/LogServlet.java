@@ -22,6 +22,7 @@ import security.DuplicateChecker;
 import security.Encryption;
 import security.Attempt;
 import security.Expiration;
+import security.PasswordGenerator;
 
 /**
  * Servlet implementation class LogServlet
@@ -77,6 +78,8 @@ public class LogServlet extends HttpServlet {
 
 	protected void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			if(request.getSession().getAttribute("lastLogged") != null)
+				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 			// check if there is no existing cart session
 			if(request.getSession().getAttribute("ShoppingCart") == null){
 				ArrayList<Bag> shoppingcart = new ArrayList<>();
@@ -460,12 +463,16 @@ public class LogServlet extends HttpServlet {
 			String email = request.getParameter("email");
 			String phone = request.getParameter("phone");
 
+			Encryption e = new Encryption();
+
 			// declare boolean variables
 			boolean foundFlag = false;
 			List<User> userlist = UserService.getAllUsers();
+			User correctUser = null;
 			for(int i = 0; i < userlist.size(); i++){
 				if(userlist.get(i).getPhone().length() > 0 || userlist.get(i).getPhone() != null){
 					if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && phone.equals(userlist.get(i).getPhone())){
+						correctUser = userlist.get(i);
 						foundFlag = true;
 						break;
 					}
@@ -481,8 +488,15 @@ public class LogServlet extends HttpServlet {
 
 			if(foundFlag){
 				// do some email algorithms
-				//Mailer mail;
-				request.getRequestDispatcher("recover.jsp").forward(request, response);
+				String passwordReset = PasswordGenerator.generate();
+				if(passwordReset != null){
+					passwordReset = e.encryptPassword(passwordReset);
+					correctUser.setPassword(passwordReset);
+					UserService.updateUser(correctUser.getUserID(), correctUser);
+					request.getRequestDispatcher("recover.jsp").forward(request, response);
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 			}
 
 			else{

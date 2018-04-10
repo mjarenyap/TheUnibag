@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +20,7 @@ import services.UserService;
 import services.BagService;
 import security.Encryption;
 import security.FieldChecker;
+import security.Expiration;
 
 /**
  * Servlet implementation class OrderAdminServlet
@@ -64,6 +66,8 @@ public class OrderAdminServlet extends HttpServlet {
 	protected void allOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// Retrieve all of the orders through OrderService
 				Encryption e = new Encryption();
 
@@ -142,6 +146,8 @@ public class OrderAdminServlet extends HttpServlet {
 	protected void archiveOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validPaths = true;
 				boolean foundFlag = true;

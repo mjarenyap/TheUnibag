@@ -112,7 +112,7 @@
                         <div class="type flex-between">
                             <div>
                                 <div>Phone number</div>
-                                <input type="number" name="phone" placeholder="Type the phone number" />
+                                <input type="text" name="phone" placeholder="Type the phone number" />
                             </div>
                             <div>
                                 <div>Province<span>*</span></div>

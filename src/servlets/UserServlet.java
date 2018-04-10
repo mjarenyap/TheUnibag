@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 import beans.User;
 import beans.Address;
@@ -56,6 +57,8 @@ public class UserServlet extends HttpServlet {
 	protected void profileRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				String purpose = request.getParameter("purpose");
 				if(purpose != null){
 					if(purpose.equals("edit-pa"))
@@ -83,6 +86,8 @@ public class UserServlet extends HttpServlet {
 		//check for logged users
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// security variables
 				Encryption e = new Encryption();
 				FieldChecker fc= new FieldChecker();
@@ -158,8 +163,12 @@ public class UserServlet extends HttpServlet {
 
 	protected void profileGeneral(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
-			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged")))
+			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
+
 				request.getRequestDispatcher("profile-general.jsp").forward(request, response);
+			}
 
 			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 		}
@@ -171,6 +180,8 @@ public class UserServlet extends HttpServlet {
 		//check for logged users
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// security variables
 				Encryption e = new Encryption();
 				FieldChecker fc = new FieldChecker();
@@ -260,6 +271,9 @@ public class UserServlet extends HttpServlet {
 	protected void profileAddress(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
+
 				List<Address> addresslist = AddressService.getAllAddress();
 				User currentUser = (User) request.getSession().getAttribute("Account");
 				Address currentAddress = null;
@@ -284,6 +298,9 @@ public class UserServlet extends HttpServlet {
 		//check for logged users
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
+
 				// security variables
 				Encryption e = new Encryption();
 				FieldChecker fc= new FieldChecker();
@@ -346,8 +363,12 @@ public class UserServlet extends HttpServlet {
 
 	protected void profilePassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("Account") != null && request.getSession().getAttribute("adminAccount") == null){
-			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged")))
+			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
+				
 				request.getRequestDispatcher("profile-password.jsp").forward(request, response);
+			}
 
 			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 		}

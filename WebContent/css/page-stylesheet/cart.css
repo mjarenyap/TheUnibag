@@ -50,6 +50,10 @@
 	border-radius: 100%;
 	background-color: white;
 	margin: 0 auto;
+	background: url('../../assets/images/feature-lesportsac.jpg');
+	background-size: cover;
+	background-position: top;
+	background-repeat: no-repeat;
 }
 
 #table-of-cart .remove{

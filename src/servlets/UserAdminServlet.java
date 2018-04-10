@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ import beans.Address;
 import security.Encryption;
 import security.FieldChecker;
 import security.DuplicateChecker;
+import security.Expiration;
 import services.UserService;
 import services.AddressService;
 
@@ -68,6 +70,8 @@ public class UserAdminServlet extends HttpServlet {
 	protected void editAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				Encryption e = new Encryption();
 
 				User currentUser = (User)request.getSession().getAttribute("Account");
@@ -93,8 +97,11 @@ public class UserAdminServlet extends HttpServlet {
 
 	protected void addUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
-			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged")))
+			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				request.getRequestDispatcher("add-user.jsp").forward(request, response);
+			}
 
 			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 		}
@@ -110,6 +117,8 @@ public class UserAdminServlet extends HttpServlet {
 		*/
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validCredentialFlag = false;
 				boolean duplicateFlag = false;
@@ -179,6 +188,8 @@ public class UserAdminServlet extends HttpServlet {
 	protected void allUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				Encryption e = new Encryption();
 
 				//to do put all users in an arraylist
@@ -213,6 +224,8 @@ public class UserAdminServlet extends HttpServlet {
 
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validUserPath = true;
 				Encryption e = new Encryption();
@@ -270,6 +283,8 @@ public class UserAdminServlet extends HttpServlet {
 	protected void editUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validUserPath = true;
 				Encryption e = new Encryption();
@@ -367,6 +382,8 @@ public class UserAdminServlet extends HttpServlet {
 	protected void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validUserPath = true;
 				Encryption e = new Encryption();
@@ -414,6 +431,8 @@ public class UserAdminServlet extends HttpServlet {
 	protected void deleteUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validPaths = true;
 				boolean foundFlag = true;

@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +16,7 @@ import beans.Size;
 import services.BagService;
 import services.SizeService;
 import security.Encryption;
+import security.Expiration;
 
 /**
  * Servlet implementation class ProductAdminServlet
@@ -64,8 +66,11 @@ public class ProductAdminServlet extends HttpServlet {
 
 	protected void addProductPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
-			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged")))
+			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				request.getRequestDispatcher("add-product.jsp").forward(request, response);
+			}
 
 			else request.getRequestDispatcher("page-401.jsp").forward(request,response);
 		}
@@ -81,6 +86,8 @@ public class ProductAdminServlet extends HttpServlet {
 		*/
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				String name = request.getParameter("name");
 				String brand= request.getParameter("brand");
 				String description = request.getParameter("description");
@@ -121,6 +128,8 @@ public class ProductAdminServlet extends HttpServlet {
 	protected void allProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// put all bags in an arraylist
 				List<Bag> bags = BagService.getAllBags();
 				ArrayList<String> productNames = new ArrayList<>();
@@ -148,6 +157,8 @@ public class ProductAdminServlet extends HttpServlet {
 	protected void viewProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validProductPath = true;
 				
@@ -214,6 +225,8 @@ public class ProductAdminServlet extends HttpServlet {
 	protected void editProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validProductPath = true;
 				
@@ -315,6 +328,8 @@ public class ProductAdminServlet extends HttpServlet {
 	protected void deletePoduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validProductPath = true;
 				
@@ -378,6 +393,8 @@ public class ProductAdminServlet extends HttpServlet {
 	protected void deleteProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// declare flag variables
 				boolean validPaths = true;
 				boolean foundFlag = true;
