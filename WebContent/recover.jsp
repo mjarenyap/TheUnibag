@@ -72,11 +72,11 @@
 
 		<section>
 			<img src="assets/icons/success.svg" id="success-icon" />
-			<h1 id="title-banner">Check your email!</h1>
+			<h1 id="title-banner">Check your Desktop!</h1>
 			<h3 id="order-confirmation">
-				Request to reset your password has been successfully sent to your email address.
+				We've already sent your new password onto your desktop. Check it out!
 			</h3>
-			<h4 id="meantime">For the meantime, you can:</h4>
+			<h4 id="meantime">After that, you can also:</h4>
 			<div id="links" class="flex-center">
 				<button id="back-home">Go back home</button>
 				<button class="hallow" id="browse-products">Browse more bags</button>

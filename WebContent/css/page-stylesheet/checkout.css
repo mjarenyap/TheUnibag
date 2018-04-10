@@ -56,6 +56,10 @@ section#checkout-section > div.flex-start{
 	height: 3em;
 	border-radius: 100%;
 	background-color: white;
+	background: url('../../assets/images/feature-lesportsac.jpg');
+	background-size: cover;
+	background-position: top;
+	background-repeat: no-repeat;
 }
 
 #product-feed .content-wrapper .product-name{

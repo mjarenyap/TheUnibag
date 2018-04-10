@@ -111,7 +111,7 @@
 						<span>Phone number</span>
 						<c:choose>
 							<c:when test="${loggedUser.phone != null}">
-								<input type="number" name="phone" value="${loggedUser.phone}" placeholder="Edit your phone number" class="full-width" />
+								<input type="text" name="phone" value="${loggedUser.phone}" placeholder="Edit your phone number" class="full-width" />
 							</c:when>
 							<c:otherwise>
 								<input type="number" name="phone" value="" placeholder="Edit your phone number" class="full-width" />
