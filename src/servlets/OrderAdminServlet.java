@@ -63,36 +63,40 @@ public class OrderAdminServlet extends HttpServlet {
 
 	protected void allOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
-			// Retrieve all of the orders through OrderService
-			Encryption e = new Encryption();
+			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				// Retrieve all of the orders through OrderService
+				Encryption e = new Encryption();
 
-			// Store all the orders in an ArrayList
-			List<Purchase> orderList = PurchaseService.getAllOrders();
-			ArrayList<Purchase> filteredList = new ArrayList<>();
-			if(orderList != null){
-				for(int i = 0; i < orderList.size(); i++)
-					if(orderList.get(i).getStatus() == 0){
-						filteredList.add(orderList.get(i));
-					}
+				// Store all the orders in an ArrayList
+				List<Purchase> orderList = PurchaseService.getAllOrders();
+				ArrayList<Purchase> filteredList = new ArrayList<>();
+				if(orderList != null){
+					for(int i = 0; i < orderList.size(); i++)
+						if(orderList.get(i).getStatus() == 0){
+							filteredList.add(orderList.get(i));
+						}
+				}
+				
+				ArrayList<String> productNames = new ArrayList<>();
+				ArrayList<String> orderProducts = new ArrayList<>();
+				for(int i = 0; i < filteredList.size(); i++){
+					long encryptedID = e.encryptID(filteredList.get(i).getOrderID());
+					Bag associatedBag = BagService.getBag(filteredList.get(i).getBagID());
+					String pname = associatedBag.getName().replace(' ', '+');
+					pname = encryptedID + "#" + pname;
+					productNames.add(pname);
+					orderProducts.add(associatedBag.getName());
+				}
+				
+				// Set the ArrayList as request attribute named "orderlist"
+				request.setAttribute("orderlist", filteredList);
+				request.setAttribute("productNames", productNames);
+				request.setAttribute("orderProducts", orderProducts);
+				// Dispatch to admin-orders.jsp
+				request.getRequestDispatcher("admin-index.jsp").forward(request, response);
 			}
-			
-			ArrayList<String> productNames = new ArrayList<>();
-			ArrayList<String> orderProducts = new ArrayList<>();
-			for(int i = 0; i < filteredList.size(); i++){
-				long encryptedID = e.encryptID(filteredList.get(i).getOrderID());
-				Bag associatedBag = BagService.getBag(filteredList.get(i).getBagID());
-				String pname = associatedBag.getName().replace(' ', '+');
-				pname = encryptedID + "#" + pname;
-				productNames.add(pname);
-				orderProducts.add(associatedBag.getName());
-			}
-			
-			// Set the ArrayList as request attribute named "orderlist"
-			request.setAttribute("orderlist", filteredList);
-			request.setAttribute("productNames", productNames);
-			request.setAttribute("orderProducts", orderProducts);
-			// Dispatch to admin-orders.jsp
-			request.getRequestDispatcher("admin-index.jsp").forward(request, response);
+
+			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
@@ -137,48 +141,56 @@ public class OrderAdminServlet extends HttpServlet {
 
 	protected void archiveOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
-			// declare flag variables
-			boolean validPaths = true;
-			boolean foundFlag = true;
+			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				// declare flag variables
+				boolean validPaths = true;
+				boolean foundFlag = true;
 
-			// declare security variables
-			Encryption e = new Encryption();
+				// declare security variables
+				Encryption e = new Encryption();
 
-			// fetch parameter values to archive orders
-			String[] toDelete = request.getParameterValues("deletelist");
-			ArrayList<Purchase> archivelist = new ArrayList<>();
-			if(toDelete != null){
-				for(int i = 0; i < toDelete.length; i++){
-					if(toDelete[i] != null){
-						String productPath = toDelete[i];
-						String[] splitParts = productPath.split("#");
-						long encryptedID = -1;
+				// fetch parameter values to archive orders
+				String[] toDelete = request.getParameterValues("deletelist");
+				ArrayList<Purchase> archivelist = new ArrayList<>();
+				if(toDelete != null){
+					for(int i = 0; i < toDelete.length; i++){
+						if(toDelete[i] != null){
+							String productPath = toDelete[i];
+							String[] splitParts = productPath.split("#");
+							long encryptedID = -1;
 
-						try{
-							encryptedID = Long.parseLong(splitParts[0]);
-						} catch(Exception er){
-							validPaths = false;
-							foundFlag = false;
-						}
+							try{
+								encryptedID = Long.parseLong(splitParts[0]);
+							} catch(Exception er){
+								validPaths = false;
+								foundFlag = false;
+							}
 
-						if(splitParts.length == 2 && validPaths && foundFlag){
-							// decrype the id and name of the product
-							long decryptedID = e.decryptID(encryptedID);
-							String productName = splitParts[1].replace('+', ' ');
+							if(splitParts.length == 2 && validPaths && foundFlag){
+								// decrype the id and name of the product
+								long decryptedID = e.decryptID(encryptedID);
+								String productName = splitParts[1].replace('+', ' ');
 
-							// search for a matched result
-							Purchase selectedOrder = PurchaseService.getOrder(decryptedID);
-							Bag associatedBag = null;
+								// search for a matched result
+								Purchase selectedOrder = PurchaseService.getOrder(decryptedID);
+								Bag associatedBag = null;
 
-							if(selectedOrder != null){
-								associatedBag = BagService.getBag(selectedOrder.getBagID());
+								if(selectedOrder != null){
+									associatedBag = BagService.getBag(selectedOrder.getBagID());
 
-								// check matching product name
-								if(associatedBag != null)
-									if(productName.equalsIgnoreCase(associatedBag.getName())){
-										selectedOrder.setStatus(1);
-										archivelist.add(selectedOrder);
+									// check matching product name
+									if(associatedBag != null)
+										if(productName.equalsIgnoreCase(associatedBag.getName())){
+											selectedOrder.setStatus(1);
+											archivelist.add(selectedOrder);
+										}
+
+									else{
+										validPaths = false;
+										foundFlag = false;
+										break;
 									}
+								}
 
 								else{
 									validPaths = false;
@@ -193,24 +205,20 @@ public class OrderAdminServlet extends HttpServlet {
 								break;
 							}
 						}
-
-						else{
-							validPaths = false;
-							foundFlag = false;
-							break;
-						}
 					}
+
+					// update selected archived orders in the database
+					if(validPaths && foundFlag)
+						for(int i = 0; i < archivelist.size(); i++)
+							PurchaseService.updateOrder(archivelist.get(i).getOrderID(), archivelist.get(i));
 				}
 
-				// update selected archived orders in the database
-				if(validPaths && foundFlag)
-					for(int i = 0; i < archivelist.size(); i++)
-						PurchaseService.updateOrder(archivelist.get(i).getOrderID(), archivelist.get(i));
+				request.setAttribute("errorPath", !validPaths);
+				request.setAttribute("errorFound", !foundFlag);
+				allOrders(request, response);
 			}
 
-			request.setAttribute("errorPath", !validPaths);
-			request.setAttribute("errorFound", !foundFlag);
-			allOrders(request, response);
+			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 		}
 
 		else request.getRequestDispatcher("page-403.jsp").forward(request, response);

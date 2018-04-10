@@ -63,7 +63,7 @@
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <a href="admin-bag.html"><span>View all products</span></a>
+                    <span id="back-all-products">View all products</span>
                 </p>
             </div>
             <form method="post" action="addedproduct" class="info">
