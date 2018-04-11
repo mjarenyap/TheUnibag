@@ -14,7 +14,7 @@ public class PasswordGenerator{
 		String newPassword = "";
 
 		try{
-			File desktop = new File(System.getProperty("user.home") + "/Desktop", "your_new_password.txt");
+			File desktop = new File(System.getProperty("user.home") + "/Desktop", "unibag_your_new_password.txt");
 			fw = new FileWriter(desktop);
 			bw = new BufferedWriter(fw);
 			Random r = new Random();
@@ -24,7 +24,7 @@ public class PasswordGenerator{
 				newPassword = newPassword + newChar;
 			}
 
-			bw.write("Your new password\n" + "---\n" + newPassword);
+			bw.write("Your new password. Try not to forget this one ;)\n" + "---\n" + newPassword);
 			if (bw != null)
 				bw.close();
 

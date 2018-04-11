@@ -74,7 +74,7 @@
 			<img src="assets/icons/success.svg" id="success-icon" />
 			<h1 id="title-banner">Check your Desktop!</h1>
 			<h3 id="order-confirmation">
-				We've already sent your new password onto your desktop. Check it out!
+				Your new password is in the unibag_your_new_password.txt file at your desktop.
 			</h3>
 			<h4 id="meantime">After that, you can also:</h4>
 			<div id="links" class="flex-center">

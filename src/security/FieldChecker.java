@@ -1,6 +1,8 @@
 package security;
 import beans.User;
 import beans.Address;
+import beans.Bag;
+import beans.Size;
 import security.Encryption;
 
 public class FieldChecker {
@@ -123,6 +125,43 @@ public class FieldChecker {
 			return false;
 
 		if(String.valueOf(address.getPostcode()) == null || address.getPostcode() == 0)
+			return false;
+
+		return true;
+	}
+
+	public boolean checkProduct(Bag newBag, Size newSize){
+		if(newBag.getName().length() == 0 || newBag.getName() == null)
+			return false;
+
+		if(newBag.getBrand().length() == 0 || newBag.getBrand() == null)
+			return false;
+
+		if(newBag.getDescription().length() == 0 || newBag.getDescription() == null)
+			return false;
+
+		if(newBag.getColor().length() == 0 || newBag.getColor() == null)
+			return false;
+
+		if(newBag.getType().length() == 0 || newBag.getType() == null)
+			return false;
+
+		if(newBag.getCollection().length() == 0 || newBag.getCollection() == null)
+			return false;
+
+		if(String.valueOf(newBag.getRating()) == null)
+			return false;
+
+		if(String.valueOf(newBag.getPrice()) == null)
+			return false;
+
+		if(newSize.getWidth().length() == 0 || newSize.getWidth() == null)
+			return false;
+
+		if(newSize.getHeight().length() == 0 || newSize.getHeight() == null)
+			return false;
+
+		if(newSize.getLength().length() == 0 || newSize.getLength() == null)
 			return false;
 
 		return true;

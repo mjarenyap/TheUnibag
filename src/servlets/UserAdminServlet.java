@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import beans.User;
 import beans.Address;
 import security.Encryption;
@@ -22,7 +23,7 @@ import services.AddressService;
 /**
  * Servlet implementation class UserAdminServlet
  */
-@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin/addeduser", "/admin/editeduser", "/admin/deleteuser", "/admin/deleteusers", "/admin/editaccount"})
+@WebServlet(urlPatterns = {"/admin/adduser", "/admin/allusers", "/admin/viewuser", "/admin/addeduser", "/admin/editeduser", "/admin/deleteuser", "/admin/deleteusers", "/admin/editaccount", "/admin/editedaccount"})
 public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -64,6 +65,9 @@ public class UserAdminServlet extends HttpServlet {
 
 			case "/admin/editaccount": editAccount(request, response);
 			break;
+
+			case "/admin/editedaccount": editLoggedAccount(request, response);
+			break;
 		}
 	}
 
@@ -74,7 +78,7 @@ public class UserAdminServlet extends HttpServlet {
 					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				Encryption e = new Encryption();
 
-				User currentUser = (User)request.getSession().getAttribute("Account");
+				User currentUser = (User)request.getSession().getAttribute("adminAccount");
 				List<Address> addresslist = AddressService.getAllAddress();
 				Address currentAddress = null;
 				long decryptedID = e.decryptID(currentUser.getUserID());
@@ -87,6 +91,78 @@ public class UserAdminServlet extends HttpServlet {
 
 				request.setAttribute("adminAddress", currentAddress);
 				request.getRequestDispatcher("edit-account.jsp").forward(request, response);
+			}
+
+			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
+		}
+
+		else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+	}
+
+	protected void editLoggedAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("adminAccount") != null && request.getSession().getAttribute("Account") == null){
+			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+				if(request.getSession().getAttribute("lastLogged") != null)
+					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
+
+				// declare second layer flag variables
+				boolean foundFlag = false;
+				boolean duplicateFlag = false;
+				boolean validCredentialFlag = false;
+				
+				FieldChecker fc = new FieldChecker();
+				DuplicateChecker dc = new DuplicateChecker();
+
+				// check for existing selectedUser
+				User selectedUser = (User)request.getSession().getAttribute("adminAccount");
+				if(selectedUser != null)
+					foundFlag = true;
+
+				if(foundFlag){
+					String firstname = request.getParameter("firstname");
+					String lastname = request.getParameter("lastname");
+					String email = request.getParameter("email");
+					String phone = request.getParameter("phone");
+					String userType = request.getParameter("userType");
+					String location = request.getParameter("location");
+					String city = request.getParameter("city");
+					String province = request.getParameter("province");
+					int postcode = 1000;
+
+					try{
+						postcode = Integer.parseInt(request.getParameter("postcode"));
+					} catch(Exception er){
+						postcode = 1000;
+					}
+
+					selectedUser.setFirstName(firstname);
+					selectedUser.setLastName(lastname);
+					selectedUser.setEmail(email);
+					selectedUser.setPhone(phone);
+					selectedUser.setUserType(userType);
+
+					validCredentialFlag = fc.checkSignup(selectedUser);
+					duplicateFlag = dc.checkUser(selectedUser, UserService.getAllUsers());
+
+					Address selectedAddress = AddressService.getAddress(selectedUser.getUserID());
+					if(!duplicateFlag && validCredentialFlag){
+						selectedAddress.setLocation(location);
+						selectedAddress.setCity(city);
+						selectedAddress.setProvince(province);
+						selectedAddress.setPostcode(postcode);
+
+						UserService.updateUser(selectedUser.getUserID(), selectedUser);
+						AddressService.updateAddress(selectedAddress.getUserID(), selectedAddress);
+						allUsers(request, response);
+					}
+
+					else{
+						request.setAttribute("error", true);
+						request.getRequestDispatcher("edit-account.jsp").forward(request, response);
+					}
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
 			}
 
 			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
@@ -176,7 +252,10 @@ public class UserAdminServlet extends HttpServlet {
 					allUsers(request, response);
 				}
 
-				else request.getRequestDispatcher("add-user.jsp").forward(request, response);
+				else{
+					request.setAttribute("error", true);
+					request.getRequestDispatcher("add-user.jsp").forward(request, response);
+				}
 			}
 
 			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
@@ -362,8 +441,13 @@ public class UserAdminServlet extends HttpServlet {
 						}
 
 						else{
+							selectedUser = UserService.getUser(decryptedID);
+							selectedAddress = AddressService.getAddress(selectedUser.getUserID());
 							request.setAttribute("error", true);
-							viewUser(request, response);
+							request.setAttribute("featuredUser", selectedUser);
+							request.setAttribute("featuredAddress", selectedAddress);
+							request.setAttribute("userPath", userPath);
+							request.getRequestDispatcher("view-user.jsp").forward(request, response);
 						}
 					}
 
@@ -410,6 +494,7 @@ public class UserAdminServlet extends HttpServlet {
 					if(selectedUser != null){
 						if(selectedUser.getEmail().equals(email)){
 							UserService.deleteUser(decryptedID);
+							AddressService.deleteAddress(decryptedID);
 							allUsers(request, response);
 						}
 						
@@ -486,8 +571,10 @@ public class UserAdminServlet extends HttpServlet {
 
 					// update selected archived orders in the database
 					if(validPaths && foundFlag)
-						for(int i = 0; i < archivelist.size(); i++)
+						for(int i = 0; i < archivelist.size(); i++){
 							UserService.deleteUser(archivelist.get(i).getUserID());
+							AddressService.deleteAddress(archivelist.get(i).getUserID());
+						}
 				}
 
 				request.setAttribute("errorPath", !validPaths);
