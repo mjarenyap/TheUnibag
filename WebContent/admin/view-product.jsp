@@ -153,7 +153,7 @@
                         <!-- Save Changes -->
                         <div class="buttons">
                             <input type="hidden" name="path" value="${productPath}" />
-                            <button class="hallow butt">DISCARD</button>
+                            <button class="hallow butt" type="button" id="discard" data-id="allproducts">DISCARD</button>
                             <button class="hallow butt save" type="submit">SAVE CHANGES</button>
                         </div>
                     </div>
