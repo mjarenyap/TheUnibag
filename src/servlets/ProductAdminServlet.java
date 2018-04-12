@@ -17,6 +17,7 @@ import services.BagService;
 import services.SizeService;
 import security.Encryption;
 import security.Expiration;
+import security.FieldChecker;
 
 /**
  * Servlet implementation class ProductAdminServlet
@@ -88,6 +89,10 @@ public class ProductAdminServlet extends HttpServlet {
 			if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
 				if(request.getSession().getAttribute("lastLogged") != null)
 					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
+
+				boolean errorFlag = true;
+				FieldChecker fc = new FieldChecker();
+
 				String name = request.getParameter("name");
 				String brand= request.getParameter("brand");
 				String description = request.getParameter("description");
@@ -95,7 +100,20 @@ public class ProductAdminServlet extends HttpServlet {
 				String type = request.getParameter("type");
 				String collection = request.getParameter("collection");
 				String rating = request.getParameter("rating");
-				float price = Float.parseFloat(request.getParameter("price"));
+				float price = (float)50.00;
+				try{
+					price = Float.parseFloat(request.getParameter("price"));
+				} catch(Exception ex){
+					price = (float)50.00;
+				}
+				String width = request.getParameter("width");
+				String height = request.getParameter("height");
+				String length = request.getParameter("length");
+
+				Size newSize = new Size();
+				newSize.setWidth(width);
+				newSize.setHeight(height);
+				newSize.setLength(length);
 
 				// create a newProduct object
 				Bag newBag = new Bag();
@@ -110,13 +128,24 @@ public class ProductAdminServlet extends HttpServlet {
 				newBag.setRating(Integer.parseInt(rating));
 				newBag.setPrice(price);
 
-				// for the new bag ID
-				List<Bag> baglist = BagService.getAllBags();
-				newBag.setBagID(baglist.get(baglist.size() - 1).getBagID() + 1);
+				errorFlag = !fc.checkProduct(newBag, newSize);
 
-				BagService.addBag(newBag);
-				// dispatch to admin-products.jsp
-				allProducts(request, response);
+				if(!errorFlag){
+					// for the new bag ID
+					List<Bag> baglist = BagService.getAllBags();
+					newBag.setBagID(baglist.get(baglist.size() - 1).getBagID() + 1);
+					newSize.setSizeID(newBag.getBagID());
+					newSize.setBagID(newBag.getBagID());
+					BagService.addBag(newBag);
+					SizeService.addSize(newSize);
+					// dispatch to admin-products.jsp
+					allProducts(request, response);
+				}
+
+				else{
+					request.setAttribute("error", errorFlag);
+					request.getRequestDispatcher("add-product.jsp").forward(request, response);
+				}
 			}
 
 			else request.getRequestDispatcher("page-401.jsp").forward(request, response);
@@ -177,7 +206,7 @@ public class ProductAdminServlet extends HttpServlet {
 				if(splitParts.length != 2)
 					validProductPath = false;
 
-				request.setAttribute("error", validProductPath);
+				request.setAttribute("error", !validProductPath);
 
 				if(validProductPath){
 					// declare second layer flag variables
@@ -231,6 +260,7 @@ public class ProductAdminServlet extends HttpServlet {
 				boolean validProductPath = true;
 				
 				Encryption e = new Encryption();
+				FieldChecker fc = new FieldChecker();
 				// get contextualized url parametr of the product
 				String productPath = request.getParameter("path");
 				String[] splitParts = productPath.split("#");
@@ -269,13 +299,13 @@ public class ProductAdminServlet extends HttpServlet {
 						String width = request.getParameter("width");
 						String height = request.getParameter("height");
 						String length = request.getParameter("length");
-						float price = 0;
+						float price = (float)50.00;
 						int rating = 0;
 
 						try{
 							price = Float.parseFloat(request.getParameter("price"));
 						} catch(Exception er){
-							price = 0;
+							price = (float)50.00;
 						}
 
 						try{
@@ -306,11 +336,24 @@ public class ProductAdminServlet extends HttpServlet {
 						selectedSize.setHeight(height);
 						selectedSize.setLength(length);
 
-						// update in the database
-						BagService.updateBag(selectedBag.getBagID(), selectedBag);
-						SizeService.updateSize(selectedSize.getSizeID(), selectedSize);
+						boolean errorFlag = fc.checkProduct(selectedBag, selectedSize);
+						if(!errorFlag){
+							// update in the database
+							BagService.updateBag(selectedBag.getBagID(), selectedBag);
+							SizeService.updateSize(selectedSize.getSizeID(), selectedSize);
 
-						allProducts(request, response);
+							allProducts(request, response);
+						}
+
+						else{
+							selectedBag = BagService.getBag(decryptedID);
+							request.setAttribute("error", true);
+							request.setAttribute("featuredBag", selectedBag);
+							request.setAttribute("featuredSize", SizeService.getSize(selectedBag.getBagID()));
+							request.setAttribute("productPath", productPath);
+							request.setAttribute("optionValue", selectedBag.getType());
+							request.getRequestDispatcher("view-product.jsp").forward(request, response);
+						}
 					}
 
 					else request.getRequestDispatcher("page-403.jsp").forward(request, response);
@@ -447,8 +490,10 @@ public class ProductAdminServlet extends HttpServlet {
 
 					// update selected archived orders in the database
 					if(validPaths && foundFlag)
-						for(int i = 0; i < archivelist.size(); i++)
+						for(int i = 0; i < archivelist.size(); i++){
 							BagService.deleteBag(archivelist.get(i).getBagID());
+							SizeService.deleteSize(archivelist.get(i).getBagID());
+						}
 				}
 
 				request.setAttribute("errorPath", !validPaths);

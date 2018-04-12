@@ -90,13 +90,14 @@ public class UserServlet extends HttpServlet {
 					request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 				// security variables
 				Encryption e = new Encryption();
-				FieldChecker fc= new FieldChecker();
+				FieldChecker fc = new FieldChecker();
 				
 				// get parameter values of firstname, lastname, email, phone
 				String firstname = request.getParameter("firstname");
 				String lastname = request.getParameter("lastname");
 				String email = request.getParameter("email");
 				String phone = request.getParameter("phone");
+				String answer = request.getParameter("securityAnswer");
 				// password as security answer
 				String securityPassword = request.getParameter("securityPassword");
 
@@ -124,6 +125,7 @@ public class UserServlet extends HttpServlet {
 					temp.setLastName(lastname);
 					temp.setEmail(email);
 					temp.setPhone(phone);
+					temp.setAnswer(answer);
 					validCredentialsFlag = fc.checkProfileGeneral(temp);
 
 					// modify the currentUser's credentials
@@ -132,6 +134,7 @@ public class UserServlet extends HttpServlet {
 						currentUser.setLastName(lastname);
 						currentUser.setEmail(email);
 						currentUser.setPhone(phone);
+						currentUser.setAnswer(e.encryptAnswer(answer));
 
 						UserService.updateUser(decryptedID, currentUser);
 						request.getSession().setAttribute("Account", currentUser);

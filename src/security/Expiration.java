@@ -16,7 +16,7 @@ public class Expiration{
 			if(seconds < 0)
 				seconds += 60;
 
-			else if(seconds >= 0 && minutes > 0)
+			else if(seconds >= 59 && minutes > 0)
 				minutes++;
 
 

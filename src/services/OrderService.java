@@ -28,7 +28,7 @@ public class OrderService {
 			if(trans!=null)
 				trans.rollback();
 			
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		em.close();
@@ -72,7 +72,7 @@ public class OrderService {
 			if(trans != null)
 				trans.rollback();
 			
-			e.printStackTrace();
+			//e.printStackTrace();
 		}finally{
 			em.close();
 		}
@@ -96,7 +96,7 @@ public class OrderService {
 			if(trans != null)
 				trans.rollback();
 			
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	

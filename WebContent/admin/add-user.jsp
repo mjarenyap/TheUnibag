@@ -144,6 +144,10 @@
                                 <input type="password" name="confirmpassword" placeholder="Retype the password" />
                             </div>
                         </div>
+                        <div>
+                            <div>A secret random answer<span>*</span></div>
+                            <input type="password" name="securityAnswer" placeholder="Type your new secret answer" />
+                        </div>
                     </div>
                     
                     <!-- Save Changes -->

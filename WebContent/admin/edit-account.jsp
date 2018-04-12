@@ -65,10 +65,10 @@
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <span id="back-all-products">View all users</span>
+                    <span id="back-all-users">View all users</span>
                 </p>
             </div>
-            <form method="port" action="editedaccount" class="info">
+            <form method="post" action="editedaccount" class="info">
                 <div class="header">Edit Your Account</div>
                 <c:if test="${error == true}">
                     <br/>
@@ -125,16 +125,20 @@
                             </div>
                             <div>
                                 <div>Province<span>*</span></div>
-                                <input type="text" placeholder="Type your province" value="${loggedAddress.province}" />
+                                <input type="text" name="province" placeholder="Type your province" value="${loggedAddress.province}" />
                             </div>
                         </div>
                     </div>
                     <!--Second One -->
                     <div class="part">
+                        <div>
+                            <div>A secret random answer<span>*</span></div>
+                            <input type="password" name="securityAnswer" value="${loggedUser.answer}" placeholder="Type your new secret answer" />
+                        </div>
                         <div class="type flex-between">
                             <div>
-                                <div>Old Password<span>*</span></div>
-                                <input type="password" name="oldpassword" placeholder="Type your old password" />
+                                <div>Confirm Password<span>*</span></div>
+                                <input type="password" name="password" placeholder="Type your password" />
                             </div>
                             
                             <div>
@@ -144,17 +148,7 @@
                                     <option value="admin">Admin</option>
                                 </select>
                             </div>
-                        </div>    
-                        <div class="type">
-                            <div>
-                                <div>New password<span>*</span></div>
-                                <input type="password" name="newpassword" placeholder="Type your new password" />
-                            </div>
-                            <div>
-                                <div>Confirm new password<span>*</span></div>
-                                <input type="password" name="confirmpassword" placeholder="Retype your new password" />
-                            </div>
-                        </div>    
+                        </div>
                     </div>
                     <!-- Save Changes -->
                     <div class="buttons">

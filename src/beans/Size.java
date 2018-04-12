@@ -43,7 +43,7 @@ public class Size {
 		return bagID;
 	}
 	
-	public void setBagID(int bagID) {
+	public void setBagID(long bagID) {
 		this.bagID = bagID;
 	}
 	
