@@ -118,6 +118,10 @@
 							</c:otherwise>
 						</c:choose>
 					</label>
+					<label>
+						<span>A secret random answer<b class="important">*</b></span>
+						<input type="password" name="securityAnswer" value="${loggedUser.answer}" placeholder="Type here your security answer (Case sensitive)" class="full-width" />
+					</label>
 					<br/><br/>
 					<label>
 						<span>Confirm Password to Continue</span>

@@ -59,9 +59,8 @@
             </div>
         </div>
         <div class="dashboard">
-            <div class="nav-header flex-between">
-                <div><input type="text" placeholder="search" id="bar"></div>
-                <div><button id="save-changes" data-id="du">SAVE CHANGES</button></div>  
+            <div class="nav-header flex-end">
+                <div><button id="save-changes" data-id="du">Delete selected users</button></div>  
             </div>
             <div class="table">
                 <table>  
@@ -75,7 +74,7 @@
                         <th></th>
                     </tr>
                     <c:forEach items="${userlist}" var="user" varStatus="status">
-                        <tr>
+                        <tr class="content-user-row">
                             <td><input type="checkbox" class="delete-status" name="deletelist" value="${usernames[status.index]}" /></td>
                             <td><c:out value="${user.firstName}" /></td>
                             <td><c:out value="${user.lastName}" /></td>

@@ -1,6 +1,8 @@
 package security;
 import beans.User;
 import beans.Address;
+import beans.Bag;
+import beans.Size;
 import security.Encryption;
 
 public class FieldChecker {
@@ -21,11 +23,11 @@ public class FieldChecker {
 	public boolean checkSignup(User newUser){
 		
 		if(newUser.getFirstName().length() == 0 || newUser.getLastName().length() == 0 ||
-		newUser.getEmail().length() == 0 || newUser.getPassword().length() == 0)
+		newUser.getEmail().length() == 0 || newUser.getPassword().length() == 0 || newUser.getAnswer().length() == 0)
 			return false;
 		
 		if(newUser.getFirstName() == null || newUser.getLastName() == null ||
-		newUser.getEmail() == null || newUser.getPassword() == null)
+		newUser.getEmail() == null || newUser.getPassword() == null || newUser.getAnswer() == null)
 			return false;
 		
 		if(!newUser.getEmail().contains("@"))
@@ -69,20 +71,36 @@ public class FieldChecker {
 		return true;
 	}
 
+	public boolean checkNormalUser(User newUser){
+		if(newUser.getFirstName().length() == 0 || newUser.getLastName().length() == 0 ||
+		newUser.getEmail().length() == 0 || newUser.getPassword().length() == 0 || newUser.getAnswer().length() == 0)
+			return false;
+		
+		if(newUser.getFirstName() == null || newUser.getLastName() == null ||
+		newUser.getEmail() == null || newUser.getPassword() == null || newUser.getAnswer() == null)
+			return false;
+		
+		if(!newUser.getEmail().contains("@"))
+			return false;
+		
+		return true;
+	}
+
 	public boolean checkProfileGeneral(User user){
-		if(user.getFirstName() == null || user.getFirstName().length() == 0)
+		if(user.getFirstName().length() == 0 || user.getFirstName() == null)
 			return false;
 
-		if(user.getLastName() == null || user.getLastName().length() == 0)
+		if(user.getLastName().length() == 0 || user.getLastName() == null)
 			return false;
 
-		if(user.getEmail() == null || user.getEmail().length() == 0 || !user.getEmail().contains("@"))
+		if(user.getEmail().length() == 0 || !user.getEmail().contains("@") || user.getEmail() == null)
 			return false;
 
-		String phone = String.valueOf(user.getPhone());
-		for(int i = 0; i < phone.length(); i++)
-			if(phone.charAt(i) < '0' || phone.charAt(i) > '9')
-				return false;
+		if(user.getAnswer().length() == 0 || user.getAnswer() == null)
+			return false;
+
+		if(user.getPhone().length() == 0 || user.getPhone() == null)
+			return false;
 
 		return true;
 	}
@@ -123,6 +141,43 @@ public class FieldChecker {
 			return false;
 
 		if(String.valueOf(address.getPostcode()) == null || address.getPostcode() == 0)
+			return false;
+
+		return true;
+	}
+
+	public boolean checkProduct(Bag newBag, Size newSize){
+		if(newBag.getName().length() == 0 || newBag.getName() == null)
+			return false;
+
+		if(newBag.getBrand().length() == 0 || newBag.getBrand() == null)
+			return false;
+
+		if(newBag.getDescription().length() == 0 || newBag.getDescription() == null)
+			return false;
+
+		if(newBag.getColor().length() == 0 || newBag.getColor() == null)
+			return false;
+
+		if(newBag.getType().length() == 0 || newBag.getType() == null)
+			return false;
+
+		if(newBag.getCollection().length() == 0 || newBag.getCollection() == null)
+			return false;
+
+		if(String.valueOf(newBag.getRating()) == null)
+			return false;
+
+		if(String.valueOf(newBag.getPrice()) == null)
+			return false;
+
+		if(newSize.getWidth().length() == 0 || newSize.getWidth() == null)
+			return false;
+
+		if(newSize.getHeight().length() == 0 || newSize.getHeight() == null)
+			return false;
+
+		if(newSize.getLength().length() == 0 || newSize.getLength() == null)
 			return false;
 
 		return true;

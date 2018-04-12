@@ -92,6 +92,7 @@ public class UserService {
 			a.setPassword(newinfo.getPassword());
 			a.setEmail(newinfo.getEmail());
 			a.setPhone(newinfo.getPhone());
+			a.setAnswer(newinfo.getAnswer());
 			a.setUserType(newinfo.getUserType());
 			trans.commit();
 			

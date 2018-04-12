@@ -59,9 +59,8 @@
             </div>
         </div>
         <div class="dashboard">
-            <div class="nav-header flex-between">
-                <div><input type="text" placeholder="search" id="bar"></div>              
-                <div><button id="save-changes" data-id="dp">SAVE CHANGES</button></div> 
+            <div class="nav-header flex-end">          
+                <div><button id="save-changes" data-id="dp">Delete selected products</button></div> 
             </div>
             <div class="table">
                 <table>

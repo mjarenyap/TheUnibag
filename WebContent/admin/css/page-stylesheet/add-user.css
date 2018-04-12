@@ -66,6 +66,10 @@
     border-radius: 3px;
 }
 
+#back-all-users, #back-all-products{
+    cursor: pointer;
+}
+
 .dashboard select, .dashboard input{
     margin-top: 2px;
 }
