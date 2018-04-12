@@ -169,7 +169,7 @@
                             <input type="password" name="securityAnswer" value="${featuredUser.answer}" placeholder="Type your new secret answer" />
                         </div>   
                     </div>
-                    
+                    <input type="hidden" name="path" value="${userPath}" />
                     <!-- Save Changes -->
                     <div class="buttons">
                         <button class="hallow butt">DISCARD</button>

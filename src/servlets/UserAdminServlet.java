@@ -116,7 +116,8 @@ public class UserAdminServlet extends HttpServlet {
 
 				// check for existing selectedUser
 				User selectedUser = (User)request.getSession().getAttribute("adminAccount");
-				String truePassword = selectedUser.getPassword();
+				User temp = UserService.getUser(e.decryptID(selectedUser.getUserID()));
+				String truePassword = temp.getPassword();
 				if(selectedUser != null)
 					foundFlag = true;
 
@@ -149,6 +150,8 @@ public class UserAdminServlet extends HttpServlet {
 
 					validCredentialFlag = fc.checkSignup(selectedUser);
 					duplicateFlag = dc.checkUser(selectedUser, UserService.getAllUsers());
+					if(email.equalsIgnoreCase(selectedUser.getEmail()))
+						duplicateFlag = false;
 
 					Address selectedAddress = AddressService.getAddress(selectedUser.getUserID());
 					if(!duplicateFlag && validCredentialFlag && password.equals(e.decryptPassword(truePassword))){
@@ -167,6 +170,7 @@ public class UserAdminServlet extends HttpServlet {
 
 					else{
 						request.setAttribute("error", true);
+						request.setAttribute("adminAddress", selectedAddress);
 						request.getRequestDispatcher("edit-account.jsp").forward(request, response);
 					}
 				}
@@ -244,6 +248,8 @@ public class UserAdminServlet extends HttpServlet {
 
 				validCredentialFlag = fc.checkSignup(newUser);
 				duplicateFlag = dc.checkUser(newUser, UserService.getAllUsers());
+				if(newUser.getEmail().equalsIgnoreCase(email))
+					duplicateFlag = true;
 				
 				if(validCredentialFlag && password.equals(confirmPass) && !duplicateFlag){
 					List<User> userlist = UserService.getAllUsers();
@@ -322,7 +328,7 @@ public class UserAdminServlet extends HttpServlet {
 				Encryption e = new Encryption();
 
 				// get user path
-				String userPath = request.getParameter("username");
+				String userPath = request.getParameter("path");
 				String[] splitParts = userPath.split("#");
 				long encryptedID = -1;
 
@@ -384,7 +390,7 @@ public class UserAdminServlet extends HttpServlet {
 				FieldChecker fc = new FieldChecker();
 
 				// get user path
-				String userPath = request.getParameter("username");
+				String userPath = request.getParameter("path");
 				String[] splitParts = userPath.split("#");
 				long encryptedID = -1;
 

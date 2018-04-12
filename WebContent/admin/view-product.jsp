@@ -148,9 +148,7 @@
                         </div>
                         <div class="type">
                             <div>Description<span>*</span></div>
-                            <textarea class="description" placeholder="Give a short description of the product" name="description">
-                                <c:out value="${featuredBag.description}" />
-                            </textarea>
+                            <textarea class="description" placeholder="Give a short description of the product" name="description"><c:out value="${featuredBag.description}" /></textarea>
                         </div>
                         <!-- Save Changes -->
                         <div class="buttons">
