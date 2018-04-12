@@ -32,11 +32,13 @@ public class User {
 	@Column
 	private String phone;
 	@Column
-	private String userType; 
+	private String userType;
+	@Column
+	private String answer;
 	
 	
 	/*Setters and Getters*/
-	
+
 	public long getUserID() {
 		return userID;
 	}
@@ -91,6 +93,14 @@ public class User {
 	
 	public void setUserType(String type) {
 		this.userType = type; 
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
 	}
 	
 	

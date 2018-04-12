@@ -59,11 +59,8 @@
             </div>
         </div>
         <div class="dashboard">
-            <div class="nav-header flex-between">
-                <div>
-                    <input type="text" placeholder="Search for orders" id="bar">
-                </div>
-                <div><button id="save-changes" data-id="do">SAVE CHANGES</button></div>
+            <div class="nav-header flex-end">
+                <div><button id="save-changes" data-id="do">Archive selected orders</button></div>
             </div>
             <div class="table">
                 <table>

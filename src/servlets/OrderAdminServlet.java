@@ -267,6 +267,7 @@ public class OrderAdminServlet extends HttpServlet {
 						userType.equalsIgnoreCase("admin")){
 						correctUser = userlist.get(i);
 						correctUser.setPassword("");
+						correctUser.setUserID(e.encryptID(correctUser.getUserID()));
 						break;
 					}
 				}
@@ -278,6 +279,8 @@ public class OrderAdminServlet extends HttpServlet {
 					// create a cookie for the logged user
 					Cookie userCookie = new Cookie("adminUsername", correctUser.getEmail());
 					response.addCookie(userCookie);
+					LocalDateTime now = LocalDateTime.now();
+					request.getSession().setAttribute("lastLogged", now);
 					allOrders(request, response);
 				}
 
