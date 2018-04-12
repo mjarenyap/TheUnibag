@@ -163,7 +163,11 @@
                                     <option value="admin">Admin</option>
                                 </select>
                             </div>
-                        </div>    
+                        </div> 
+                        <div>
+                            <div>A secret random answer<span>*</span></div>
+                            <input type="password" name="securityAnswer" value="${featuredUser.answer}" placeholder="Type your new secret answer" />
+                        </div>   
                     </div>
                     
                     <!-- Save Changes -->

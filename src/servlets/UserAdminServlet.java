@@ -112,9 +112,11 @@ public class UserAdminServlet extends HttpServlet {
 				
 				FieldChecker fc = new FieldChecker();
 				DuplicateChecker dc = new DuplicateChecker();
+				Encryption e = new Encryption();
 
 				// check for existing selectedUser
 				User selectedUser = (User)request.getSession().getAttribute("adminAccount");
+				String truePassword = selectedUser.getPassword();
 				if(selectedUser != null)
 					foundFlag = true;
 
@@ -123,6 +125,8 @@ public class UserAdminServlet extends HttpServlet {
 					String lastname = request.getParameter("lastname");
 					String email = request.getParameter("email");
 					String phone = request.getParameter("phone");
+					String password = request.getParameter("password");
+					String answer = request.getParameter("securityAnswer");
 					String userType = request.getParameter("userType");
 					String location = request.getParameter("location");
 					String city = request.getParameter("city");
@@ -139,17 +143,22 @@ public class UserAdminServlet extends HttpServlet {
 					selectedUser.setLastName(lastname);
 					selectedUser.setEmail(email);
 					selectedUser.setPhone(phone);
+					selectedUser.setPassword(password);
+					selectedUser.setAnswer(answer);
 					selectedUser.setUserType(userType);
 
 					validCredentialFlag = fc.checkSignup(selectedUser);
 					duplicateFlag = dc.checkUser(selectedUser, UserService.getAllUsers());
 
 					Address selectedAddress = AddressService.getAddress(selectedUser.getUserID());
-					if(!duplicateFlag && validCredentialFlag){
+					if(!duplicateFlag && validCredentialFlag && password.equals(e.decryptPassword(truePassword))){
 						selectedAddress.setLocation(location);
 						selectedAddress.setCity(city);
 						selectedAddress.setProvince(province);
 						selectedAddress.setPostcode(postcode);
+
+						selectedUser.setPassword(e.encryptPassword(password));
+						selectedUser.setAnswer(e.encryptAnswer(answer));
 
 						UserService.updateUser(selectedUser.getUserID(), selectedUser);
 						AddressService.updateAddress(selectedAddress.getUserID(), selectedAddress);
@@ -208,6 +217,7 @@ public class UserAdminServlet extends HttpServlet {
 				String password = request.getParameter("password");
 				String confirmPass = request.getParameter("confirmpassword");
 				String phone = request.getParameter("phone");
+				String answer = request.getParameter("securityAnswer");
 				String userType = request.getParameter("userType").toLowerCase();
 				String location = request.getParameter("location");
 				String city = request.getParameter("city");
@@ -229,6 +239,7 @@ public class UserAdminServlet extends HttpServlet {
 				newUser.setEmail(email);
 				newUser.setPassword(password);
 				newUser.setPhone(phone);
+				newUser.setAnswer(answer);
 				newUser.setUserType(userType);
 
 				validCredentialFlag = fc.checkSignup(newUser);
@@ -237,6 +248,7 @@ public class UserAdminServlet extends HttpServlet {
 				if(validCredentialFlag && password.equals(confirmPass) && !duplicateFlag){
 					List<User> userlist = UserService.getAllUsers();
 					newUser.setPassword(e.encryptPassword(password));
+					newUser.setAnswer(e.encryptAnswer(answer));
 					newUser.setUserID(userlist.get(userlist.size() - 1).getUserID() + 1);
 					UserService.addUser(newUser);
 
@@ -341,6 +353,7 @@ public class UserAdminServlet extends HttpServlet {
 						Address selectedAddress = AddressService.getAddress(selectedUser.getUserID());
 						
 						// set selected user and address as request attribute
+						selectedUser.setAnswer(e.decryptAnswer(selectedUser.getAnswer()));
 						request.setAttribute("featuredUser", selectedUser);
 						request.setAttribute("featuredAddress", selectedAddress);
 						request.setAttribute("userPath", userPath);
@@ -405,6 +418,7 @@ public class UserAdminServlet extends HttpServlet {
 						String lastname = request.getParameter("lastname");
 						String email = request.getParameter("email");
 						String phone = request.getParameter("phone");
+						String answer = request.getParameter("securityAnswer");
 						String userType = request.getParameter("userType");
 						String location = request.getParameter("location");
 						String city = request.getParameter("city");
@@ -421,9 +435,10 @@ public class UserAdminServlet extends HttpServlet {
 						selectedUser.setLastName(lastname);
 						selectedUser.setEmail(email);
 						selectedUser.setPhone(phone);
+						selectedUser.setAnswer(answer);
 						selectedUser.setUserType(userType);
 
-						validCredentialFlag = fc.checkSignup(selectedUser);
+						validCredentialFlag = fc.checkNormalUser(selectedUser);
 						duplicateFlag = dc.checkUser(selectedUser, UserService.getAllUsers());
 						if(selectedUser.getEmail().equals(emailpath))
 							duplicateFlag = false;
@@ -434,6 +449,8 @@ public class UserAdminServlet extends HttpServlet {
 							selectedAddress.setCity(city);
 							selectedAddress.setProvince(province);
 							selectedAddress.setPostcode(postcode);
+
+							selectedUser.setAnswer(e.encryptAnswer(answer));
 
 							UserService.updateUser(selectedUser.getUserID(), selectedUser);
 							AddressService.updateAddress(selectedAddress.getUserID(), selectedAddress);

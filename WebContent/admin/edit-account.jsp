@@ -133,8 +133,12 @@
                     <div class="part">
                         <div class="type flex-between">
                             <div>
-                                <div>Old Password<span>*</span></div>
-                                <input type="password" name="oldpassword" placeholder="Type your old password" />
+                                <div>A secret random answer<span>*</span></div>
+                                <input type="password" name="securityAnswer" value="${loggedUser.answer}" placeholder="Type your new secret answer" />
+                            </div>
+                            <div>
+                                <div>Confirm Password<span>*</span></div>
+                                <input type="password" name="password" placeholder="Type your password" />
                             </div>
                             
                             <div>
@@ -144,17 +148,7 @@
                                     <option value="admin">Admin</option>
                                 </select>
                             </div>
-                        </div>    
-                        <div class="type">
-                            <div>
-                                <div>New password<span>*</span></div>
-                                <input type="password" name="newpassword" placeholder="Type your new password" />
-                            </div>
-                            <div>
-                                <div>Confirm new password<span>*</span></div>
-                                <input type="password" name="confirmpassword" placeholder="Retype your new password" />
-                            </div>
-                        </div>    
+                        </div>
                     </div>
                     <!-- Save Changes -->
                     <div class="buttons">

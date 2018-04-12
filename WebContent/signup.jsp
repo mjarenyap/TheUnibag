@@ -120,6 +120,11 @@
 					<span>Phone number</span>
 					<input type="text" name="phone" placeholder="(Optional) Type here you phone number" class="full-width" />
 				</label>
+				<br/><br/>
+				<label>
+					<span>A secret random answer<b class="important">*</b></span>
+					<input type="text" name="securityAnswer" placeholder="Type here your security answer (Case sensitive)" class="full-width" />
+				</label>
 				<div class="flex-end">
 					<span class="help">Already have an account? <a href="#" id="go-login">Login</a> here.</span>
 					<input type="submit" value="Sign Up" />

@@ -218,6 +218,7 @@ public class LogServlet extends HttpServlet {
 							userlist.get(i).getUserType().equalsIgnoreCase("normal")){
 							correctUser = userlist.get(i);
 							correctUser.setUserID(e.encryptID(correctUser.getUserID()));
+							correctUser.setAnswer(e.decryptAnswer(correctUser.getAnswer()));
 							correctUser.setPassword("");
 							break;
 						}
@@ -371,6 +372,8 @@ public class LogServlet extends HttpServlet {
 
 			String password = request.getParameter("password");
 			String confirmPass = request.getParameter("confirmpass");
+			String securityAnswer = request.getParameter("securityAnswer");
+
 			// get the redirect parameter
 			String redirect = request.getParameter("redirect");
 
@@ -389,6 +392,7 @@ public class LogServlet extends HttpServlet {
 				newUser.setPhone(phone);
 				newUser.setUserType("normal");
 				newUser.setPassword(password);
+				newUser.setAnswer(securityAnswer);
 
 				// check for invalid or empty fields
 				validCredentialFlag = fc.checkSignup(newUser);
@@ -409,10 +413,12 @@ public class LogServlet extends HttpServlet {
 
 					String encryptedPass = e.encryptPassword(password);
 					newUser.setPassword(encryptedPass);
+					newUser.setAnswer(e.encryptAnswer(securityAnswer));
 
 					UserService.addUser(newUser);
 
 					// set a session attribute "Account"
+					newUser.setAnswer(securityAnswer);
 					request.getSession().setAttribute("Account", newUser);
 					LocalDateTime now = LocalDateTime.now();
 					request.getSession().setAttribute("lastLogged", now);
@@ -462,6 +468,7 @@ public class LogServlet extends HttpServlet {
 		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
 			String email = request.getParameter("email");
 			String phone = request.getParameter("phone");
+			String answer = request.getParameter("securityAnswer");
 
 			Encryption e = new Encryption();
 
@@ -471,7 +478,7 @@ public class LogServlet extends HttpServlet {
 			User correctUser = null;
 			for(int i = 0; i < userlist.size(); i++){
 				if(userlist.get(i).getPhone().length() > 0 || userlist.get(i).getPhone() != null){
-					if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && phone.equals(userlist.get(i).getPhone())){
+					if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && phone.equals(userlist.get(i).getPhone()) && answer.equals(e.decryptAnswer(userlist.get(i).getAnswer()))){
 						correctUser = userlist.get(i);
 						foundFlag = true;
 						break;

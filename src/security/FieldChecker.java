@@ -23,11 +23,11 @@ public class FieldChecker {
 	public boolean checkSignup(User newUser){
 		
 		if(newUser.getFirstName().length() == 0 || newUser.getLastName().length() == 0 ||
-		newUser.getEmail().length() == 0 || newUser.getPassword().length() == 0)
+		newUser.getEmail().length() == 0 || newUser.getPassword().length() == 0 || newUser.getAnswer().length() == 0)
 			return false;
 		
 		if(newUser.getFirstName() == null || newUser.getLastName() == null ||
-		newUser.getEmail() == null || newUser.getPassword() == null)
+		newUser.getEmail() == null || newUser.getPassword() == null || newUser.getAnswer() == null)
 			return false;
 		
 		if(!newUser.getEmail().contains("@"))
@@ -71,20 +71,36 @@ public class FieldChecker {
 		return true;
 	}
 
+	public boolean checkNormalUser(User newUser){
+		if(newUser.getFirstName().length() == 0 || newUser.getLastName().length() == 0 ||
+		newUser.getEmail().length() == 0 || newUser.getPassword().length() == 0 || newUser.getAnswer().length() == 0)
+			return false;
+		
+		if(newUser.getFirstName() == null || newUser.getLastName() == null ||
+		newUser.getEmail() == null || newUser.getPassword() == null || newUser.getAnswer() == null)
+			return false;
+		
+		if(!newUser.getEmail().contains("@"))
+			return false;
+		
+		return true;
+	}
+
 	public boolean checkProfileGeneral(User user){
-		if(user.getFirstName() == null || user.getFirstName().length() == 0)
+		if(user.getFirstName().length() == 0 || user.getFirstName() == null)
 			return false;
 
-		if(user.getLastName() == null || user.getLastName().length() == 0)
+		if(user.getLastName().length() == 0 || user.getLastName() == null)
 			return false;
 
-		if(user.getEmail() == null || user.getEmail().length() == 0 || !user.getEmail().contains("@"))
+		if(user.getEmail().length() == 0 || !user.getEmail().contains("@") || user.getEmail() == null)
 			return false;
 
-		String phone = String.valueOf(user.getPhone());
-		for(int i = 0; i < phone.length(); i++)
-			if(phone.charAt(i) < '0' || phone.charAt(i) > '9')
-				return false;
+		if(user.getAnswer().length() == 0 || user.getAnswer() == null)
+			return false;
+
+		if(user.getPhone().length() == 0 || user.getPhone() == null)
+			return false;
 
 		return true;
 	}
