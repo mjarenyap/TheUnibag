@@ -65,10 +65,10 @@
             <div class="nav-header">
                 <p class="flex-start">
                     <i class="fa fa-angle-left fa-2x"></i>
-                    <span id="back-all-products">View all users</span>
+                    <span id="back-all-users">View all users</span>
                 </p>
             </div>
-            <form method="port" action="editedaccount" class="info">
+            <form method="post" action="editedaccount" class="info">
                 <div class="header">Edit Your Account</div>
                 <c:if test="${error == true}">
                     <br/>
@@ -125,17 +125,17 @@
                             </div>
                             <div>
                                 <div>Province<span>*</span></div>
-                                <input type="text" placeholder="Type your province" value="${loggedAddress.province}" />
+                                <input type="text" name="province" placeholder="Type your province" value="${loggedAddress.province}" />
                             </div>
                         </div>
                     </div>
                     <!--Second One -->
                     <div class="part">
+                        <div>
+                            <div>A secret random answer<span>*</span></div>
+                            <input type="password" name="securityAnswer" value="${loggedUser.answer}" placeholder="Type your new secret answer" />
+                        </div>
                         <div class="type flex-between">
-                            <div>
-                                <div>A secret random answer<span>*</span></div>
-                                <input type="password" name="securityAnswer" value="${loggedUser.answer}" placeholder="Type your new secret answer" />
-                            </div>
                             <div>
                                 <div>Confirm Password<span>*</span></div>
                                 <input type="password" name="password" placeholder="Type your password" />

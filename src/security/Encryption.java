@@ -58,8 +58,8 @@ public class Encryption{
 		for(int i = 0; i < answer.length(); i++){
 			int shifted = answer.charAt(i) + charOffset[i % 2];
 			int bounded = shifted % 126;
-			if(bounded >= 0 && bounded <= 32)
-				bounded += 33;
+			if(bounded >= 0 && bounded <= 31)
+				bounded += 32;
 			encrypted += Character.toString((char)bounded);
 		}
 
@@ -72,8 +72,8 @@ public class Encryption{
 
 		for(int i = 0; i < answer.length(); i++){
 			int bounded = answer.charAt(i) - charOffset[i % 2];
-			if(bounded >= 0 && bounded <= 32){
-				bounded = 33 - bounded;
+			if(bounded >= 0 && bounded <= 31){
+				bounded = 32 - bounded;
 				bounded = 126 - bounded;
 			}
 
