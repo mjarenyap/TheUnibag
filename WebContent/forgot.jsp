@@ -82,10 +82,6 @@
 					<input type="email" name="email" placeholder="user@example.com" class="full-width" />
 				</label>
 				<label>
-					<span>Phone number</span>
-					<input type="text" name="phone" placeholder="Type here your phone number (if there is)" class="full-width" />
-				</label>
-				<label>
 					<span>Your secret random answer</span>
 					<input type="text" name="securityAnswer" placeholder="Type here your answer (case sensitive)" class="full-width" />
 				</label>

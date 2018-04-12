@@ -119,8 +119,8 @@
 						</c:choose>
 					</label>
 					<label>
-						<span>A secret random answer<b class="important">*</b></span>
-						<input type="password" name="securityAnswer" value="${loggedUser.answer}" placeholder="Type here your security answer (Case sensitive)" class="full-width" />
+						<span>A secret random answer</span>
+						<input type="text" name="securityAnswer" value="${loggedUser.answer}" placeholder="Type here your security answer (Case sensitive)" class="full-width" />
 					</label>
 					<br/><br/>
 					<label>
