@@ -16,7 +16,7 @@ import javax.persistence.Id;
 public class Address {
 	
 	@Id
-	@Column(name="userID")
+	@Column(name = "userID")
 	private long userID;
 	@Column
 	private String city; 

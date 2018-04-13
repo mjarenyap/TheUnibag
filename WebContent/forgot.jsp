@@ -19,14 +19,15 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/modal.css" />
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/login.css" />
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
@@ -80,10 +81,6 @@
 				<label>
 					<span>Email address</span>
 					<input type="email" name="email" placeholder="user@example.com" class="full-width" />
-				</label>
-				<label>
-					<span>Phone number</span>
-					<input type="text" name="phone" placeholder="Type here your phone number (if there is)" class="full-width" />
 				</label>
 				<label>
 					<span>Your secret random answer</span>

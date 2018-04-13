@@ -467,7 +467,6 @@ public class LogServlet extends HttpServlet {
 	protected void recover(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
 			String email = request.getParameter("email");
-			String phone = request.getParameter("phone");
 			String answer = request.getParameter("securityAnswer");
 
 			Encryption e = new Encryption();
@@ -477,19 +476,10 @@ public class LogServlet extends HttpServlet {
 			List<User> userlist = UserService.getAllUsers();
 			User correctUser = null;
 			for(int i = 0; i < userlist.size(); i++){
-				if(userlist.get(i).getPhone().length() > 0 || userlist.get(i).getPhone() != null){
-					if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && phone.equals(userlist.get(i).getPhone()) && answer.equals(e.decryptAnswer(userlist.get(i).getAnswer()))){
-						correctUser = userlist.get(i);
-						foundFlag = true;
-						break;
-					}
-				}
-
-				else{
-					if(email.equalsIgnoreCase(userlist.get(i).getEmail())){
-						foundFlag = true;
-						break;
-					}
+				if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && answer.equals(e.decryptAnswer(userlist.get(i).getAnswer()))){
+					correctUser = userlist.get(i);
+					foundFlag = true;
+					break;
 				}
 			}
 
