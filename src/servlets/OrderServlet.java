@@ -205,6 +205,7 @@ public class OrderServlet extends HttpServlet {
 		tempUser.setLastName(lastname);
 		tempUser.setEmail(email);
 		tempUser.setPhone(phone);
+		tempUser.setAnswer("");
 		
 		Address tempAddress = new Address();
 		tempAddress.setLocation(location);

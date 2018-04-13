@@ -233,6 +233,7 @@ public class ProductServlet extends HttpServlet {
 				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
 			// get search keyword
 			String keyword = request.getParameter("keyword");
+			keyword = keyword.toLowerCase();
 			ArrayList<Bag> searchlist = new ArrayList<>();
 			ArrayList<String> productPaths = new ArrayList<>();
 

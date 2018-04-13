@@ -71,6 +71,7 @@
                         <th>City</th>
                         <th>Postcode</th>
                         <th>Province</th>
+                        <th>Ordered By</th>
                         <th>Order Date</th>
                         <th>Time</th>
                     </tr>
@@ -82,6 +83,7 @@
                             <td><c:out value="${order.city}" /></td>
                             <td><c:out value="${order.postcode}" /></td>
                             <td><c:out value="${order.province}" /></td>
+                            <td><c:out value="${names[status.index]}" /></td>
                             <td><c:out value="${order.orderDate}" /></td>
                             <td><c:out value="${order.orderTime}" /></td>
                         </tr>

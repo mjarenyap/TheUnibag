@@ -238,6 +238,7 @@ public class UserServlet extends HttpServlet {
 						}
 
 						else{
+							currentAddress = new Address();
 							currentAddress.setUserID(decryptedID);
 							currentAddress.setLocation(location);
 							currentAddress.setCity(city);
@@ -248,17 +249,16 @@ public class UserServlet extends HttpServlet {
 
 						successFlag = true;
 						errorFlag = false;
-						request.setAttribute("success", successFlag);
-						request.setAttribute("error", errorFlag);
 					}
 
 					else if(!validPasswordFlag || errorFlag){
 						successFlag = false;
 						errorFlag = true;
-						request.setAttribute("success", successFlag);
-						request.setAttribute("error", errorFlag);
 					}
 
+					request.setAttribute("success", successFlag);
+					request.setAttribute("error", errorFlag);
+					request.setAttribute("address", AddressService.getAddress(e.decryptID(currentUser.getUserID())));
 					request.getRequestDispatcher("profile-address.jsp").forward(request, response);
 				}
 
@@ -306,12 +306,12 @@ public class UserServlet extends HttpServlet {
 
 				// security variables
 				Encryption e = new Encryption();
-				FieldChecker fc= new FieldChecker();
+				FieldChecker fc = new FieldChecker();
 				
 				// get parameter values of firstname, lastname, email, phone
-				String oldPassword = request.getParameter("oldPassword");
-				String newPassword = request.getParameter("newPassword");
-				String confirmNewPass = request.getParameter("confirmPass");
+				String oldPassword = request.getParameter("oldpassword");
+				String newPassword = request.getParameter("newpassword");
+				String confirmNewPass = request.getParameter("confirmpass");
 
 				// declare flags
 				boolean validPasswordFlag = false;
@@ -336,7 +336,7 @@ public class UserServlet extends HttpServlet {
 
 					// modify the currentUser's credentials
 					if(validCredentialsFlag && validPasswordFlag && !errorFlag){
-						currentUser.setPassword(newPassword);
+						currentUser.setPassword(e.encryptPassword(newPassword));
 						UserService.updateUser(decryptedID, currentUser);
 
 						successFlag = true;

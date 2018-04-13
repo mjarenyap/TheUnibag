@@ -172,7 +172,7 @@
                     <input type="hidden" name="path" value="${userPath}" />
                     <!-- Save Changes -->
                     <div class="buttons">
-                        <button class="hallow butt">DISCARD</button>
+                        <button class="hallow butt" type="button" id="discard" data-id="allusers">DISCARD</button>
                         <button class="hallow butt save" type="submit">SAVE CHANGES</button>
                     </div>
                 </div>

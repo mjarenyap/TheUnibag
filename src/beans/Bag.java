@@ -31,7 +31,7 @@ public class Bag {
 	@Column
 	private int rating;
 	@Column
-	private float price; 
+	private float price;
 	
 	
 	/*Setters and Getters*/
