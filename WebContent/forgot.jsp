@@ -19,14 +19,15 @@
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/flex.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/button.css" />
 		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/field.css" />
+		<link rel="stylesheet" type="text/css" href="css/framework-stylesheet/modal.css" />
 
 		<!-- PAGE STYLESHEET -->
 		<link rel="stylesheet" type="text/css" href="css/page-stylesheet/login.css" />
 
 		<!-- JAVASCRIPT -->
 		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="js/formfunctions.js" type="text/javascript"></script>
 		<script src="js/layout.js" type="text/javascript"></script>
+		<script src="js/formfunctions.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<c:set var="shoppingcart" value="${sessionScope.ShoppingCart}" />
