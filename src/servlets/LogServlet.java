@@ -132,6 +132,7 @@ public class LogServlet extends HttpServlet {
 			request.getSession().setAttribute("Account", null);
 			request.getSession().setAttribute("adminAccount", null);
 			request.getSession().setAttribute("lastLogged", null);
+			//request.getSession().invalidate();
 
 			// remove the Account cookies
 			Cookie[] cookies = request.getCookies();

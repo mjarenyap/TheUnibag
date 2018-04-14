@@ -40,11 +40,11 @@
 				<h1 class="heading">Admin Login</h1>
 				<label>
 					<span>Email address</span>
-					<input type="email" name="email" placeholder="user@example.com" class="full-width" />
+					<input type="email" autocomplete="off" name="email" placeholder="user@example.com" class="full-width" />
 				</label>
 				<label>
 					<span>Password</span>
-					<input type="password" name="password" placeholder="Type here your password" class="full-width" />
+					<input type="password" autocomplete="off" name="password" placeholder="Type here your password" class="full-width" />
 				</label>
 				<div>
 					<input type="submit" value="Login" class="full-width" />
