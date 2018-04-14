@@ -1,0 +1,29 @@
+/* footer stylesheet */
+
+footer{
+	padding: 5em 15%;
+	background-color: var(--theme-dark-neutral);
+	color: white;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+footer div.content-wrapper{
+	width: 30%;
+}
+
+footer div.content-wrapper h3{
+	margin-bottom: 1em;
+	color: white;
+}
+
+footer div.content-wrapper p{
+	font-weight: lighter;
+	font-size: 0.8em;
+	color: white;
+}
+
+footer i.fa{
+	margin-right: 0.5em;
+}

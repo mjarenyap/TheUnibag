@@ -1,0 +1,86 @@
+/* shopping cart stylesheet */
+
+#cart-section button{
+	font-size: 0.7em;
+	padding: 10px 20px;
+	box-sizing: border-box;
+}
+
+#cart-heading{
+	font-size: 2em;
+	margin-bottom: 0.8em;
+}
+
+#table-of-cart{
+	width: 65%;
+	max-width: 65%
+	color: var(--theme-dark-neutral);
+	margin-right: 1.5em;
+	margin-bottom: 1.5em;
+	box-sizing: border-box;
+}
+
+#table-of-cart th{
+	border-top: thin solid #ccc;
+	border-bottom: thin solid #ccc;
+	padding: 1em 0;
+	font-family: 'Source Serif Pro', sans-serif;
+	text-align: left;
+}
+
+#table-of-cart thead th:first-of-type{
+	text-align: center;
+}
+
+#table-of-cart td{
+	font-weight: normal;
+	padding: 1em 0;
+	color: var(--theme-dark-neutral);
+	border-bottom: thin solid #ccc;
+	word-wrap: break-word;
+}
+
+#table-of-cart tbody tr td:first-of-type{
+	width: 7em;
+}
+
+#table-of-cart td div.featured-image{
+	width: 5em;
+	height: 5em;
+	border-radius: 100%;
+	background-color: white;
+	margin: 0 auto;
+	background: url('../../assets/images/feature-lesportsac.jpg');
+	background-size: cover;
+	background-position: top;
+	background-repeat: no-repeat;
+}
+
+#table-of-cart .remove{
+	width: 1.5em;
+	cursor: pointer;
+	display: block;
+	margin: auto;
+}
+
+
+/* Summary pane */
+#cart-section > div.flex-start{
+	align-items: flex-start;
+}
+
+#summary-pane{
+	padding: 1.5em;
+	width: 100%;
+	max-width: 30%;
+	border-top:  thin solid #ccc;
+	border-bottom:  thin solid #ccc;
+}
+
+#summary-content{
+	margin: 1.5em 0;
+}
+
+#count-summary b, #total-summary b{
+	font-family: 'Source Serif Pro', sans-serif;
+}

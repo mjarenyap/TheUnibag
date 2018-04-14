@@ -13,7 +13,6 @@ import beans.Bag;
  * version 1.0.02.25.18
  */
 
-
 public class BagService {
 	public static void addBag(Bag bags)
 	{
@@ -50,7 +49,6 @@ public class BagService {
 		em.close();
 		
 		return bags;
-		
 	}
 	
 	public static void deleteBag(long id)
@@ -85,8 +83,11 @@ public class BagService {
 			//find a bag
 			Bag a = em.find(Bag.class, id);
 			
-			//change Bag Color, description, price, rating
+			a.setName(newinfo.getName());
+			a.setBrand(newinfo.getBrand());
 			a.setColor(newinfo.getColor());
+			a.setType(newinfo.getType());
+			a.setCollection(newinfo.getCollection());
 			a.setDescription(newinfo.getDescription());
 			a.setPrice(newinfo.getPrice());
 			a.setRating(newinfo.getRating());
@@ -133,4 +134,32 @@ public class BagService {
 		
 	}
 
+
+	public static List<Bag> getAllBags(int sortMode){
+		List<Bag> bags = null;
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+
+		String[] modes = {"bag.name ASC", "bag.name DESC", "bag.price ASC", "bag.price DESC", "bag.type ASC", "bag.brand ASC"};
+		
+		try{
+			trans.begin();
+			
+			TypedQuery<Bag> query = em.createQuery("select bag from bag bag order by " + modes[sortMode], Bag.class);
+			bags = query.getResultList();
+			
+			trans.commit();
+		
+		}catch(Exception e){
+			if(trans != null)
+				trans.rollback();
+			
+			e.printStackTrace();
+		}finally{
+			em.close();
+		}
+		
+		return bags;
+	}
 }

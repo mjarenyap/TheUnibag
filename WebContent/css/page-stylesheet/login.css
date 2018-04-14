@@ -1,0 +1,43 @@
+/* login stylesheet */
+
+form#login-form{
+	margin: auto;
+	width: 35%;
+	box-sizing: border-box;
+}
+
+form#login-form .heading{
+	font-size: 2.7em;
+	margin-bottom: 0.8em;
+}
+
+form#login-form label input.full-width{
+	width: 88%;
+}
+
+form#login-form label span{
+	display: block;
+	color: var(--theme-dark-neutral);
+	margin-bottom: 0.5em;
+}
+
+form#login-form label{
+	margin: 1em 0;
+	display: block;
+}
+
+span.help{
+	font-style: italic;
+	font-size: 0.8em;
+	margin-right: 2em;
+}
+
+#forgot-password{
+	cursor: pointer;
+	margin: 0;
+	color: var(--theme-color);
+}
+
+#forgot-password:hover{
+	text-decoration: underline;
+}

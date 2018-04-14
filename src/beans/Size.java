@@ -2,8 +2,8 @@ package beans;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
@@ -17,7 +17,6 @@ public class Size {
 	
 	@Id
 	@Column(name="sizeID")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long sizeID;
 	@Column
 	private long bagID;
@@ -44,7 +43,7 @@ public class Size {
 		return bagID;
 	}
 	
-	public void setBagID(int bagID) {
+	public void setBagID(long bagID) {
 		this.bagID = bagID;
 	}
 	

@@ -16,7 +16,7 @@ import beans.User;
 public class UserService {
 	/*CRUD Operations*/
 	
-	public static void addUser(User users)
+	public static void addUser(User user)
 	{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -24,7 +24,7 @@ public class UserService {
 		
 		try{
 			trans.begin();
-			em.persist(users);
+			em.persist(user);
 			trans.commit();
 		}catch(Exception e){
 			if(trans!=null)
@@ -36,7 +36,7 @@ public class UserService {
 		em.close();
 	}
 	
-	public static User getUser(int id)
+	public static User getUser(long id)
 	{
 		User users = null;
 		
@@ -54,7 +54,7 @@ public class UserService {
 		
 	}
 	
-	public static void deleteUser(int id)
+	public static void deleteUser(long id)
 	{	
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mysqldb");
 		EntityManager em = emf.createEntityManager();
@@ -73,7 +73,7 @@ public class UserService {
 		}
 	}
 	
-	public static boolean updateUser(int id, User newinfo)
+	public static boolean updateUser(long id, User newinfo)
 	{
 		boolean success = false;
 		
@@ -92,6 +92,8 @@ public class UserService {
 			a.setPassword(newinfo.getPassword());
 			a.setEmail(newinfo.getEmail());
 			a.setPhone(newinfo.getPhone());
+			a.setAnswer(newinfo.getAnswer());
+			a.setUserType(newinfo.getUserType());
 			trans.commit();
 			
 		}catch(Exception e){

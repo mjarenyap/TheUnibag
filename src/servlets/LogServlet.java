@@ -10,16 +10,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import beans.User;
 import beans.Bag;
 import services.UserService;
 import services.BagService;
+import security.FieldChecker;
+import security.PurposeChecker;
+import security.DuplicateChecker;
+import security.Encryption;
+import security.Attempt;
+import security.Expiration;
+import security.PasswordGenerator;
 
 /**
  * Servlet implementation class LogServlet
  */
-@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/logout"})
+@WebServlet(urlPatterns = {"/login", "/home", "/signup", "/account", "/reset", "/logout", "/forgot", "/recover"})
 public class LogServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,160 +46,486 @@ public class LogServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		String path = request.getServletPath();
-
 		switch(path){
-			case "/login": login(request, response);
-			break;
-
 			case "/home": home(request, response);
 			break;
 
-			case "/signup": signup(request, response);
+			case "/login": loginPage(request, response);
+			break;
+
+			case "/signup": signupPage(request, response);
+			break;
+
+			case "/account": processAccount(request, response);
+			break;
+
+			case "/reset": resetAll(request, response);
 			break;
 
 			case "/logout": logout(request, response);
 			break;
-		}
-	}
 
-	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<User> users = UserService.getAllUsers();
-		boolean found = false;
-		
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		
-		for(int i = 0; i < users.size(); i++){
-			if(users.get(i).getEmail().equals(email) && users.get(i).getPassword().equals(password)){
-				request.getSession().setAttribute("user", users.get(i));
-				
-				Cookie userCookie = new Cookie("Username", users.get(i).getEmail());
-				if(request.getParameterValues("remember") != null)
-					userCookie.setMaxAge(60*60*24*21);
-				
-				response.addCookie(userCookie);
-				found = true;
-				home(request, response);
-				break;
-			}
-		}
-		
-		if(!found){
-			request.setAttribute("invalid", !found);
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		}
+			case "/forgot": forgotPage(request, response);
+			break;
 
-		home(request, response);
+			case "/recover": recover(request, response);
+			break;
+
+			default: request.getRequestDispatcher("page-404.jsp").forward(request, response);
+			break;
+		}
 	}
 
 	protected void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//get all bags
-		List<Bag> baglist = BagService.getAllBags();
-
-		//get new arrival products
-		ArrayList<Bag> featuredBagList = new ArrayList<>();
-		for(int i = 0; i < 3; i++)
-			featuredBagList.add(baglist.get(i));
-
-		request.setAttribute("featuredBagList", featuredBagList);
-
-		//categorize the bags according to brands
-		ArrayList<Bag> lesportsacList = new ArrayList<>();
-		ArrayList<Bag> kiplingList = new ArrayList<>();
-		ArrayList<Bag> cathList = new ArrayList<>();
-
-		int lCount = 0, kCount = 0, cCount = 0;
-		for(int i = 0; i < baglist.size(); i++){
-			if(baglist.get(i).getBrand().equalsIgnoreCase("LeSportSac") && lCount != 3){
-				lesportsacList.add(baglist.get(i));
-				lCount++;
+		if(!Expiration.isExpired((LocalDateTime)request.getSession().getAttribute("lastLogged"))){
+			if(request.getSession().getAttribute("lastLogged") != null)
+				request.getSession().setAttribute("lastLogged", LocalDateTime.now());
+			// check if there is no existing cart session
+			if(request.getSession().getAttribute("ShoppingCart") == null){
+				ArrayList<Bag> shoppingcart = new ArrayList<>();
+				request.getSession().setAttribute("ShoppingCart", shoppingcart);
 			}
 
-			else if(baglist.get(i).getBrand().equalsIgnoreCase("Kipling") && kCount != 3){
-				kiplingList.add(baglist.get(i));
-				kCount++;
+			if(request.getSession().getAttribute("Blacklist") == null){
+				ArrayList<Attempt> blacklist = new ArrayList<>();
+				request.getSession().setAttribute("Blacklist", blacklist);
 			}
 
-			else if(baglist.get(i).getBrand().equalsIgnoreCase("Cath Kidston") && cCount != 3){
-				cathList.add(baglist.get(i));
-				cCount++;
-			}
-		}
+			// IMPORTANT: GET ALL PROMOTIONS
+			List<Bag> bags = BagService.getAllBags();
+			ArrayList<Bag> baglist = new ArrayList<>();
+			ArrayList<String> productNames = new ArrayList<>();
+			Encryption e = new Encryption();
 
-		//set attributes
-		request.setAttribute("lesportsacList", lesportsacList);
-		request.setAttribute("kiplingList", kiplingList);
-		request.setAttribute("cathList", cathList);
+			// IMPORTANT: SET THEM TO REQUEST ATTRIBUTES
+			if(bags.size() > 0)
+				for(int i = 0; i < 3; i++){
+					long encryptedID = e.encryptID(bags.get(i).getBagID());
+					bags.get(i).setBagID(encryptedID);
 
-
-		//dispatch to JSP
-		request.getRequestDispatcher("index.jsp").forward(request, response);
-	}
-
-	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User newUser = new User();
-		List<User> users = UserService.getAllUsers();
-		boolean duplicate = false;
-		boolean invalid = false;
-		
-		String firstname = request.getParameter("fname");
-		String lastname = request.getParameter("lname");
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String confirmpass = request.getParameter("firmpassword");
-		String phone = request.getParameter("phone");
-
-		//to check if fields are empty and/or invalid
-		if(firstname.length() == 0 || lastname.length() == 0 ||
-			email.length() == 0 || confirmpass.length() == 0 ||
-			password.length() == 0 || !password.equals(confirmpass)){
-			invalid = true;
-			request.setAttribute("invalid", invalid);
-		}
-
-		//to check for duplicate users
-		if(!invalid){
-			for(int i = 0; i < users.size(); i++){
-				if(email.equalsIgnoreCase(users.get(i).getEmail())){
-					duplicate = true;
-					request.setAttribute("duplicate", duplicate);
+					String pname = bags.get(i).getName().replace(' ', '+');
+					pname = encryptedID + "#" + pname;
+					productNames.add(pname);
+					baglist.add(bags.get(i));
 				}
-			}
 
-			request.getRequestDispatcher("signup.jsp").forward(request, response);
+			request.setAttribute("baglist", baglist);
+			request.setAttribute("productnames", productNames);
+
+			// dispatch to the homepage
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
 
-		else if(!duplicate && !invalid){
-			newUser.setFirstName(firstname);
-			newUser.setLastName(lastname);
-			newUser.setEmail(email);
-			newUser.setPassword(password);
-			newUser.setPhone(phone);
-			
-			UserService.addUser(newUser);
-			request.getSession().setAttribute("user", newUser);
-			home(request, response);
-		}
-
-		request.getRequestDispatcher("signup.jsp").forward(request, response);
+		else request.getRequestDispatcher("page-401.jsp").forward(request, response);
 	}
 
 	protected void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getSession().invalidate();
+		// declare needed variables
+		boolean loggedFlag = false;
+
+		// check for logged user
+		if(request.getSession().getAttribute("Account") != null || request.getSession().getAttribute("adminAccount") != null)
+			loggedFlag = true;
+
+		// invalidate the session
+		if(loggedFlag){
+			request.getSession().setAttribute("Account", null);
+			request.getSession().setAttribute("adminAccount", null);
+			request.getSession().setAttribute("lastLogged", null);
+			//request.getSession().invalidate();
+
+			// remove the Account cookies
+			Cookie[] cookies = request.getCookies();
+			if(cookies != null){
+				for(int i = 0; i < cookies.length; i++)
+				{	
+					Cookie currentCookie = cookies[i];
+					if(currentCookie.getName().equals("Username") || currentCookie.getName().equals("adminUsername"))
+					{
+						currentCookie.setMaxAge(0);
+						response.addCookie(currentCookie);
+					}
+				}
+			}
+
+			home(request, response);
+		}
+
+		else home(request, response);
+	}
+
+	protected void processAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String purpose = request.getParameter("processAccount");
+		if(purpose.equals("login"))
+			login(request, response);
+
+		else if(purpose.equals("signup"))
+			signup(request, response);
+
+		else home(request, response);
+	}
+
+	protected void loginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
+			String pRedirect = request.getParameter("purpose");
+			PurposeChecker pc = new PurposeChecker();
+
+			if(pc.checkRedirect(pRedirect)){
+				request.setAttribute("purpose", pRedirect);
+				request.getRequestDispatcher("login.jsp").forward(request, response);
+			}
+
+			else home(request, response);
+		}
 		
+		else home(request, response);
+	}
+
+	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check if there is a logged user
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
+			//security calsses
+			FieldChecker fc = new FieldChecker();
+			Encryption e = new Encryption();
+			
+			// get the email, password and redirect parameters
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			String redirect = request.getParameter("redirect");
+
+			// declare flag variables
+			boolean validCredentialFlag = false;
+			boolean validRedirectFlag = false;
+			boolean errorFlag = false;
+
+			// check for invalid or empty fields
+			validCredentialFlag = fc.checkLogin(email, password);
+
+			// check if the redirect parameter is part of the whitelisted pages (array of URLs)
+			PurposeChecker checker = new PurposeChecker();
+			if(checker.checkRedirect(redirect))
+				validRedirectFlag = true;
+
+
+			if(validCredentialFlag && validRedirectFlag){
+				// find a matched account credentials from the database
+				List<User> userlist = UserService.getAllUsers();
+				User correctUser = null;
+
+				if(userlist != null){
+					for(int i = 0; i < userlist.size(); i++){
+						String decryptedPassword = e.decryptPassword(userlist.get(i).getPassword());
+						if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && password.equals(decryptedPassword) &&
+							userlist.get(i).getUserType().equalsIgnoreCase("normal")){
+							correctUser = userlist.get(i);
+							correctUser.setUserID(e.encryptID(correctUser.getUserID()));
+							correctUser.setAnswer(e.decryptAnswer(correctUser.getAnswer()));
+							correctUser.setPassword("");
+							break;
+						}
+					}
+				}
+
+				// set a session attribute "Account"
+				if(correctUser != null){
+					// remove from blacklist
+					@SuppressWarnings("unchecked")
+					ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+					for(int i = 0; i < blacklist.size(); i++)
+						if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+							blacklist.remove(i);
+							break;
+						}
+
+					request.getSession().setAttribute("Blacklist", blacklist);
+					request.getSession().setAttribute("Account", correctUser);
+					LocalDateTime now = LocalDateTime.now();
+					request.getSession().setAttribute("lastLogged", now);
+					
+					// create a cookie for the logged user
+					Cookie userCookie = new Cookie("Username", correctUser.getEmail());
+					response.addCookie(userCookie);
+
+					if(!redirect.equals("home")){
+						switch(redirect){
+							case "cart":
+							case "checkout":
+								// check cart session for items
+								@SuppressWarnings("unchecked")
+								ArrayList<Bag> cartlist = (ArrayList<Bag>) request.getSession().getAttribute("ShoppingCart");
+								float subtotal = 0;
+								// check if there are items in the shopping cart
+								if(cartlist.size() > 0 && cartlist != null)
+									for(int i = 0; i < cartlist.size(); i++)
+										subtotal += cartlist.get(i).getPrice();
+
+								request.setAttribute("subtotal", subtotal);
+							break;
+						}
+
+						request.getRequestDispatcher(redirect + ".jsp").forward(request, response);
+					}
+
+					else home(request, response);
+				}
+
+				else{
+					// initiate blacklisting
+					int bindex = -1;
+					boolean blacklisted = false;
+					@SuppressWarnings("unchecked")
+					ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+					for(int i = 0; i < blacklist.size(); i++)
+						if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+							blacklist.get(i).setCount(blacklist.get(i).getCount() + 1);
+							blacklisted = true;
+							bindex = i;
+							break;
+						}
+
+					if(!blacklisted){
+						blacklist.add(new Attempt(email, 1));
+						bindex = blacklist.size() - 1;
+					}
+
+					request.getSession().setAttribute("Blacklist", blacklist);
+
+					errorFlag = true;
+					request.setAttribute("error", errorFlag);
+					request.setAttribute("purpose", redirect);
+
+					if(blacklist.get(bindex).getCount() >= 3)
+						request.getRequestDispatcher("page-403.jsp").forward(request, response);
+
+					else request.getRequestDispatcher("login.jsp").forward(request, response);
+				}
+			}
+
+			else if(validCredentialFlag && !validRedirectFlag)
+				home(request, response);
+
+			else if(!validCredentialFlag && validRedirectFlag){
+				// initiate blacklisting
+				int bindex = -1;
+				boolean blacklisted = false;
+				@SuppressWarnings("unchecked")
+				ArrayList<Attempt> blacklist = (ArrayList<Attempt>)request.getSession().getAttribute("Blacklist");
+				for(int i = 0; i < blacklist.size(); i++)
+					if(blacklist.get(i).getEmail().equalsIgnoreCase(email)){
+						blacklist.get(i).setCount(blacklist.get(i).getCount() + 1);
+						bindex = i;
+						blacklisted = true;
+						break;
+					}
+
+				if(!blacklisted){
+					blacklist.add(new Attempt(email, 1));
+					bindex = blacklist.size() - 1;
+				}
+
+				request.getSession().setAttribute("Blacklist", blacklist);
+
+				errorFlag = true;
+				request.setAttribute("error", errorFlag);
+				request.setAttribute("purpose", redirect);
+
+				if(blacklist.get(bindex).getCount() >= 3)
+					request.getRequestDispatcher("page-403.jsp").forward(request, response);
+
+				else request.getRequestDispatcher("login.jsp").forward(request, response);
+			}
+
+			else home(request, response);
+		}
+
+		else home(request, response);
+	}
+
+	protected void signupPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
+			String pRedirect = request.getParameter("purpose");
+			PurposeChecker pc = new PurposeChecker();
+
+			if(pc.checkRedirect(pRedirect)){
+				request.setAttribute("purpose", pRedirect);
+				request.getRequestDispatcher("signup.jsp").forward(request, response);
+			}
+
+			else home(request, response);
+		}
+
+		else home(request, response);
+	}
+
+	protected void signup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// check if there is a logged user
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
+			//security variables
+			FieldChecker fc = new FieldChecker();
+			DuplicateChecker dc = new DuplicateChecker();
+			Encryption e = new Encryption();
+			
+			// get the firstname, lastname, email, and phone parameters
+			String firstname = request.getParameter("firstname");
+			String lastname = request.getParameter("lastname");
+			String email = request.getParameter("email");
+			String phone = request.getParameter("phone");
+
+			String password = request.getParameter("password");
+			String confirmPass = request.getParameter("confirmpass");
+			String securityAnswer = request.getParameter("securityAnswer");
+
+			// get the redirect parameter
+			String redirect = request.getParameter("redirect");
+
+			// declare flags
+			boolean validCredentialFlag = false;
+			boolean validRedirectFlag = false;
+			boolean duplicateFlag = true;
+			boolean errorFlag = false;
+
+			if(password.equals(confirmPass)){
+				// create a User object then set the necessary attributes
+				User newUser = new User();
+				newUser.setFirstName(firstname);
+				newUser.setLastName(lastname);
+				newUser.setEmail(email);
+				newUser.setPhone(phone);
+				newUser.setUserType("normal");
+				newUser.setPassword(password);
+				newUser.setAnswer(securityAnswer);
+
+				// check for invalid or empty fields
+				validCredentialFlag = fc.checkSignup(newUser);
+
+				// check if the redirect parameter is part of the whitelisted pages (array of URLs)
+				PurposeChecker checker = new PurposeChecker();
+				if(checker.checkRedirect(redirect))
+					validRedirectFlag = true;
+
+				// check for duplicate account
+				List<User> userlist = UserService.getAllUsers();
+				duplicateFlag = dc.checkUser(newUser, userlist);
+
+				if(validCredentialFlag && validRedirectFlag && !duplicateFlag){
+					// add the User to the database
+					long newUserID = (long)userlist.size() + 1;
+					newUser.setUserID(newUserID);
+
+					String encryptedPass = e.encryptPassword(password);
+					newUser.setPassword(encryptedPass);
+					newUser.setAnswer(e.encryptAnswer(securityAnswer));
+
+					UserService.addUser(newUser);
+
+					// set a session attribute "Account"
+					newUser.setAnswer(securityAnswer);
+					request.getSession().setAttribute("Account", newUser);
+					LocalDateTime now = LocalDateTime.now();
+					request.getSession().setAttribute("lastLogged", now);
+						
+					// create a cookie for the logged user
+					Cookie userCookie = new Cookie("Username", newUser.getEmail());
+					response.addCookie(userCookie);
+
+					if(redirect.equals("cart") || redirect.equals("checkout"))
+						request.getRequestDispatcher(redirect + ".jsp").forward(request, response);
+
+					else home(request, response);
+				}
+
+				else if((!validCredentialFlag && validRedirectFlag) || (duplicateFlag && validRedirectFlag)){
+					errorFlag = true;
+					request.setAttribute("error", errorFlag);
+					request.setAttribute("duplicate", duplicateFlag);
+					request.setAttribute("purpose", redirect);
+					request.getRequestDispatcher("signup.jsp").forward(request, response);
+				}
+
+				else home(request, response);
+			}
+
+			else{
+				errorFlag = true;
+				duplicateFlag = false;
+				request.setAttribute("error", errorFlag);
+				request.setAttribute("duplicate", duplicateFlag);
+				request.setAttribute("purpose", redirect);
+				request.getRequestDispatcher("signup.jsp").forward(request, response);
+			}
+		}
+
+		else home(request, response);
+	}
+
+	protected void forgotPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null)
+			request.getRequestDispatcher("forgot.jsp").forward(request, response);
+
+		else home(request, response);
+	}
+
+	protected void recover(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getSession().getAttribute("Account") == null && request.getSession().getAttribute("adminAccount") == null){
+			String email = request.getParameter("email");
+			String answer = request.getParameter("securityAnswer");
+
+			Encryption e = new Encryption();
+
+			// declare boolean variables
+			boolean foundFlag = false;
+			List<User> userlist = UserService.getAllUsers();
+			User correctUser = null;
+			for(int i = 0; i < userlist.size(); i++){
+				if(email.equalsIgnoreCase(userlist.get(i).getEmail()) && answer.equals(e.decryptAnswer(userlist.get(i).getAnswer()))){
+					correctUser = userlist.get(i);
+					foundFlag = true;
+					break;
+				}
+			}
+
+			if(foundFlag){
+				// do some email algorithms
+				String passwordReset = PasswordGenerator.generate();
+				if(passwordReset != null){
+					passwordReset = e.encryptPassword(passwordReset);
+					correctUser.setPassword(passwordReset);
+					UserService.updateUser(correctUser.getUserID(), correctUser);
+					request.getRequestDispatcher("recover.jsp").forward(request, response);
+				}
+
+				else request.getRequestDispatcher("page-403.jsp").forward(request, response);
+			}
+
+			else{
+				request.setAttribute("error", !foundFlag);
+				request.getRequestDispatcher("forgot.jsp").forward(request, response);
+			}
+		}
+
+		else home(request, response);
+	}
+
+	protected void resetAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getSession().setAttribute("Account", null);
+		request.getSession().setAttribute("adminAccount", null);
+		request.getSession().setAttribute("ShoppingCart", new ArrayList<Bag>());
+		request.getSession().setAttribute("lastLogged", null);
+
+		// remove the Account cookies
 		Cookie[] cookies = request.getCookies();
 		if(cookies != null){
 			for(int i = 0; i < cookies.length; i++)
 			{	
 				Cookie currentCookie = cookies[i];
-				if(currentCookie.getName().equals("Username"))
+				if(currentCookie.getName().equals("Username") || currentCookie.getName().equals("adminUsername"))
 				{
 					currentCookie.setMaxAge(0);
 					response.addCookie(currentCookie);
 				}
 			}
 		}
-		
+
 		home(request, response);
 	}
 
