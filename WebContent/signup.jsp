@@ -97,33 +97,33 @@
 				<div class="flex-between forname">
 					<label>
 						<span>First name<b class="important">*</b></span>
-						<input type="text" name="firstname" placeholder="William Luther" class="full-width" />
+						<input type="text" autocomplete="off" name="firstname" placeholder="William Luther" class="full-width" />
 					</label>
 					<label>
 						<span>Last name<b class="important">*</b></span>
-						<input type="text" name="lastname" placeholder="Shakespeare" class="full-width" />
+						<input type="text" autocomplete="off" name="lastname" placeholder="Shakespeare" class="full-width" />
 					</label>
 				</div>
 				<label>
 					<span>Email address<b class="important">*</b></span>
-					<input type="email" name="email" placeholder="user@example.com" class="full-width" />
+					<input type="email" autocomplete="off" name="email" placeholder="user@example.com" class="full-width" />
 				</label>
 				<label>
 					<span>Password<b class="important">*</b></span>
-					<input type="password" name="password" placeholder="Type here your password" class="full-width" />
+					<input type="password" autocomplete="off" name="password" placeholder="Type here your password" class="full-width" />
 				</label>
 				<label>
 					<span>Confirm password<b class="important">*</b></span>
-					<input type="password" name="confirmpass" placeholder="Re-type here your password" class="full-width" />
+					<input type="password" autocomplete="off" name="confirmpass" placeholder="Re-type here your password" class="full-width" />
 				</label>
 				<label>
 					<span>Phone number</span>
-					<input type="text" name="phone" placeholder="(Optional) Type here you phone number" class="full-width" />
+					<input type="text" autocomplete="off" name="phone" placeholder="(Optional) Type here you phone number" class="full-width" />
 				</label>
 				<br/><br/>
 				<label>
 					<span>A secret random answer<b class="important">*</b></span>
-					<input type="text" name="securityAnswer" placeholder="Type here your security answer (Case sensitive)" class="full-width" />
+					<input type="text" autocomplete="off" name="securityAnswer" placeholder="Type here your security answer (Case sensitive)" class="full-width" />
 				</label>
 				<div class="flex-end">
 					<span class="help">Already have an account? <a href="#" id="go-login">Login</a> here.</span>

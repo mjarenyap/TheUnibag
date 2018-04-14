@@ -83,7 +83,7 @@ public class OrderAdminServlet extends HttpServlet {
 				
 				ArrayList<String> productNames = new ArrayList<>();
 				ArrayList<String> orderProducts = new ArrayList<>();
-				ArrayList<String> names = new ArrayList<>();
+				//ArrayList<String> names = new ArrayList<>();
 				for(int i = 0; i < filteredList.size(); i++){
 					long encryptedID = e.encryptID(filteredList.get(i).getOrderID());
 					Bag associatedBag = BagService.getBag(filteredList.get(i).getBagID());
@@ -93,15 +93,15 @@ public class OrderAdminServlet extends HttpServlet {
 					productNames.add(pname);
 					orderProducts.add(associatedBag.getName());
 
-					User associatedUser = UserService.getUser(filteredList.get(i).getUserID());
-					String uname = associatedUser.getFirstName() + " " + associatedUser.getLastName();
-					names.add(uname);
+					//User associatedUser = UserService.getUser(filteredList.get(i).getUserID());
+					//String uname = associatedUser.getFirstName() + " " + associatedUser.getLastName();
+					//names.add(uname);
 				}
 				
 				// Set the ArrayList as request attribute named "orderlist"
 				request.setAttribute("orderlist", filteredList);
 				request.setAttribute("productNames", productNames);
-				request.setAttribute("names", names);
+				//request.setAttribute("names", names);
 				request.setAttribute("orderProducts", orderProducts);
 				// Dispatch to admin-orders.jsp
 				request.getRequestDispatcher("admin-index.jsp").forward(request, response);

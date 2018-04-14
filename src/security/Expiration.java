@@ -40,7 +40,7 @@ public class Expiration{
 
 	public static boolean isExpired(LocalDateTime lastLogged){
 		if(lastLogged != null){
-			int expireQuota = 1; // in minutes
+			int expireQuota = 3; // in minutes
 			LocalDateTime now = LocalDateTime.now();
 
 			lastLogged = lastLogged.plusSeconds((long)(expireQuota*60));

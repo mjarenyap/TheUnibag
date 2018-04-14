@@ -80,11 +80,11 @@
 				<h1 class="heading">Reset Password</h1>
 				<label>
 					<span>Email address</span>
-					<input type="email" name="email" placeholder="user@example.com" class="full-width" />
+					<input type="email" autocomplete="off" name="email" placeholder="user@example.com" class="full-width" />
 				</label>
 				<label>
 					<span>Your secret random answer</span>
-					<input type="text" name="securityAnswer" placeholder="Type here your answer (case sensitive)" class="full-width" />
+					<input type="text" autocomplete="off" name="securityAnswer" placeholder="Type here your answer (case sensitive)" class="full-width" />
 				</label>
 				<div class="flex-end">
 					<span class="help">Don't have an account? <a href="#" id="go-signup">Get started</a> here.</span>

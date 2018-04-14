@@ -81,14 +81,14 @@
 				<h1 class="heading">Login to Unibag</h1>
 				<label>
 					<span>Email address</span>
-					<input type="email" name="email" placeholder="user@example.com" class="full-width" />
+					<input type="email" autocomplete="off" name="email" placeholder="user@example.com" class="full-width" />
 				</label>
 				<label>
 					<div class="flex-between">
 						<span>Password</span>
 						<span class="help" id="forgot-password">Forgot your password?</span>
 					</div>
-					<input type="password" name="password" placeholder="Type here your password" class="full-width" />
+					<input type="password" autocomplete="off" name="password" placeholder="Type here your password" class="full-width" />
 				</label>
 				<div class="flex-end">
 					<span class="help">Don't have an account? <a href="#" id="go-signup">Get started</a> here.</span>
